@@ -52,7 +52,7 @@ header$children[[2]]$children[[1]] <- tags$a(href='https://www.nature.org/en-us/
 
 # Siderbar ------------------------------------------------------------------
 siderbar<- dashboardSidebar(
-  introBox(data.step = 1, data.intro = intro$text[1], data.position="right", #  intro tour
+  #introBox(data.step = 1, data.intro = intro$text[1], data.position="right", #  intro tour
            div(class="inlay",style = "height:100%;width:100%;background-color: #ecf0f5;"),
   sidebarMenu(
     menuItem("Resources Axis", tabName = "Initial", icon = icon("fa-brands fa-pagelines"),
@@ -67,7 +67,7 @@ siderbar<- dashboardSidebar(
              menuSubItem("Data Information",tabName = "Details", icon = icon("info-circle"))),
     menuItem("Other Information",tabName = "Oinfo", icon = icon("info-circle"))
     )
-  )
+  #)
   )
 
 # Body ------------------------------------------------------------------

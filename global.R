@@ -20,6 +20,7 @@ packs = c("tidyverse",
           "shinythemes",
           "shinyjs",
           "shinyWidgets",
+          "rintrojs",
           "sf",
           "here",
           "janitor",
@@ -29,7 +30,8 @@ packs = c("tidyverse",
           "leaflet",
           "bslib",
           "shinyWidgets",
-          "stars"
+          "stars",
+          "tmaptools"
           )
 
 
@@ -49,9 +51,16 @@ library(shiny)
 # ----------------------
 
 # Natural Resources Axis spatial data
-resources_axis_sf <- st_read(here('data','small_MB_area','small_MB_area.shp')) %>% 
+resources_axis_sf <- st_read(here('data','SHP_Multi-benefit_Areas_Map','0000Multi-benefit Areas Map (EEMS Synthesis b07 - Simple).shp')) %>% 
   clean_names() %>% 
   st_transform("EPSG:4326") # Reproject so it can be visualized using leaflet
+
+resources_axis_r <- st_rasterize(resources_axis_sf %>% dplyr::select(agricultur,
+                                                                      community,
+                                                                      flora_faun,
+                                                                      water_raw, 
+                                                                      eems_synth, 
+                                                                      geometry)) # Rasterizing shapefile
 
 resources_axis_df <- st_drop_geometry(resources_axis_sf)
 

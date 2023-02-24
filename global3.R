@@ -30,7 +30,9 @@ packs = c("shiny",
           "ggsci",
           "colorRamps",
           "ggrepel",
-          "rintrojs"
+          "rintrojs",
+          "leafem",
+          "caret"
           )
 
 # Run the following command to verify that the required packages are installed. If some package
