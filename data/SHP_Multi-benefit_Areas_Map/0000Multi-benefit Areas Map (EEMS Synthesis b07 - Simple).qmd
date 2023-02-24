@@ -1,0 +1,49 @@
+<!DOCTYPE qgis PUBLIC 'http://mrcc.com/qgis.dtd' 'SYSTEM'>
+<qgis version="3.22.2-Białowieża">
+  <identifier></identifier>
+  <parentidentifier></parentidentifier>
+  <language></language>
+  <type>dataset</type>
+  <title></title>
+  <abstract>This is one of the SB Blueprint's synthesis products using the Environmental Evaluation Modeling System (EEMS).  &lt;div>&#xd;
+Upon opening the map, click on the EEMS Explorer icon in the layers tab. (See also &lt;a href="http://drecp.databasin.org/videos" target="_self">the 4 minute EEMS Explorer introductory video&lt;/a>.)&lt;/div>&lt;div>&#xd;
+&#xd;
+All of the input layers are shown in the EEMS Explorer window, as well as how they are overlaid.  A list of the layers is also in the &amp;quot;Data layers&amp;quot; tab of this synthesis data layer's home page, and the logic model diagram is available online.&#xd;
+&#xd;
+For an overview, webinar, and peer reviewed publication about EEMS, please see the &lt;a href="https://consbio.org/products/tools/environmental-evaluation-modeling-system-eems" target="_self">EEMS home page&lt;/a>. (Note that our EEMS models do not use &amp;quot;fuzzy logic&amp;quot;.)  See also the &lt;a href="http://sbcblueprint.net/" target="_self">SB Blueprint webpage&lt;/a> for a project overview.&#xd;
+&#xd;
+&lt;/div>&lt;div>Build 7&lt;/div>&#xd;
+&#xd;
+This dataset was uploaded to Data Basin and is available with additional information at: /datasets/000bf625b88547caa02890c0958d082c</abstract>
+  <keywords vocabulary="gmd:topicCategory">
+    <keyword>land,eems,santa barbara blueprint,water,flora,community,ranch lands,fauna,agriculture,santa barbara</keyword>
+  </keywords>
+  <contact>
+    <name></name>
+    <organization></organization>
+    <position></position>
+    <voice></voice>
+    <fax></fax>
+    <email>annie.jacobs@consbio.org</email>
+    <role>Point of contact</role>
+  </contact>
+  <links/>
+  <fees></fees>
+  <rights>This work is licensed under a Creative Commons Attribution 3.0 License.</rights>
+  <rights>John Gallo, Dustin Pearce and Annie Jacobs of Conservation Biology Institute;&lt;div>Brooking Gatewood of Ag Innovations;&lt;br />Chet Work, Sharyn Main, Greg Parker, and Anne Coates of the Santa Barbara Blueprint Executive Committee;&lt;br />and various members of the SB Blueprint Steering Committee&lt;br />&lt;/div></rights>
+  <encoding></encoding>
+  <crs>
+    <spatialrefsys>
+      <wkt></wkt>
+      <proj4></proj4>
+      <srsid>0</srsid>
+      <srid>0</srid>
+      <authid></authid>
+      <description></description>
+      <projectionacronym></projectionacronym>
+      <ellipsoidacronym></ellipsoidacronym>
+      <geographicflag>false</geographicflag>
+    </spatialrefsys>
+  </crs>
+  <extent/>
+</qgis>
