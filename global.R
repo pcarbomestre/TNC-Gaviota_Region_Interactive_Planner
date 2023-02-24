@@ -31,7 +31,8 @@ packs = c("tidyverse",
           "bslib",
           "shinyWidgets",
           "stars",
-          "tmaptools"
+          "tmaptools",
+          "leaflet.extras"
           )
 
 

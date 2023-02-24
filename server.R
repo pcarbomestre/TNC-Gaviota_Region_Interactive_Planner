@@ -88,7 +88,11 @@ server <- function(input, output, session) {
                 fitBounds(lng1=as.numeric(bb(resources_axis_r)[1]), 
                           lat1=as.numeric(bb(resources_axis_r)[2]),
                           lng2=as.numeric(bb(resources_axis_r)[3]),
-                          lat2=as.numeric(bb(resources_axis_r)[4]))
+                          lat2=as.numeric(bb(resources_axis_r)[4])) %>% 
+                addDrawToolbar(targetGroup = "draw",
+                               editOptions = editToolbarOptions(
+                                   selectedPathOptions = selectedPathOptions()),
+                               position = "topright") 
             
             ## Process for Vector data --------------------
             # leaflet(resources_axis_sf) %>% 
@@ -123,7 +127,11 @@ server <- function(input, output, session) {
             fitBounds(lng1=as.numeric(bb(weights_reactive())[1]), 
                       lat1=as.numeric(bb(weights_reactive())[2]),
                       lng2=as.numeric(bb(weights_reactive())[3]),
-                      lat2=as.numeric(bb(weights_reactive())[4]))
+                      lat2=as.numeric(bb(weights_reactive())[4])) %>% 
+            addDrawToolbar(targetGroup = "draw",
+                           editOptions = editToolbarOptions(
+                               selectedPathOptions = selectedPathOptions()),
+                           position = "topright") 
         
         ## Process for Raster data --------------------
         # map <-  leaflet(map_reactive()) %>% 

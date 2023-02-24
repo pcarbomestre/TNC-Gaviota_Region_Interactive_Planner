@@ -105,8 +105,8 @@ body <- dashboardBody(
                                    fixed = TRUE,
                                    draggable = FALSE, 
                                    top = 80, left = "auto", 
-                                   right = 40, bottom = "auto",
-                                   width = 250, height = "auto",
+                                   right = 70, bottom = "auto",
+                                   width = 200, height = "75",
                                    style="background-color: white;
                                           opacity: 0.85;
                                           padding: 20px 20px 20px 20px;
