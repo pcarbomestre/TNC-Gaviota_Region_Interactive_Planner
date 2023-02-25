@@ -80,4 +80,59 @@ leaflet() %>% addTiles() %>%
   addLegend(pal = pal,
             values = area_r["eems_synth"][[1]]
   )
-$
+
+
+
+
+
+
+jldp_sf <- st_read(here('data','jldp_boundary','jldp_boundary.shp')) %>%
+  clean_names() %>% 
+  st_transform("EPSG:4326")
+
+
+draw <- read_csv(here("Drawings.csv"))
+
+polygon <- draw %>% 
+  dplyr::select(starts_with("features.geometry.coordinates")) %>% 
+  as.numeric() %>% 
+  matrix(ncol=2, byrow=TRUE) %>% 
+  list() %>% 
+  st_polygon() %>% 
+  st_sfc(crs = "EPSG:4326")
+
+polygon%>% 
+  as.data.frame()
+
+test <- st_extract(area_r, polygon) %>% 
+  st_as_sf() %>% 
+  st_drop_geometry()
+
+selected <- as.data.frame(test)
+
+as.numeric(selected[1:4])
+
+fig <- plot_ly(
+  type = 'scatterpolar',
+  r =   as.numeric(selected[1:4]),
+  theta = c("Agriculture",
+            "Community",
+            "Biodiversity",
+            "Water"),
+  fill = 'toself'
+)
+
+fig <- fig %>%
+  layout(
+    polar = list(
+      radialaxis = list(
+        visible = T,
+        range = c(0,5)
+      )
+    ),
+    showlegend = F
+  )
+fig
+
+
+ol3 <- apply(ahp_weights, 1, function(x) {x[1] <- x[2]; return(x[1])})

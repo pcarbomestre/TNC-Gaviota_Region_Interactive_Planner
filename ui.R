@@ -57,7 +57,7 @@ siderbar<- dashboardSidebar(
   sidebarMenu(
     menuItem("Resources Axis", tabName = "Initial", icon = icon("fa-brands fa-pagelines"),
              menuSubItem("Natural Resources",tabName = "Map", icon = icon("map")),
-             menuSubItem("Stackholders priorities",tabName = "Map", icon = icon("fa-solid fa-layer-group")),
+             menuSubItem("Stakeholders priorities",tabName = "Map", icon = icon("fa-solid fa-layer-group")),
              menuSubItem("Data Information",tabName = "Details", icon = icon("info-circle"))),
     menuItem("Threats Axis",tabName = "landings", icon = icon("fa-regular fa-fire"),
              menuSubItem("Environmental Threats",tabName = "Map", icon = icon("map")),
@@ -144,46 +144,88 @@ body <- dashboardBody(
                                           box-shadow: 0pt 0pt 6pt 0px rgba(61,59,61,0.48);
                                           padding-bottom: 2mm;
                                           padding-top: 1mm;",
-                                   setSliderColor(c("#629871", "#629871", "#629871", "#629871","#629871"), c(1,2,3,4,5)),
                                    
-                                   sliderInput(inputId = "water_w",
-                                               label = "Water resources",
-                                               ticks = FALSE,
-                                               min = 0,
-                                               max = 10,
-                                               value = 5,
-                                   ), # End sliderInput
                                    
-                                   sliderInput(inputId = "agriculture_w",
-                                               label = "Agricultural use",
-                                               ticks = FALSE,
-                                               min = 0,
-                                               max = 10,
-                                               value = 5,
-                                   ), # End sliderInput
-                                   
-                                   sliderInput(inputId = "biodiversity_w",
-                                               label = "Biodiversity",
-                                               ticks = FALSE,
-                                               min = 0,
-                                               max = 10,
-                                               value = 5,
-                                   ), # End sliderInput
-                                   
-                                   sliderInput(inputId = "community_w",
-                                               label = "Community resources",
-                                               ticks = FALSE,
-                                               min = 0,
-                                               max = 10,
-                                               value = 5,
-                                   ), # End sliderInput
-                                   
+                                
+                                     tags$style(HTML("
+                                     a.action-button {
+                                        color: #000000;
+                                        font-weight: bold;
+                                        
+                                     }
+                                     
+                                     #checkbox1{
+                                     padding-left: 25px;
+                                     }
+                                     
                             
+                                                     ")),
+                                   
+                                   setSliderColor(c("#629871", "#629871", "#629871", "#629871","#629871"), c(1,2,3,4,5)),
+                                  
+                                   actionLink("checkbox_water", label = "Water resources"),
+                                   sliderInput(inputId = "water_w",
+                                               label = NULL,
+                                               ticks = FALSE,
+                                               min = 0,
+                                               max = 10,
+                                               value = 5,
+                                   ), # End sliderInput
+
+                                   actionLink("checkbox_agri", label = "Soil"),
+                                   sliderInput(inputId = "agriculture_w",
+                                               label = NULL,
+                                               ticks = FALSE,
+                                               min = 0,
+                                               max = 10,
+                                               value = 5,
+                                   ), # End sliderInput
+                                   
+                                   actionLink("checkbox_bio", label = "Biodiversity"),
+                                   sliderInput(inputId = "biodiversity_w",
+                                               label = NULL,
+                                               ticks = FALSE,
+                                               min = 0,
+                                               max = 10,
+                                               value = 5,
+                                   ), # End sliderInput
+                                   
+                                   actionLink("checkbox_com", label = "Community resources"),
+                                   sliderInput(inputId = "community_w",
+                                               label = NULL,
+                                               ticks = FALSE,
+                                               min = 0,
+                                               max = 10,
+                                               value = 5,
+                                   ), # End sliderInput
                                    
                                    actionButton("run", "Apply weights")
                                    
-                                   )),
+                                   ),
+                     
+                     absolutePanel(id = "stats-button", 
+                                   class = "panel panel-default", 
+                                   fixed = TRUE,
+                                   draggable = FALSE, 
+                                   top = 160, left = "auto", 
+                                   right = 70, bottom = "auto",
+                                   width = "auto", height = "auto",
+                                   style="background-color: white;
+                                          opacity: 0.85;
+                                          margin: auto;
+                                          padding-bottom: 0mm;
+                                          padding-top: 0mm;",
+                                   actionButton("printShapes", h5(strong("Generate Stats")))
+                     
+                     ),
+                     
+
               column(6,
+                     br(),
+                     selectInput("stakeholder_w", label = "Select stakeholder's weights:", 
+                                 choices = c("None",ahp_weights$stakeholder), 
+                                 selected = NULL),
+                     
                      h2("How to use this map?"),
                      tags$p("The Santa Barbara Countys Interactive Planner allows you to adjust weights given to each of the four 
                             Conservation Goals to create an integrated assessment map that reflects your unique vision for the 
@@ -192,6 +234,16 @@ body <- dashboardBody(
                             leveraged to achieve conservation of other goals.",
                             style="text-align: justify")
                   ),
+              column(1,
+                     br(),
+                     br(),
+                     tableOutput("mytable")),
+              column(5,
+                     br(),
+                     br(),
+                     plotlyOutput("radar_graph", inline=T,height = 230))
+    
+              )
             )
     ),
     tabItem(tabName = "Details",

@@ -32,7 +32,9 @@ packs = c("tidyverse",
           "shinyWidgets",
           "stars",
           "tmaptools",
-          "leaflet.extras"
+          "leaflet.extras",
+          "leafem",
+          "plotly"
           )
 
 
@@ -63,11 +65,12 @@ resources_axis_r <- st_rasterize(resources_axis_sf %>% dplyr::select(agricultur,
                                                                       eems_synth, 
                                                                       geometry)) # Rasterizing shapefile
 
+
 resources_axis_df <- st_drop_geometry(resources_axis_sf)
 
 # AHP weights
-# resources_axis <- read_csv(here('data','small_MB_area','small_MB_area.shp')) %>% 
-#   clean_names()
+ahp_weights <- read_csv2(here('data','ahp_weights.csv')) %>%
+  clean_names()
 
 # Environmental Threats Axis spatial data
 threats_axis_sf <- st_read(here('data','small_MB_area','small_MB_area.shp')) %>% 
