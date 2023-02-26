@@ -110,6 +110,39 @@ test <- st_extract(area_r, polygon) %>%
 
 selected <- as.data.frame(test)
 
+t(selected) %>% kbl() %>%
+  kable_styling()
+
+tbl_img <- data.frame(
+  names= (colnames(selected[1:4])),
+  score= (as.numeric(selected[1,1:4]))
+)
+
+tbl_img$ImageName =c(here("www","img","bio_icon.png"), 
+                here("www","img","soil_icon.png"),
+                here("www","img","bio_icon.png"),
+                here("www","img","bio_icon.png"))
+
+print(kable(tbl_img, format="html") %>% 
+        kable_styling(full_width=FALSE) %>% 
+        collapse_rows(columns=1, valign="top"))
+
+
+tbl_img %>%
+  kbl(booktabs = T) %>%
+  kable_paper(full_width = F) %>%
+  column_spec(3, image = "bio_icon.png") %>% 
+  
+
+tbl_img %>%
+  kbl(booktabs = T) %>%
+  kable_paper(full_width = F) %>%
+  column_spec(3, image = spec_image(
+    c(here("www","img","bio_icon.png"), 
+      here("www","img","soil_icon.png"),
+      here("www","img","bio_icon.png"),
+      here("www","img","bio_icon.png")), 2, 2))
+
 as.numeric(selected[1:4])
 
 fig <- plot_ly(
@@ -132,7 +165,14 @@ fig <- fig %>%
     ),
     showlegend = F
   )
+
 fig
 
 
-ol3 <- apply(ahp_weights, 1, function(x) {x[1] <- x[2]; return(x[1])})
+
+tbl_img %>%
+  mutate(images = paste0("<","img src=",here("www","img","bio_icon.png"),">")) %>%
+  kable(format = "html", escape = F) %>%
+  kable_styling(bootstrap_options = "striped")
+
+

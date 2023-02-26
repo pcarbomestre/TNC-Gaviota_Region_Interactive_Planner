@@ -144,21 +144,10 @@ body <- dashboardBody(
                                           box-shadow: 0pt 0pt 6pt 0px rgba(61,59,61,0.48);
                                           padding-bottom: 2mm;
                                           padding-top: 1mm;",
-                                   
-                                   
-                                
+
                                      tags$style(HTML("
-                                     a.action-button {
-                                        color: #000000;
-                                        font-weight: bold;
-                                        
-                                     }
-                                     
-                                     #checkbox1{
-                                     padding-left: 25px;
-                                     }
-                                     
-                            
+                                     a.action-button {color: #000000;font-weight: bold;}
+                                     #checkbox1{padding-left: 25px;}
                                                      ")),
                                    
                                    setSliderColor(c("#629871", "#629871", "#629871", "#629871","#629871"), c(1,2,3,4,5)),
@@ -200,7 +189,6 @@ body <- dashboardBody(
                                    ), # End sliderInput
                                    
                                    actionButton("run", "Apply weights")
-                                   
                                    ),
                      
                      absolutePanel(id = "stats-button", 
@@ -216,10 +204,8 @@ body <- dashboardBody(
                                           padding-bottom: 0mm;
                                           padding-top: 0mm;",
                                    actionButton("printShapes", h5(strong("Generate Stats")))
-                     
                      ),
                      
-
               column(6,
                      br(),
                      selectInput("stakeholder_w", label = "Select stakeholder's weights:", 
@@ -234,18 +220,40 @@ body <- dashboardBody(
                             leveraged to achieve conservation of other goals.",
                             style="text-align: justify")
                   ),
-              column(1,
-                     br(),
-                     br(),
-                     tableOutput("mytable")),
-              column(5,
-                     br(),
-                     br(),
-                     plotlyOutput("radar_graph", inline=T,height = 210))
-    
+             
+               column(6,
+                      tabsetPanel(
+                        tags$style(HTML(".tabbable > .nav > li > a {margin-top:5px;float:right;display:inline-block;}")),
+                        tags$style(HTML(
+                          ".tabbable ul li:nth-child(4) { float: right;} 
+                          .tabbable ul li:nth-child(3) { float: right;}
+                          .tabbable ul li:nth-child(5) { float: right;}"
+                        )),
+                        tabPanel("About",
+                                 h3("Area statistics:"),
+                                 br(),
+                                 h4("To extract statistics from your area of interest, simply create a polygon on the map and then click on the Generate Stats button.",
+                                    style="text-align: center")
+                                 ),
+                        tabPanel("Summary", tableOutput("mytable")),
+                        tabPanel("Plot",plotlyOutput("radar_graph", inline=T, height = 210)),
+                      
+                        )
+                ),
+
+              # column(1,
+              #        br(),
+              #        br(),
+              #        tableOutput("mytable")),
+              # column(5,
+              #        br(),
+              #        br(),
+              #        plotlyOutput("radar_graph", inline=T,height = 210))
+              
               )
-            )
-    ),
+              )
+            ),
+    
     tabItem(tabName = "Details",
             br(),
             tags$p("This tab provides a brief description of the different data sources relevant to Shellfish Stocks 

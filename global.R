@@ -34,7 +34,8 @@ packs = c("tidyverse",
           "tmaptools",
           "leaflet.extras",
           "leafem",
-          "plotly"
+          "plotly",
+          "kableExtra"
           )
 
 
