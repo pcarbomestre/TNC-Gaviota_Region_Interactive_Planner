@@ -308,8 +308,32 @@ server <- function(input, output, session) {
     observeEvent(input$stakeholder_w, {
       selected_weight = com_weights[[input$stakeholder_w]]
       updateSliderInput(session, "community_w", value = selected_weight)
+    
     })
     
+    # If slide bar values do not match group weights
+    observe({
+      if(input$community_w == com_weights[["Government"]] &
+         input$biodiversity_w == bio_weights[["Government"]] &
+         input$agriculture_w == agri_weights[["Government"]] &
+         input$water_w == water_weights[["Government"]]){
+      } else if(input$community_w == com_weights[["NGO"]] &
+                input$biodiversity_w == bio_weights[["NGO"]] &
+                input$agriculture_w == agri_weights[["NGO"]] &
+                input$water_w == water_weights[["NGO"]]) {
+      } else if(input$community_w == com_weights[["Native"]] &
+                input$biodiversity_w == bio_weights[["Native"]] &
+                input$agriculture_w == agri_weights[["Native"]] &
+                input$water_w == water_weights[["Native"]]) {
+      } else if(input$community_w == com_weights[["Private"]] &
+                input$biodiversity_w == bio_weights[["Private"]] &
+                input$agriculture_w == agri_weights[["Private"]] &
+                input$water_w == water_weights[["Private"]]) {
+      } else {
+        updateSelectInput(session,"stakeholder_w",selected="None")
+      }
+    })
+
     
   # Free weights display ---------------------------------------------------------------
   # ------------------------------------------------------------------------------------
@@ -548,44 +572,8 @@ server <- function(input, output, session) {
             else thisShape <- ddf[ind[i]:ncol(ddf)]
             
             #####
-            if(thisShape[3] == "polyline") {
-                tf <- array(startsWith(names(thisShape),"features.geometry.coordinates"))
-                w <- 1
-                pnts <- array()
-                for (i in 1:nrow(tf)) {
-                    if(tf[i] == TRUE) {
-                        pnts[w] <- thisShape[i]
-                        w <- w+1
-                    }
-                }
-                n <- 1
-                m <- 1
-                plng <- array()
-                plat <- array()
-                pnts <- as.array(pnts)
-                for (j in 1:nrow(pnts)) {
-                    if(j %% 2 == 1) {
-                        plng[n] <- pnts[j]
-                        n <- n+1
-                    }
-                    else if(j %% 2 == 0) {
-                        plat[m] <- pnts[j]
-                        m <- m+1
-                    }
-                }
-                as.vector(plng, mode = "any")
-                as.vector(plat, mode = "any")
-                PL <- data.frame(matrix(unlist(plng)))
-                PLsub <- data.frame(matrix(unlist(plat)))
-                PL <- cbind(PL, PLsub)
-                colnames(PL) <- c("lng","lat")
-                PL1 <- reactiveVal(PL)
-                
-                proxy <- leafletProxy("map", data = PL1())
-                proxy %>% addPolylines(lng = ~lng, lat = ~lat, group = "draw")
-            }
-            #####
-            else if(thisShape[3] == "polygon") {
+            
+             if(thisShape[3] == "polygon") {
                 tf <- array(startsWith(names(thisShape),"features.geometry.coordinates"))
                 w <- 1
                 pnts <- array()
@@ -633,30 +621,6 @@ server <- function(input, output, session) {
                                         group = "draw")
             }
             #####
-            else if(thisShape[3] == "circle"){
-                crad <- as.numeric(thisShape[4])
-                clng <- as.numeric(thisShape[6])
-                clat <- as.numeric(thisShape[7])
-                
-                proxy <- leafletProxy("map")
-                proxy %>% addCircles(lng = clng, lat = clat, radius = crad, group = "draw")
-            }
-            #####
-            else if(thisShape[3] == "marker") {
-                mlng <- as.numeric(thisShape[5])
-                mlat <- as.numeric(thisShape[6])
-                
-                proxy <- leafletProxy("map")
-                proxy %>% addMarkers(lng = mlng, lat = mlat, group = "draw")
-            }
-            #####
-            else if(thisShape[3] == "circlemarker") {
-                cmlng <- as.numeric(thisShape[6])
-                cmlat <- as.numeric(thisShape[7])
-                
-                proxy <- leafletProxy("map")
-                proxy %>% addCircleMarkers(lng = cmlng, lat = cmlat, group = "draw")
-            }
         }
     })
     

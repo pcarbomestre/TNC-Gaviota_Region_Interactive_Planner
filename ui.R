@@ -241,7 +241,7 @@ body <- dashboardBody(
               column(5,
                      br(),
                      br(),
-                     plotlyOutput("radar_graph", inline=T,height = 230))
+                     plotlyOutput("radar_graph", inline=T,height = 210))
     
               )
             )
