@@ -35,7 +35,9 @@ packs = c("tidyverse",
           "leaflet.extras",
           "leafem",
           "plotly",
-          "kableExtra"
+          "kableExtra",
+          "rgeos",
+          "shinyalert"
           )
 
 

@@ -43,7 +43,6 @@ area_r_all <- st_rasterize(area_sf %>% dplyr::select(agricultur,
                                                  eems_synth, 
                                                  geometry)) # Rasterizing shapefile
 
-
 area_r <- area_r_all %>% 
   mutate("agricultur" = agricultur * weight_agr) %>% 
   mutate("community" = community * weight_com) %>% 

@@ -435,7 +435,9 @@ server <- function(input, output, session) {
 # Extract data from the map ---------------------------------------------------------------
 # -----------------------------------------------------------------------------------------
     
+    
     # Generate Shape List Action Button
+    
     observeEvent(input$printShapes, {
         shapedf <- data.frame()
         reactive(shapedf)
@@ -450,105 +452,120 @@ server <- function(input, output, session) {
             st_polygon() %>% 
             st_sfc(crs="EPSG:4326")
         
+        polygon_sp <- as(polygon, Class = "Spatial")
         
-        if (!input$run) {
+        if (gIsValid(polygon_sp) == FALSE){
+            shinyalert("Shape edges can not cross!", 
+                       "Draw again the polygon to extract statistics", 
+                       type = "warning",
+                       size="xs",
+                       animation=T)
+        }
+        
+        else {
+          
+          if (!input$run) {
             
-            df <- st_extract(resources_axis_r, polygon) %>%
-                st_as_sf() %>%
-                st_drop_geometry()
+            extracted_area <- st_crop(resources_axis_r, polygon)
+            
+            extracted_df <- cbind(agricultur= as.numeric(extracted_area$agricultur),
+                                  community= as.numeric(extracted_area$community),
+                                  flora_faun= as.numeric(extracted_area$flora_faun),
+                                  water_raw= as.numeric(extracted_area$water_raw),
+                                  eems_synth= as.numeric(extracted_area$eems_synth)) %>%
+              as.data.frame()
+            
+            mean_extracted_values <- apply(extracted_df,2,mean,na.rm=T)
             
             output$mytable = renderTable({
-                
-                selected <- as.data.frame(df)
-                rownames(selected) <- "Score"
-                cbind(c("Agriculture",
-                        "Community",
-                        "Biodiversity",
-                        "Water",
-                        "Aggregated"), round(t(selected[-6]),3))
+              t(mean_extracted_values)
             })
             
             output$radar_graph <- renderPlotly({
-                
-                selected <- as.data.frame(df)
-                
-                fig <- plot_ly(
-                    type = 'scatterpolar',
-                    r =   as.numeric(selected[1:4]),
-                    theta = c("Agriculture",
-                              "Community",
-                              "Biodiversity",
-                                "Water"),
-                    fill = 'toself',
+              
+              selected <- as.data.frame(df)
+              
+              fig <- plot_ly(
+                type = 'scatterpolar',
+                r =   as.numeric(mean_extracted_values[1:4]),
+                theta = c("Agriculture",
+                          "Community",
+                          "Biodiversity",
+                          "Water"),
+                fill = 'toself',
+              )
+              
+              fig <- fig %>%
+                layout(
+                  polar = list(radialaxis = list(
+                    visible = T,
+                    range = c(0,1))
+                  ),
+                  plot_bgcolor  = "rgba(0, 0, 0, 0)",
+                  paper_bgcolor = "rgba(0, 0, 0, 0)",
+                  fig_bgcolor   = "rgba(0, 0, 0, 0)",
+                  showlegend = F
                 )
-
-                fig <- fig %>%
-                    layout(
-                        polar = list(radialaxis = list(
-                            visible = T,
-                            range = c(0,1))
-                            ),
-                        plot_bgcolor  = "rgba(0, 0, 0, 0)",
-                        paper_bgcolor = "rgba(0, 0, 0, 0)",
-                        fig_bgcolor   = "rgba(0, 0, 0, 0)",
-                        showlegend = F
-                    )
-                fig
+              fig
             })
-        
             
-        }
-        
-        else{
             
-            df <- st_extract(resources_axis_r, polygon) %>%
-                st_as_sf() %>%
-                st_drop_geometry()
+          }
+          
+          else{
             
-            df_aggregated <- st_extract(weights_reactive(), polygon) %>%
-                st_as_sf() %>%
-                st_drop_geometry()
+            extracted_area <- st_crop(resources_axis_r, polygon)
             
+            extracted_area_aggr <- st_crop(weights_reactive(), polygon)
+            
+            extracted_df <- cbind(agricultur= as.numeric(extracted_area$agricultur),
+                                  community= as.numeric(extracted_area$community),
+                                  flora_faun= as.numeric(extracted_area$flora_faun),
+                                  water_raw= as.numeric(extracted_area$water_raw),
+                                  aggregated_val= as.numeric(extracted_area_aggr$norm_score)) %>%
+              as.data.frame()
+            
+            mean_extracted_values <- apply(extracted_df,2,mean,na.rm=T)
+            
+          
             output$mytable = renderTable({
-                
-                selected <- cbind(as.data.frame(df[1:4]),
-                                  as.data.frame(df_aggregated[7]))
-                rownames(selected) <- "Score"
-                cbind(c("Agriculture",
-                        "Community",
-                        "Biodiversity",
-                        "Water",
-                        "Aggregated (weighted)"), round(t(selected[-6]),3))
+              t(mean_extracted_values)
             })
             
             output$radar_graph <- renderPlotly({
-                
-                selected <- as.data.frame(df)
-                
-                fig <- plot_ly(
-                    type = 'scatterpolar',
-                    r =   as.numeric(selected[1:4]),
-                    theta = c("Agriculture",
-                              "Community",
-                              "Biodiversity",
-                              "Water"),
-                    fill = 'toself',
+              
+              selected <- as.data.frame(df)
+              
+              fig <- plot_ly(
+                type = 'scatterpolar',
+                r =   as.numeric(mean_extracted_values[1:4]),
+                theta = c("Agriculture",
+                          "Community",
+                          "Biodiversity",
+                          "Water"),
+                fill = 'toself',
+              )
+              
+              fig <- fig %>%
+                layout(
+                  polar = list(radialaxis = list(
+                    visible = T,
+                    range = c(0,1))
+                  ),
+                  plot_bgcolor  = "rgba(0, 0, 0, 0)",
+                  paper_bgcolor = "rgba(0, 0, 0, 0)",
+                  fig_bgcolor   = "rgba(0, 0, 0, 0)",
+                  showlegend = F
                 )
-                
-                fig <- fig %>%
-                    layout(
-                        polar = list(radialaxis = list(
-                            visible = T,
-                            range = c(0,1))
-                        ),
-                        plot_bgcolor  = "rgba(0, 0, 0, 0)",
-                        paper_bgcolor = "rgba(0, 0, 0, 0)",
-                        fig_bgcolor   = "rgba(0, 0, 0, 0)",
-                        showlegend = F
-                    )
-                fig
+              fig
             })
+          }
         }
+          
+          
+        
+        
+        
 
       
         
@@ -624,8 +641,5 @@ server <- function(input, output, session) {
         }
     })
     
-     
-    
-       
 }
     

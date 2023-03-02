@@ -20,7 +20,11 @@ server <- function(input, output, session) {
         leaflet() %>%
             addTiles(group = "Default", attribution = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors') %>%
             setView(lng = -98, lat = 30, zoom = 4) %>%
-            addDrawToolbar(targetGroup = "draw", position = "topleft", editOptions = editToolbarOptions(edit=TRUE))
+            addDrawToolbar(targetGroup = "draw", position = "topleft", 
+                           editOptions = editToolbarOptions(edit = TRUE, 
+                                                            remove = TRUE, 
+                                                            selectedPathOptions = NULL,
+                                                            allowIntersection = FALSE))
     })
     
     # Generate Shape List Action Button
