@@ -108,7 +108,7 @@ body <- dashboardBody(
                                    right = 70, bottom = "auto",
                                    width = 200, height = "75",
                                    style="background-color: white;
-                                          opacity: 0.85;
+                                          opacity: 0.95;
                                           padding: 20px 20px 20px 20px;
                                           margin: auto;
                                           border-radius: 5pt;
@@ -133,11 +133,11 @@ body <- dashboardBody(
                                    class = "panel panel-default", 
                                    fixed = TRUE,
                                    draggable = TRUE, 
-                                   top = 200, left = "auto", 
+                                   top = 250, left = "auto", 
                                    right = 920, bottom = "auto",
                                    width = 250, height = "auto",
                                    style="background-color: white;
-                                          opacity: 0.85;
+                                          opacity: 0.95;
                                           padding: 20px 20px 20px 20px;
                                           margin: auto;
                                           border-radius: 5pt;
@@ -158,8 +158,7 @@ body <- dashboardBody(
                                                ticks = FALSE,
                                                min = 0,
                                                max = 10,
-                                               value = 5,
-                                   ), # End sliderInput
+                                               value = 5), # End sliderInput
 
                                    actionLink("checkbox_agri", label = "Soil"),
                                    sliderInput(inputId = "agriculture_w",
@@ -167,8 +166,7 @@ body <- dashboardBody(
                                                ticks = FALSE,
                                                min = 0,
                                                max = 10,
-                                               value = 5,
-                                   ), # End sliderInput
+                                               value = 5), # End sliderInput
                                    
                                    actionLink("checkbox_bio", label = "Biodiversity"),
                                    sliderInput(inputId = "biodiversity_w",
@@ -176,8 +174,7 @@ body <- dashboardBody(
                                                ticks = FALSE,
                                                min = 0,
                                                max = 10,
-                                               value = 5,
-                                   ), # End sliderInput
+                                               value = 5), # End sliderInput
                                    
                                    actionLink("checkbox_com", label = "Community resources"),
                                    sliderInput(inputId = "community_w",
@@ -185,10 +182,7 @@ body <- dashboardBody(
                                                ticks = FALSE,
                                                min = 0,
                                                max = 10,
-                                               value = 5,
-                                   ), # End sliderInput
-                                   
-                                   actionButton("run", "Apply weights")
+                                               value = 5), # End sliderInput
                                    ),
                      
                      absolutePanel(id = "stats-button", 
@@ -199,7 +193,7 @@ body <- dashboardBody(
                                    right = 70, bottom = "auto",
                                    width = "auto", height = "auto",
                                    style="background-color: white;
-                                          opacity: 0.85;
+                                          opacity: 0.95;
                                           margin: auto;
                                           padding-bottom: 0mm;
                                           padding-top: 0mm;",

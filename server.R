@@ -15,63 +15,6 @@ server <- function(input, output, session) {
 
  
 # Leaflet Map ------------------------------------------------------------------------
-
-  # Default Map Display --------------------------------------------------------------
-  # ----------------------------------------------------------------------------------
-  
-  output$map <- renderLeaflet({
-    
-    if (!input$run) {
-      # default plot
-      
-      pal <- colorNumeric(palette= "Greens",
-                          domain = resources_axis_r["eems_synth"][[1]],
-                          na.color = "transparent") # pallete for default leaflet
-      
-      ## Process for Raster data --------------------
-      leaflet() %>% addTiles() %>%
-        addGeoRaster(resources_axis_r["eems_synth"], 
-                     opacity = input$alpha,
-                     colorOptions =leafem:::colorOptions(
-                       palette = "Greens",
-                       breaks = seq(min(resources_axis_r["eems_synth"][[1]], na.rm = TRUE),
-                                    max(resources_axis_r["eems_synth"][[1]], na.rm = TRUE),
-                                    100),
-                       na.color = "transparent"
-                     ),
-                     resolution=10000) %>% 
-        addProviderTiles(providers$Stamen.Terrain) %>% 
-        addLegend(pal = pal,
-                  values = resources_axis_r["eems_synth"][[1]],
-                  position = "bottomright",
-                  opacity = input$alpha) %>% 
-        fitBounds(lng1=as.numeric(bb(resources_axis_r)[1]), 
-                  lat1=as.numeric(bb(resources_axis_r)[2]),
-                  lng2=as.numeric(bb(resources_axis_r)[3]),
-                  lat2=as.numeric(bb(resources_axis_r)[4])) %>% 
-        addDrawToolbar(targetGroup = "draw",
-                       polylineOptions = FALSE,
-                       circleOptions = FALSE,
-                       markerOptions = FALSE,
-                       circleMarkerOptions = FALSE,
-                       editOptions = editToolbarOptions(
-                         selectedPathOptions = selectedPathOptions()),
-                       position = "topright",
-                       singleFeature = TRUE) 
-      
-      ## Process for Vector data --------------------
-      # leaflet(resources_axis_sf) %>% 
-      #         setView(lng = -120.3, lat = 34.53, zoom =10 ) %>%
-      #         addPolygons(stroke = FALSE, fillOpacity = input$alpha, smoothFactor = 0.5,
-      #                 color = "grey",
-      #                 fillColor = ~pal(eems_synth)) %>% 
-      #     addProviderTiles(providers$Stamen.Terrain) %>% 
-      #     addLegend("bottomright", pal = pal, values = ~resources_axis_sf$eems_synth,
-      #               title = "Score",
-      #               opacity = 1)
-      
-    }
-  })
   
   # Display individual layers  ---------------------------------------------------------
   # ------------------------------------------------------------------------------------
@@ -83,44 +26,6 @@ server <- function(input, output, session) {
       updateSliderInput(session, "biodiversity_w", value = 0)
       updateSliderInput(session, "community_w", value = 0)
     }
-    
-    ## Leaflet display --------------------
-    output$map <- renderLeaflet({
-      pal <- colorNumeric(palette= "Greens",
-                          domain = resources_axis_r["water_raw"][[1]],
-                          na.color = "transparent") # pallete for default leaflet
-      
-      ### Process for Raster data --------------------
-      leaflet() %>% addTiles() %>%
-        addGeoRaster(resources_axis_r["water_raw"], 
-                     opacity = input$alpha,
-                     colorOptions =leafem:::colorOptions(
-                       palette = "Greens",
-                       breaks = seq(min(resources_axis_r["water_raw"][[1]], na.rm = TRUE),
-                                    max(resources_axis_r["water_raw"][[1]], na.rm = TRUE),
-                                    100),
-                       na.color = "transparent"
-                     ),
-                     resolution=10000) %>% 
-        addProviderTiles(providers$Stamen.Terrain) %>% 
-        addLegend(pal = pal,
-                  values = resources_axis_r["water_raw"][[1]],
-                  position = "bottomright",
-                  opacity = input$alpha) %>% 
-        fitBounds(lng1=as.numeric(bb(resources_axis_r)[1]), 
-                  lat1=as.numeric(bb(resources_axis_r)[2]),
-                  lng2=as.numeric(bb(resources_axis_r)[3]),
-                  lat2=as.numeric(bb(resources_axis_r)[4])) %>% 
-        addDrawToolbar(targetGroup = "draw",
-                       polylineOptions = FALSE,
-                       circleOptions = FALSE,
-                       markerOptions = FALSE,
-                       circleMarkerOptions = FALSE,
-                       editOptions = editToolbarOptions(
-                         selectedPathOptions = selectedPathOptions()),
-                       position = "topright",
-                       singleFeature = TRUE) })
-    
   })
   
   observeEvent(input$checkbox_agri, {
@@ -130,43 +35,6 @@ server <- function(input, output, session) {
       updateSliderInput(session, "biodiversity_w", value = 0)
       updateSliderInput(session, "community_w", value = 0)
     }
-    
-    ## Leaflet display --------------------
-    output$map <- renderLeaflet({
-      pal <- colorNumeric(palette= "Greens",
-                          domain = resources_axis_r["agricultur"][[1]],
-                          na.color = "transparent") # pallete for default leaflet
-    
-    ### Process for Raster data --------------------
-    leaflet() %>% addTiles() %>%
-      addGeoRaster(resources_axis_r["agricultur"], 
-                   opacity = input$alpha,
-                   colorOptions =leafem:::colorOptions(
-                     palette = "Greens",
-                     breaks = seq(min(resources_axis_r["agricultur"][[1]], na.rm = TRUE),
-                                  max(resources_axis_r["agricultur"][[1]], na.rm = TRUE),
-                                  100),
-                     na.color = "transparent"
-                   ),
-                   resolution=10000) %>% 
-      addProviderTiles(providers$Stamen.Terrain) %>% 
-      addLegend(pal = pal,
-                values = resources_axis_r["agricultur"][[1]],
-                position = "bottomright",
-                opacity = input$alpha) %>% 
-      fitBounds(lng1=as.numeric(bb(resources_axis_r)[1]), 
-                lat1=as.numeric(bb(resources_axis_r)[2]),
-                lng2=as.numeric(bb(resources_axis_r)[3]),
-                lat2=as.numeric(bb(resources_axis_r)[4])) %>% 
-      addDrawToolbar(targetGroup = "draw",
-                     polylineOptions = FALSE,
-                     circleOptions = FALSE,
-                     markerOptions = FALSE,
-                     circleMarkerOptions = FALSE,
-                     editOptions = editToolbarOptions(
-                       selectedPathOptions = selectedPathOptions()),
-                     position = "topright",
-                     singleFeature = TRUE) })
     })
     
   observeEvent(input$checkbox_bio, {
@@ -176,43 +44,6 @@ server <- function(input, output, session) {
       updateSliderInput(session, "water_w", value = 0)
       updateSliderInput(session, "community_w", value = 0)
     }
-    
-    ## Leaflet display --------------------
-    output$map <- renderLeaflet({
-      pal <- colorNumeric(palette= "Greens",
-                          domain = resources_axis_r["flora_faun"][[1]],
-                          na.color = "transparent") # pallete for default leaflet
-      
-      ### Process for Raster data --------------------
-      leaflet() %>% addTiles() %>%
-        addGeoRaster(resources_axis_r["flora_faun"], 
-                     opacity = input$alpha,
-                     colorOptions =leafem:::colorOptions(
-                       palette = "Greens",
-                       breaks = seq(min(resources_axis_r["flora_faun"][[1]], na.rm = TRUE),
-                                    max(resources_axis_r["flora_faun"][[1]], na.rm = TRUE),
-                                    100),
-                       na.color = "transparent"
-                     ),
-                     resolution=10000) %>% 
-        addProviderTiles(providers$Stamen.Terrain) %>% 
-        addLegend(pal = pal,
-                  values = resources_axis_r["flora_faun"][[1]],
-                  position = "bottomright",
-                  opacity = input$alpha) %>% 
-        fitBounds(lng1=as.numeric(bb(resources_axis_r)[1]), 
-                  lat1=as.numeric(bb(resources_axis_r)[2]),
-                  lng2=as.numeric(bb(resources_axis_r)[3]),
-                  lat2=as.numeric(bb(resources_axis_r)[4])) %>% 
-        addDrawToolbar(targetGroup = "draw",
-                       polylineOptions = FALSE,
-                       circleOptions = FALSE,
-                       markerOptions = FALSE,
-                       circleMarkerOptions = FALSE,
-                       editOptions = editToolbarOptions(
-                         selectedPathOptions = selectedPathOptions()),
-                       position = "topright",
-                       singleFeature = TRUE) })
   })
       
   observeEvent(input$checkbox_com, {
@@ -222,45 +53,8 @@ server <- function(input, output, session) {
       updateSliderInput(session, "biodiversity_w", value = 0)
       updateSliderInput(session, "water_w", value = 0)
     }
-    
-    ## Leaflet display --------------------
-    output$map <- renderLeaflet({
-      pal <- colorNumeric(palette= "Greens",
-                          domain = resources_axis_r["community"][[1]],
-                          na.color = "transparent") # pallete for default leaflet
-      
-      ### Process for Raster data --------------------
-      leaflet() %>% addTiles() %>%
-        addGeoRaster(resources_axis_r["community"], 
-                     opacity = input$alpha,
-                     colorOptions =leafem:::colorOptions(
-                       palette = "Greens",
-                       breaks = seq(min(resources_axis_r["community"][[1]], na.rm = TRUE),
-                                    max(resources_axis_r["community"][[1]], na.rm = TRUE),
-                                    100),
-                       na.color = "transparent"
-                     ),
-                     resolution=10000) %>% 
-        addProviderTiles(providers$Stamen.Terrain) %>% 
-        addLegend(pal = pal,
-                  values = resources_axis_r["community"][[1]],
-                  position = "bottomright",
-                  opacity = input$alpha) %>% 
-        fitBounds(lng1=as.numeric(bb(resources_axis_r)[1]), 
-                  lat1=as.numeric(bb(resources_axis_r)[2]),
-                  lng2=as.numeric(bb(resources_axis_r)[3]),
-                  lat2=as.numeric(bb(resources_axis_r)[4])) %>% 
-        addDrawToolbar(targetGroup = "draw",
-                       polylineOptions = FALSE,
-                       circleOptions = FALSE,
-                       markerOptions = FALSE,
-                       circleMarkerOptions = FALSE,
-                       editOptions = editToolbarOptions(
-                         selectedPathOptions = selectedPathOptions()),
-                       position = "topright",
-                       singleFeature = TRUE) })
   })
-
+  
   # AHP weights  -----------------------------------------------------------------------
   # ------------------------------------------------------------------------------------
     
@@ -335,10 +129,10 @@ server <- function(input, output, session) {
     })
 
     
-  # Free weights display ---------------------------------------------------------------
+  # Apply selected weights -------------------------------------------------------------
   # ------------------------------------------------------------------------------------
     
-    weights_reactive <- eventReactive(input$run,{
+    weights_reactive <- reactive({
         
         ## Process for Raster data --------------------
         resources_axis_r %>% 
@@ -367,7 +161,8 @@ server <- function(input, output, session) {
         ## Process for Raster data --------------------
         colorNumeric(palette= "Greens",
                      domain = weights_reactive()["norm_score"][[1]],
-                     na.color = "transparent")
+                     na.color = "transparent",
+                     reverse = TRUE)
         
         ## Process for Vector data --------------------
         # colorNumeric("Greens", weights_reactive()$norm_score) # pallete for leaflet
@@ -381,8 +176,10 @@ server <- function(input, output, session) {
     #     
     # }) # end map_reactive
     
-
-    observeEvent(input$run,{
+    
+    # Map Display ------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------------
+    
     output$map <- renderLeaflet({
 
         ## Process for Raster data --------------------
@@ -401,7 +198,8 @@ server <- function(input, output, session) {
             addLegend(pal = pallete_reactive(),
                       values = weights_reactive()["norm_score"][[1]],
                       position = "bottomright",
-                      opacity = input$alpha) %>% 
+                      opacity = input$alpha,
+                      labFormat = labelFormat(transform = function(x) sort(x, decreasing = TRUE))) %>% 
             fitBounds(lng1=as.numeric(bb(weights_reactive())[1]), 
                       lat1=as.numeric(bb(weights_reactive())[2]),
                       lng2=as.numeric(bb(weights_reactive())[3]),
@@ -428,9 +226,6 @@ server <- function(input, output, session) {
         #               opacity = 1)
     
     })
-    })
-    
- 
     
 # Extract data from the map ---------------------------------------------------------------
 # -----------------------------------------------------------------------------------------
@@ -463,60 +258,9 @@ server <- function(input, output, session) {
         }
         
         else {
-          
-          if (!input$run) {
-            
-            extracted_area <- st_crop(resources_axis_r, polygon)
-            
-            extracted_df <- cbind(agricultur= as.numeric(extracted_area$agricultur),
-                                  community= as.numeric(extracted_area$community),
-                                  flora_faun= as.numeric(extracted_area$flora_faun),
-                                  water_raw= as.numeric(extracted_area$water_raw),
-                                  eems_synth= as.numeric(extracted_area$eems_synth)) %>%
-              as.data.frame()
-            
-            mean_extracted_values <- apply(extracted_df,2,mean,na.rm=T)
-            
-            output$mytable = renderTable({
-              t(mean_extracted_values)
-            })
-            
-            output$radar_graph <- renderPlotly({
-              
-              selected <- as.data.frame(df)
-              
-              fig <- plot_ly(
-                type = 'scatterpolar',
-                r =   as.numeric(mean_extracted_values[1:4]),
-                theta = c("Agriculture",
-                          "Community",
-                          "Biodiversity",
-                          "Water"),
-                fill = 'toself',
-              )
-              
-              fig <- fig %>%
-                layout(
-                  polar = list(radialaxis = list(
-                    visible = T,
-                    range = c(0,1))
-                  ),
-                  plot_bgcolor  = "rgba(0, 0, 0, 0)",
-                  paper_bgcolor = "rgba(0, 0, 0, 0)",
-                  fig_bgcolor   = "rgba(0, 0, 0, 0)",
-                  showlegend = F
-                )
-              fig
-            })
-            
-            
-          }
-          
-          else{
-            
-            extracted_area <- st_crop(resources_axis_r, polygon)
-            
-            extracted_area_aggr <- st_crop(weights_reactive(), polygon)
+
+            extracted_area <- st_crop(resources_axis_r, polygon) # Original spatial data
+            extracted_area_aggr <- st_crop(weights_reactive(), polygon) # Aggregated spatial data
             
             extracted_df <- cbind(agricultur= as.numeric(extracted_area$agricultur),
                                   community= as.numeric(extracted_area$community),
@@ -526,10 +270,9 @@ server <- function(input, output, session) {
               as.data.frame()
             
             mean_extracted_values <- apply(extracted_df,2,mean,na.rm=T)
-            
           
             output$mytable = renderTable({
-              t(mean_extracted_values)
+              t(round(mean_extracted_values,2))
             })
             
             output$radar_graph <- renderPlotly({
@@ -559,7 +302,7 @@ server <- function(input, output, session) {
                 )
               fig
             })
-          }
+          #}
         }
           
           
