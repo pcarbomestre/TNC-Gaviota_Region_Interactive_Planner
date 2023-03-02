@@ -183,7 +183,7 @@ server <- function(input, output, session) {
     output$map <- renderLeaflet({
 
         ## Process for Raster data --------------------
-        map <- leaflet() %>% addTiles() %>%
+        map <- leaflet(options = leafletOptions(minZoom = 9)) %>% addTiles() %>%
             addGeoRaster(weights_reactive()["norm_score"], 
                          opacity = input$alpha,
                          colorOptions =leafem:::colorOptions(
@@ -204,6 +204,10 @@ server <- function(input, output, session) {
                       lat1=as.numeric(bb(weights_reactive())[2]),
                       lng2=as.numeric(bb(weights_reactive())[3]),
                       lat2=as.numeric(bb(weights_reactive())[4])) %>% 
+          setMaxBounds(lng1=as.numeric(bb(weights_reactive())[1])-1, 
+                       lat1=as.numeric(bb(weights_reactive())[2])-0.4,
+                       lng2=as.numeric(bb(weights_reactive())[3])+1,
+                       lat2=as.numeric(bb(weights_reactive())[4])+0.4) %>% 
             addDrawToolbar(targetGroup = "draw",
                            polylineOptions = FALSE,
                            circleOptions = FALSE,
@@ -212,7 +216,7 @@ server <- function(input, output, session) {
                            editOptions = editToolbarOptions(
                                selectedPathOptions = selectedPathOptions()),
                            position = "topright",
-                           singleFeature = TRUE) 
+                           singleFeature = TRUE)
         
         ## Process for Raster data --------------------
         # map <-  leaflet(map_reactive()) %>% 
@@ -234,6 +238,7 @@ server <- function(input, output, session) {
     # Generate Shape List Action Button
     
     observeEvent(input$printShapes, {
+      
         shapedf <- data.frame()
         reactive(shapedf)
         shapedf <-input$map_draw_all_features
@@ -256,6 +261,7 @@ server <- function(input, output, session) {
                        size="xs",
                        animation=T)
         }
+      
         
         else {
 
@@ -267,12 +273,29 @@ server <- function(input, output, session) {
                                   flora_faun= as.numeric(extracted_area$flora_faun),
                                   water_raw= as.numeric(extracted_area$water_raw),
                                   aggregated_val= as.numeric(extracted_area_aggr$norm_score)) %>%
-              as.data.frame()
+              as.data.frame() %>% 
+              na.omit()
             
+         
             mean_extracted_values <- apply(extracted_df,2,mean,na.rm=T)
+            
+            summary_data <- data.frame(value=c("Agriculture","Community","bio","water","aggregated"),
+                                       score=mean_extracted_values)
+            rownames(summary_data)<-NULL
+            
           
             output$mytable = renderTable({
-              t(round(mean_extracted_values,2))
+              summary_data
+            })
+            
+            output$gauge = renderGauge({
+              gauge(as.numeric(mean_extracted_values[5]), 
+                    min = 0, 
+                    max = 1, 
+                    abbreviateDecimals=2,
+                    sectors = gaugeSectors(success = c(0.5, 1), 
+                                           warning = c(0.3, 0.5),
+                                           danger = c(0, 0.3)))
             })
             
             output$radar_graph <- renderPlotly({

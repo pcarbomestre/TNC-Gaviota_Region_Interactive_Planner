@@ -37,7 +37,8 @@ packs = c("tidyverse",
           "plotly",
           "kableExtra",
           "rgeos",
-          "shinyalert"
+          "shinyalert",
+          "flexdashboard"
           )
 
 
@@ -117,6 +118,33 @@ intro<-read.csv("./data/intro.csv")
 # ----------------------
 # Map setup
 pal <- colorNumeric("Greens", threats_axis_sf$eems_synth) # pallete for default leaflet
+
+map_bounds <- st_bbox(resources_axis_sf) %>% 
+  as.vector()
+
+leaflet() %>% 
+  addTiles() %>% 
+  setMaxBounds(lng1=map_bounds[1], lat1= map_bounds[2], lng2=map_bounds[3], lat2= map_bounds[4])
+
+
+leaflet(options = leafletOptions(minZoom = 11)) %>%
+  addProviderTiles("OpenStreetMap") %>%
+  setView( lng = -87.567215
+           , lat = 41.822582
+           , zoom = 11 ) %>%
+  setMaxBounds( lng1 = -120.8998
+                , lat1 = 34.27348
+                , lng2 = -119.1025
+                , lat2 = 35.31413 ) %>% 
+  addDrawToolbar(targetGroup = "draw",
+                 polylineOptions = FALSE,
+                 circleOptions = FALSE,
+                 markerOptions = FALSE,
+                 circleMarkerOptions = FALSE,
+                 editOptions = editToolbarOptions(
+                   selectedPathOptions = selectedPathOptions()),
+                 position = "topright",
+                 singleFeature = TRUE)
 
 # Custom theme
 my_theme <- bs_theme(

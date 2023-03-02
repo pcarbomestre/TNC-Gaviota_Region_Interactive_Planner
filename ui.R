@@ -229,7 +229,15 @@ body <- dashboardBody(
                                  h4("To extract statistics from your area of interest, simply create a polygon on the map and then click on the Generate Stats button.",
                                     style="text-align: center")
                                  ),
-                        tabPanel("Summary", tableOutput("mytable")),
+                        tabPanel("Summary",
+                                 fluidRow(column(4,
+                                                 tableOutput("mytable")),
+                                          column(6,
+                                                 h4("Aggregated Score:"),
+                                                 gaugeOutput("gauge"))
+                                          )
+                                 ),
+
                         tabPanel("Plot",plotlyOutput("radar_graph", inline=T, height = 210)),
                       
                         )
