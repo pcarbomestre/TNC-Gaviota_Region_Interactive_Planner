@@ -275,12 +275,20 @@ server <- function(input, output, session) {
     # Generate Shape List Action Button
     
     observeEvent(input$printShapes, {
+
+      shapedf <- data.frame()
+      reactive(shapedf)
+      shapedf <- input$map_draw_all_features
+      sh <- as.data.frame(shapedf)
       
-        shapedf <- data.frame()
-        reactive(shapedf)
-        shapedf <-input$map_draw_all_features
-        sh <- as.data.frame(shapedf)
-        
+      if(sum(dim(sh)) == 0){
+        shinyalert("Draw a shape", 
+                   "Draw a polygon to extract statistics", 
+                   type = "warning",
+                   size="xs",
+                   animation=T)
+      } else {
+    
         polygon <- sh %>% 
             dplyr::select(starts_with("features.geometry.coordinates")) %>% 
             as.numeric() %>% 
@@ -364,33 +372,23 @@ server <- function(input, output, session) {
             })
           #}
         }
-          
-          
-        
-        
-        
-
-      
-        
-        
+      }
 
     })
     
-    # Intake Shape CSV
-    observeEvent(input$drawingFile, {
-        drawFile <- input$drawingFile
-        ext <- file_ext(drawFile$datapath)
-        req(drawFile)
-        validate(need(ext == "csv", "Please upload a csv file."))
+    # Intake Shape
+    observeEvent(input$drawing, {
         
-        ddf <- read.csv(drawFile$datapath, header = TRUE) # The drawing dataframe
+        ddf <- data.frame() # The drawing dataframe
         ind <- which(ddf == "Feature") # Index for drawing df to break up the df to redraw the shapes.
         ind <- as.array(ind)
+    
+      
         
         for (i in 1:nrow(ind)) {
             if(i != nrow(ind)) thisShape <- ddf[ind[i]:ind[i+1]]
             else thisShape <- ddf[ind[i]:ncol(ddf)]
-            
+
             #####
             
              if(thisShape[3] == "polygon") {
@@ -428,6 +426,11 @@ server <- function(input, output, session) {
                 
                 proxy <- leafletProxy("map", data = PG1())
                 proxy %>% addPolygons(lng = ~lng, lat = ~lat, group = "draw")
+                
+                output$statsBut <- renderUI({
+                  actionButton("printShapes", h5(strong("Generate Stats")))
+                })
+              
             }
             #####
             else if(thisShape[3] == "rectangle"){
@@ -439,11 +442,16 @@ server <- function(input, output, session) {
                 proxy <- leafletProxy("map")
                 proxy %>% addRectangles(lng1 = rlng1, lat1 = rlat1, lng2 = rlng2, lat2 = rlat2,
                                         group = "draw")
+                
             }
             #####
         }
     })
     
+    # output$printShapes <- renderUI({
+    #   actionButton("printShapes", h5(strong("Generate Stats")))
+    # })
+    # 
 
     
     

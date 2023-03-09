@@ -280,7 +280,7 @@ body <- dashboardBody(
                      )
                      ),
                      
-                     absolutePanel(id = "stats-button", 
+                     absolutePanel(id = "printShapes", 
                                    class = "panel panel-default", 
                                    fixed = TRUE,
                                    draggable = FALSE, 
@@ -300,6 +300,7 @@ body <- dashboardBody(
                      selectInput("stakeholder_w", label = "Select stakeholder's weights:", 
                                  choices = c("None",ahp_weights$group), 
                                  selected = NULL),
+                     #uiOutput("statsBut"),
                      
                      h2("How to use this map?"),
                      tags$p("The Santa Barbara Countys Interactive Planner allows you to adjust weights given to each of the four 
