@@ -236,7 +236,7 @@ body <- dashboardBody(
                      fluidRow(
                        column(10,
                                    actionLink("checkbox_agri", label = "Soil"),
-                                   sliderInput(inputId = "agriculture_w",
+                                   sliderInput(inputId = "soil_w",
                                                label = NULL,
                                                ticks = FALSE,
                                                min = 0,
@@ -245,7 +245,7 @@ body <- dashboardBody(
                        ),
                        column(1,offset = 0, style='padding: 15px 10px 0px 0px;',
                               br(),
-                              textOutput("agriculture_agg_pref")
+                              textOutput("soil_agg_pref")
                        )
                      ),
                      fluidRow(
@@ -265,8 +265,8 @@ body <- dashboardBody(
                      ),
                      fluidRow(
                        column(10,   
-                                   actionLink("checkbox_com", label = "Community resources"),
-                                   sliderInput(inputId = "community_w",
+                                   actionLink("checkbox_com", label = "Resilience"),
+                                   sliderInput(inputId = "resil_w",
                                                label = NULL,
                                                ticks = FALSE,
                                                min = 0,
@@ -275,7 +275,7 @@ body <- dashboardBody(
                                    ),
                        column(1,offset = 0, style='padding: 15px 10px 0px 0px;',
                               br(),
-                              textOutput("community_agg_pref")
+                              textOutput("resilience_agg_pref")
                        )
                      )
                      ),

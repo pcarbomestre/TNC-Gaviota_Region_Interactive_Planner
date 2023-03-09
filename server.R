@@ -22,34 +22,34 @@ server <- function(input, output, session) {
   observeEvent(input$checkbox_water, {
     if (input$checkbox_water) {
       updateSliderInput(session, "water_w", value = 5)
-      updateSliderInput(session, "agriculture_w", value = 0)
+      updateSliderInput(session, "soil_w", value = 0)
       updateSliderInput(session, "biodiversity_w", value = 0)
-      updateSliderInput(session, "community_w", value = 0)
+      updateSliderInput(session, "resil_w", value = 0)
     }
   })
   
   observeEvent(input$checkbox_agri, {
     if (input$checkbox_agri) {
-      updateSliderInput(session, "agriculture_w", value = 5)
+      updateSliderInput(session, "soil_w", value = 5)
       updateSliderInput(session, "water_w", value = 0)
       updateSliderInput(session, "biodiversity_w", value = 0)
-      updateSliderInput(session, "community_w", value = 0)
+      updateSliderInput(session, "resil_w", value = 0)
     }
     })
     
   observeEvent(input$checkbox_bio, {
     if (input$checkbox_bio) {
       updateSliderInput(session, "biodiversity_w", value = 5)
-      updateSliderInput(session, "agriculture_w", value = 0)
+      updateSliderInput(session, "soil_w", value = 0)
       updateSliderInput(session, "water_w", value = 0)
-      updateSliderInput(session, "community_w", value = 0)
+      updateSliderInput(session, "resil_w", value = 0)
     }
   })
       
   observeEvent(input$checkbox_com, {
     if (input$checkbox_com) {
-      updateSliderInput(session, "community_w", value = 5)
-      updateSliderInput(session, "agriculture_w", value = 0)
+      updateSliderInput(session, "resil_w", value = 5)
+      updateSliderInput(session, "soil_w", value = 0)
       updateSliderInput(session, "biodiversity_w", value = 0)
       updateSliderInput(session, "water_w", value = 0)
     }
@@ -60,16 +60,16 @@ server <- function(input, output, session) {
     
   # Calculate aggregated preference values from weights
   agg_pref_df <- reactive({
-    data.frame(resources = c("agricultur","community","flora_faun","water_raw"),
-               weights= c(input$agriculture_w,
-                          input$community_w,
+    data.frame(resources = c("soil_fz","resil_fz","bio_fz","water_fz"),
+               weights= c(input$soil_w,
+                          input$resil_w,
                           input$biodiversity_w,
                           input$water_w)) %>% 
       mutate(agg_pref = weights/sum(weights))
   })
   
-  output$agriculture_agg_pref <- renderText(paste(round(as.numeric(agg_pref_df()[1,3]),2)))
-  output$community_agg_pref <- renderText(paste(round(as.numeric(agg_pref_df()[2,3]),2)))
+  output$soil_agg_pref <- renderText(paste(round(as.numeric(agg_pref_df()[1,3]),2)))
+  output$resilience_agg_pref <- renderText(paste(round(as.numeric(agg_pref_df()[2,3]),2)))
   output$biodiversity_agg_pref <- renderText(paste(round(as.numeric(agg_pref_df()[3,3]),2)))
   output$water_agg_pref <- renderText(paste(round(as.numeric(agg_pref_df()[4,3]),2)))
   
@@ -81,7 +81,6 @@ server <- function(input, output, session) {
                                    "Non-profit"=100,
                                    "Farm/Ranch"=76,
                                    Indigenous=58)
-    
     
     
     # If selected element changes, then update the slider
@@ -99,7 +98,7 @@ server <- function(input, output, session) {
     
     observeEvent(input$stakeholder_w, {
       selected_weight = agri_weights[[input$stakeholder_w]]
-      updateSliderInput(session, "agriculture_w", value = selected_weight)
+      updateSliderInput(session, "soil_w", value = selected_weight)
     })
     
     bio_weights = reactiveValues(None=NULL,
@@ -123,31 +122,31 @@ server <- function(input, output, session) {
     
     observeEvent(input$stakeholder_w, {
       selected_weight = com_weights[[input$stakeholder_w]]
-      updateSliderInput(session, "community_w", value = selected_weight)
+      updateSliderInput(session, "resil_w", value = selected_weight)
     
     })
     
     # If slide bar values do not match group weights
     observe({
-      if(input$community_w == com_weights[["Government"]] &
+      if(input$resil_w == com_weights[["Government"]] &
          input$biodiversity_w == bio_weights[["Government"]] &
-         input$agriculture_w == agri_weights[["Government"]] &
+         input$soil_w == agri_weights[["Government"]] &
          input$water_w == water_weights[["Government"]]){
-      } else if(input$community_w == com_weights[["All"]] &
+      } else if(input$resil_w == com_weights[["All"]] &
                 input$biodiversity_w == bio_weights[["All"]] &
-                input$agriculture_w == agri_weights[["All"]] &
+                input$soil_w == agri_weights[["All"]] &
                 input$water_w == water_weights[["All"]]) {
-      } else if(input$community_w == com_weights[["Non-profit"]] &
+      } else if(input$resil_w == com_weights[["Non-profit"]] &
                 input$biodiversity_w == bio_weights[["Non-profit"]] &
-                input$agriculture_w == agri_weights[["Non-profit"]] &
+                input$soil_w == agri_weights[["Non-profit"]] &
                 input$water_w == water_weights[["Non-profit"]]) {
-      } else if(input$community_w == com_weights[["Farm/Ranch"]] &
+      } else if(input$resil_w == com_weights[["Farm/Ranch"]] &
                 input$biodiversity_w == bio_weights[["Farm/Ranch"]] &
-                input$agriculture_w == agri_weights[["Farm/Ranch"]] &
+                input$soil_w == agri_weights[["Farm/Ranch"]] &
                 input$water_w == water_weights[["Farm/Ranch"]]) {
-      } else if(input$community_w == com_weights[["Indigenous"]] &
+      } else if(input$resil_w == com_weights[["Indigenous"]] &
                 input$biodiversity_w == bio_weights[["Indigenous"]] &
-                input$agriculture_w == agri_weights[["Indigenous"]] &
+                input$soil_w == agri_weights[["Indigenous"]] &
                 input$water_w == water_weights[["Indigenous"]]) {
       } else {
         updateSelectInput(session,"stakeholder_w",selected="None")
@@ -163,31 +162,31 @@ server <- function(input, output, session) {
         
       # Using Aggregated Preference values
       resources_axis_r %>% 
-            mutate("agricultur" = agricultur * agg_pref_df()[1,3]) %>%
-            mutate("community" = community * agg_pref_df()[2,3]) %>%
-            mutate("flora_faun" = flora_faun * agg_pref_df()[3,3]) %>%
-            mutate("water_raw" = water_raw * agg_pref_df()[4,3]) %>%
-            mutate(score = agricultur + community + flora_faun + water_raw) %>%
+            mutate("soil_fz" = soil_fz * agg_pref_df()[1,3]) %>%
+            mutate("resil_fz" = resil_fz * agg_pref_df()[2,3]) %>%
+            mutate("bio_fz" = bio_fz * agg_pref_df()[3,3]) %>%
+            mutate("water_fz" = water_fz * agg_pref_df()[4,3]) %>%
+            mutate(score = soil_fz + resil_fz + bio_fz + water_fz) %>%
             mutate(norm_score = range_norm_manual(score))
       
       
       # Applying weights directly
         ## Process for Raster data --------------------
         # resources_axis_r %>% 
-        #     mutate("agricultur" = agricultur * input$agriculture_w) %>% 
-        #     mutate("community" = community * input$community_w) %>% 
-        #     mutate("flora_faun" = flora_faun * input$biodiversity_w) %>% 
-        #     mutate("water_raw" = water_raw * input$water_w) %>% 
-        #     mutate(score = agricultur + community + flora_faun + water_raw) %>% 
+        #     mutate("soil_fz" = soil_fz * input$soil_w) %>% 
+        #     mutate("resil_fz" = resil_fz * input$resil_fz) %>% 
+        #     mutate("bio_fz" = bio_fz * input$biodiversity_w) %>% 
+        #     mutate("water_fz" = water_fz * input$water_w) %>% 
+        #     mutate(score = soil_fz + resil_fz + bio_fz + water_fz) %>% 
         #     mutate(norm_score = range_norm_manual(score))
         
         ## Process for Vector data --------------------
         # resources_axis_df %>%
-        #     mutate_at(vars(agricultur), function(x) input$agriculture_w * x) %>% 
-        #     mutate_at(vars(community), function(x) input$community_w * x) %>% 
-        #     mutate_at(vars(flora_faun), function(x) input$biodiversity_w * x) %>% 
-        #     mutate_at(vars(water_raw), function(x) input$water_w * x) %>% 
-        #     mutate(score = agricultur+community+flora_faun+water_raw) %>% 
+        #     mutate_at(vars(soil_fz), function(x) input$soil_w * x) %>% 
+        #     mutate_at(vars(resil_fz), function(x) input$resil_fz * x) %>% 
+        #     mutate_at(vars(bio_fz), function(x) input$biodiversity_w * x) %>% 
+        #     mutate_at(vars(water_fz), function(x) input$water_w * x) %>% 
+        #     mutate(score = soil_fz+resil_fz+bio_fz+water_fz) %>% 
         #     mutate(norm_score = range_norm(score)[,1],.after = objectid) %>% 
         #     select(c(objectid,norm_score))
         
@@ -306,10 +305,10 @@ server <- function(input, output, session) {
             extracted_area <- st_crop(resources_axis_r, polygon) # Original spatial data
             extracted_area_aggr <- st_crop(weights_reactive(), polygon) # Aggregated spatial data
             
-            extracted_df <- cbind(agricultur= as.numeric(extracted_area$agricultur),
-                                  community= as.numeric(extracted_area$community),
-                                  flora_faun= as.numeric(extracted_area$flora_faun),
-                                  water_raw= as.numeric(extracted_area$water_raw),
+            extracted_df <- cbind(soil_fz= as.numeric(extracted_area$soil_fz),
+                                  resil_fz= as.numeric(extracted_area$resil_fz),
+                                  bio_fz= as.numeric(extracted_area$bio_fz),
+                                  water_fz= as.numeric(extracted_area$water_fz),
                                   aggregated_val= as.numeric(extracted_area_aggr$norm_score)) %>%
               as.data.frame() %>% 
               na.omit()
@@ -317,7 +316,7 @@ server <- function(input, output, session) {
          
             mean_extracted_values <- apply(extracted_df,2,mean,na.rm=T)
             
-            summary_data <- data.frame(value=c("Agriculture","Community","bio","water","aggregated"),
+            summary_data <- data.frame(value=c("Soil","Resilience","Biodiversity","Water resources","Aggregated score"),
                                        score=mean_extracted_values)
             rownames(summary_data)<-NULL
             
@@ -343,8 +342,8 @@ server <- function(input, output, session) {
               fig <- plot_ly(
                 type = 'scatterpolar',
                 r =   as.numeric(mean_extracted_values[1:4]),
-                theta = c("Agriculture",
-                          "Community",
+                theta = c("Soil",
+                          "Resilience",
                           "Biodiversity",
                           "Water"),
                 fill = 'toself',
