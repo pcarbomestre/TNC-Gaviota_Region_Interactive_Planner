@@ -1,0 +1,21 @@
+group;resource;agg_pref
+All;Biodiversity;0.32
+All;Water;0.28
+All;Soil;0.17
+All;Climate Resilience;0.23
+Government;Biodiversity;0.37
+Government;Water;0.29
+Government;Soil;0.12
+Government;Climate Resilience;0.22
+Non-profit;Biodiversity;0.27
+Non-profit;Water;0.27
+Non-profit;Soil;0.26
+Non-profit;Climate Resilience;0.20
+Farm/Ranch;Biodiversity;0.09
+Farm/Ranch;Water;0.35
+Farm/Ranch;Soil;0.46
+Farm/Ranch;Climate Resilience;0.10
+Indigenous;Biodiversity;0.27
+Indigenous;Water;0.21
+Indigenous;Soil;0.16
+Indigenous;Climate Resilience;0.36

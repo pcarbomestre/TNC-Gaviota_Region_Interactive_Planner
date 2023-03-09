@@ -58,12 +58,31 @@ server <- function(input, output, session) {
   # AHP weights  -----------------------------------------------------------------------
   # ------------------------------------------------------------------------------------
     
+  # Calculate aggregated preference values from weights
+  agg_pref_df <- reactive({
+    data.frame(resources = c("agricultur","community","flora_faun","water_raw"),
+               weights= c(input$agriculture_w,
+                          input$community_w,
+                          input$biodiversity_w,
+                          input$water_w)) %>% 
+      mutate(agg_pref = weights/sum(weights))
+  })
+  
+  output$agriculture_agg_pref <- renderText(paste(round(as.numeric(agg_pref_df()[1,3]),2)))
+  output$community_agg_pref <- renderText(paste(round(as.numeric(agg_pref_df()[2,3]),2)))
+  output$biodiversity_agg_pref <- renderText(paste(round(as.numeric(agg_pref_df()[3,3]),2)))
+  output$water_agg_pref <- renderText(paste(round(as.numeric(agg_pref_df()[4,3]),2)))
+  
+
     # initialize the weights
     water_weights = reactiveValues(None=NULL,
-                                   Government=3,
-                                   NGO=6,
-                                   Native=1,
-                                   Private=5)
+                                   All=88,
+                                   Government=78,
+                                   "Non-profit"=100,
+                                   "Farm/Ranch"=76,
+                                   Indigenous=58)
+    
+    
     
     # If selected element changes, then update the slider
     observeEvent(input$stakeholder_w, {
@@ -72,10 +91,11 @@ server <- function(input, output, session) {
     })
     
     agri_weights = reactiveValues(None=NULL,
-                                   Government=6,
-                                   NGO=1,
-                                   Native=4,
-                                   Private=8)
+                                  All=53,
+                                  Government=32,
+                                  "Non-profit"=96,
+                                  "Farm/Ranch"=100,
+                                  Indigenous=44)
     
     observeEvent(input$stakeholder_w, {
       selected_weight = agri_weights[[input$stakeholder_w]]
@@ -83,10 +103,11 @@ server <- function(input, output, session) {
     })
     
     bio_weights = reactiveValues(None=NULL,
-                                  Government=9,
-                                  NGO=5,
-                                  Native=1,
-                                  Private=5)
+                                 All= 100,
+                                 Government=100,
+                                 "Non-profit"=100,
+                                 "Farm/Ranch"=20,
+                                 Indigenous=75)
     
     observeEvent(input$stakeholder_w, {
       selected_weight = bio_weights[[input$stakeholder_w]]
@@ -94,10 +115,11 @@ server <- function(input, output, session) {
     })
     
     com_weights = reactiveValues(None=NULL,
-                                 Government=7,
-                                 NGO=2,
-                                 Native=5,
-                                 Private=3)
+                                 All=72,
+                                 Government=59,
+                                 "Non-profit"=74,
+                                 "Farm/Ranch"=22,
+                                 Indigenous=100)
     
     observeEvent(input$stakeholder_w, {
       selected_weight = com_weights[[input$stakeholder_w]]
@@ -111,18 +133,22 @@ server <- function(input, output, session) {
          input$biodiversity_w == bio_weights[["Government"]] &
          input$agriculture_w == agri_weights[["Government"]] &
          input$water_w == water_weights[["Government"]]){
-      } else if(input$community_w == com_weights[["NGO"]] &
-                input$biodiversity_w == bio_weights[["NGO"]] &
-                input$agriculture_w == agri_weights[["NGO"]] &
-                input$water_w == water_weights[["NGO"]]) {
-      } else if(input$community_w == com_weights[["Native"]] &
-                input$biodiversity_w == bio_weights[["Native"]] &
-                input$agriculture_w == agri_weights[["Native"]] &
-                input$water_w == water_weights[["Native"]]) {
-      } else if(input$community_w == com_weights[["Private"]] &
-                input$biodiversity_w == bio_weights[["Private"]] &
-                input$agriculture_w == agri_weights[["Private"]] &
-                input$water_w == water_weights[["Private"]]) {
+      } else if(input$community_w == com_weights[["All"]] &
+                input$biodiversity_w == bio_weights[["All"]] &
+                input$agriculture_w == agri_weights[["All"]] &
+                input$water_w == water_weights[["All"]]) {
+      } else if(input$community_w == com_weights[["Non-profit"]] &
+                input$biodiversity_w == bio_weights[["Non-profit"]] &
+                input$agriculture_w == agri_weights[["Non-profit"]] &
+                input$water_w == water_weights[["Non-profit"]]) {
+      } else if(input$community_w == com_weights[["Farm/Ranch"]] &
+                input$biodiversity_w == bio_weights[["Farm/Ranch"]] &
+                input$agriculture_w == agri_weights[["Farm/Ranch"]] &
+                input$water_w == water_weights[["Farm/Ranch"]]) {
+      } else if(input$community_w == com_weights[["Indigenous"]] &
+                input$biodiversity_w == bio_weights[["Indigenous"]] &
+                input$agriculture_w == agri_weights[["Indigenous"]] &
+                input$water_w == water_weights[["Indigenous"]]) {
       } else {
         updateSelectInput(session,"stakeholder_w",selected="None")
       }
@@ -132,16 +158,28 @@ server <- function(input, output, session) {
   # Apply selected weights -------------------------------------------------------------
   # ------------------------------------------------------------------------------------
     
+ 
     weights_reactive <- reactive({
         
-        ## Process for Raster data --------------------
-        resources_axis_r %>% 
-            mutate("agricultur" = agricultur * input$agriculture_w) %>% 
-            mutate("community" = community * input$community_w) %>% 
-            mutate("flora_faun" = flora_faun * input$biodiversity_w) %>% 
-            mutate("water_raw" = water_raw * input$water_w) %>% 
-            mutate(score = agricultur + community + flora_faun + water_raw) %>% 
+      # Using Aggregated Preference values
+      resources_axis_r %>% 
+            mutate("agricultur" = agricultur * agg_pref_df()[1,3]) %>%
+            mutate("community" = community * agg_pref_df()[2,3]) %>%
+            mutate("flora_faun" = flora_faun * agg_pref_df()[3,3]) %>%
+            mutate("water_raw" = water_raw * agg_pref_df()[4,3]) %>%
+            mutate(score = agricultur + community + flora_faun + water_raw) %>%
             mutate(norm_score = range_norm_manual(score))
+      
+      
+      # Applying weights directly
+        ## Process for Raster data --------------------
+        # resources_axis_r %>% 
+        #     mutate("agricultur" = agricultur * input$agriculture_w) %>% 
+        #     mutate("community" = community * input$community_w) %>% 
+        #     mutate("flora_faun" = flora_faun * input$biodiversity_w) %>% 
+        #     mutate("water_raw" = water_raw * input$water_w) %>% 
+        #     mutate(score = agricultur + community + flora_faun + water_raw) %>% 
+        #     mutate(norm_score = range_norm_manual(score))
         
         ## Process for Vector data --------------------
         # resources_axis_df %>%
@@ -406,6 +444,9 @@ server <- function(input, output, session) {
             #####
         }
     })
+    
+
+    
     
 }
     

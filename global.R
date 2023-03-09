@@ -73,8 +73,11 @@ resources_axis_r <- st_rasterize(resources_axis_sf %>% dplyr::select(agricultur,
 resources_axis_df <- st_drop_geometry(resources_axis_sf)
 
 # AHP weights
-ahp_weights <- read_csv2(here('data','ahp_weights.csv')) %>%
-  clean_names()
+ahp_weights <- read_csv2(here('data','ahp_results.csv')) %>%
+  clean_names() %>% 
+  mutate(agg_pref = as.numeric(agg_pref)) %>% 
+  group_by(group) %>% 
+  mutate(weight = round(100*(agg_pref)/max(agg_pref),0))
 
 # Environmental Threats Axis spatial data
 threats_axis_sf <- st_read(here('data','small_MB_area','small_MB_area.shp')) %>% 

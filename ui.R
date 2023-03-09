@@ -72,23 +72,23 @@ siderbar<- dashboardSidebar(
 
 # Body ------------------------------------------------------------------
 body <- dashboardBody(
-  
-  tags$head( # must include css
-    tags$style(HTML("
-        .img-local {
-        }
-        
-        .small-box .img-local {
-        position: absolute;
-        top: auto;
-        bottom: -25px;
-        right: 5px;
-        z-index: 0;
-        font-size: 70px;
-        color: rgba(0, 0, 0, 0.15);
-        }"
-    ))
-  ),
+  # 
+  # tags$head( # must include css
+  #   tags$style(HTML("
+  #       .img-local {
+  #       }
+  #       
+  #       .small-box .img-local {
+  #       position: absolute;
+  #       top: auto;
+  #       bottom: -25px;
+  #       right: 5px;
+  #       z-index: 0;
+  #       font-size: 70px;
+  #       color: rgba(0, 0, 0, 0.15);
+  #       }"
+  #   ))
+  # ),
   
   useShinyjs(),
   introjsUI(),  
@@ -144,6 +144,72 @@ body <- dashboardBody(
                                           box-shadow: 0pt 0pt 6pt 0px rgba(61,59,61,0.48);
                                           padding-bottom: 2mm;
                                           padding-top: 1mm;",
+                                   
+                       tags$head(
+                       #Using ionRangeSlider's javascript options you can hide/show selector labels and min/max labels
+                       HTML("
+                                     <script>
+                                      $(document).ready(function(){
+                                          $(\".js-range-slider\").ionRangeSlider({
+                                          hide_min_max: false,
+                                          hide_from_to: true
+                                          });
+                                  
+                                      });
+                                  
+                                      </script>
+                                      ")
+                     ),
+                     
+                     #This CSS hack first hides the text within the span tags of the specified classes
+                     #Then it adds desired text and CSS properties. !important parameter is to override
+                     #inline css parameters.
+                     tags$style(HTML(
+                                ".irs-min {visibility:hidden !important;}
+                                    .irs-max {visibility:hidden !important;}
+                                    .js-irs-1 .irs .irs-min:after {content:'Lowest' !important;}
+                                    .js-irs-1 .irs .irs-max:after {content:'Highest' !important;}
+                                    .js-irs-2 .irs .irs-min:after {content:'Lowest' !important;}
+                                    .js-irs-2 .irs .irs-max:after {content:'Highest' !important;}
+                                    .js-irs-3 .irs .irs-min:after {content:'Lowest' !important;}
+                                    .js-irs-3 .irs .irs-max:after {content:'Highest' !important;}
+                                    .js-irs-4 .irs .irs-min:after {content:'Lowest' !important;}
+                                    .js-irs-4 .irs .irs-max:after {content:'Highest' !important;}
+                                    .irs-min:after {
+                                        visibility: visible !important;
+                                        display: block;
+                                        background: rgba(0, 0, 0, 0.1) none repeat scroll 0 0;
+                                        border-radius: 3px;
+                                        color: #333;
+                                        font-size: 10px;
+                                        line-height: 1.333;
+                                        padding: 1px 3px;
+                                        text-shadow: none;
+                                        top: 0;
+                                        cursor: default;
+                                        display: block;
+                                        left: 0;
+                                        position: absolute;}
+                                
+                                    .irs-max:after {
+                                        visibility: visible !important;
+                                        display: block;
+                                        background: rgba(0, 0, 0, 0.1) none repeat scroll 0 0;
+                                        border-radius: 3px;
+                                        color: #333;
+                                        font-size: 10px;
+                                        line-height: 1.333;
+                                        padding: 1px 3px;
+                                        text-shadow: none;
+                                        top: 0;
+                                        cursor: default;
+                                        display: block;
+                                        right: 0;
+                                        position: absolute;}
+                                
+                                ")),
+                     
+                                   
 
                                      tags$style(HTML("
                                      a.action-button {color: #000000;font-weight: bold;}
@@ -151,39 +217,68 @@ body <- dashboardBody(
                                                      ")),
                                    
                                    setSliderColor(c("#629871", "#629871", "#629871", "#629871","#629871"), c(1,2,3,4,5)),
-                                  
+                     fluidRow(
+                       column(10,
                                    actionLink("checkbox_water", label = "Water resources"),
                                    sliderInput(inputId = "water_w",
                                                label = NULL,
                                                ticks = FALSE,
                                                min = 0,
-                                               max = 10,
-                                               value = 5), # End sliderInput
-
+                                               max = 100,
+                                               value = 25), # End sliderInput
+                               ),
+                               column(1,offset = 0, style='padding: 15px 10px 0px 0px;',
+                                      br(),
+                                      textOutput("water_agg_pref")
+                                      )
+                       ),
+                     
+                     fluidRow(
+                       column(10,
                                    actionLink("checkbox_agri", label = "Soil"),
                                    sliderInput(inputId = "agriculture_w",
                                                label = NULL,
                                                ticks = FALSE,
                                                min = 0,
-                                               max = 10,
-                                               value = 5), # End sliderInput
-                                   
+                                               max = 100,
+                                               value = 25), # End sliderInput
+                       ),
+                       column(1,offset = 0, style='padding: 15px 10px 0px 0px;',
+                              br(),
+                              textOutput("agriculture_agg_pref")
+                       )
+                     ),
+                     fluidRow(
+                       column(10,
                                    actionLink("checkbox_bio", label = "Biodiversity"),
                                    sliderInput(inputId = "biodiversity_w",
                                                label = NULL,
                                                ticks = FALSE,
                                                min = 0,
-                                               max = 10,
-                                               value = 5), # End sliderInput
-                                   
+                                               max = 100,
+                                               value = 25), # End sliderInput
+                       ),
+                       column(1,offset = 0, style='padding: 15px 10px 0px 0px;',
+                              br(),
+                              textOutput("biodiversity_agg_pref")
+                       )
+                     ),
+                     fluidRow(
+                       column(10,   
                                    actionLink("checkbox_com", label = "Community resources"),
                                    sliderInput(inputId = "community_w",
                                                label = NULL,
                                                ticks = FALSE,
                                                min = 0,
-                                               max = 10,
-                                               value = 5), # End sliderInput
+                                               max = 100,
+                                               value = 25), # End sliderInput
                                    ),
+                       column(1,offset = 0, style='padding: 15px 10px 0px 0px;',
+                              br(),
+                              textOutput("community_agg_pref")
+                       )
+                     )
+                     ),
                      
                      absolutePanel(id = "stats-button", 
                                    class = "panel panel-default", 
@@ -203,7 +298,7 @@ body <- dashboardBody(
               column(6,
                      br(),
                      selectInput("stakeholder_w", label = "Select stakeholder's weights:", 
-                                 choices = c("None",ahp_weights$stakeholder), 
+                                 choices = c("None",ahp_weights$group), 
                                  selected = NULL),
                      
                      h2("How to use this map?"),
