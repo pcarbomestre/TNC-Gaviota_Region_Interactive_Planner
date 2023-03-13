@@ -324,13 +324,14 @@ server <- function(input, output, session) {
          
             mean_extracted_values <- apply(extracted_df,2,mean,na.rm=T)
             
-            summary_data <- data.frame(value=c("Soil","Resilience","Biodiversity","Water resources","Aggregated score"),
-                                       score=mean_extracted_values)
+            summary_data <- data.frame(Resource=c("Soil","Resilience","Biodiversity","Water resources","Aggregated score"),
+                                       Score=mean_extracted_values)
             rownames(summary_data)<-NULL
             
           
             output$mytable = renderTable({
-              summary_data
+              summary_data %>% 
+                filter(!Resource %in% "Aggregated score")
             })
             
             output$gauge = renderGauge({
@@ -349,12 +350,11 @@ server <- function(input, output, session) {
               
               fig <- plot_ly(
                 type = 'scatterpolar',
-                r =   as.numeric(mean_extracted_values[1:4]),
-                theta = c("Soil",
-                          "Resilience",
-                          "Biodiversity",
-                          "Water"),
+                r = as.numeric(mean_extracted_values[1:4]),
+                theta = c("Soil", "Resilience", "Biodiversity", "Water"),
                 fill = 'toself',
+                marker = list(color = 'rgba(23, 135, 53, 0.9)', size = 5),
+                fillcolor = list(color = 'rgba(27, 181, 68, 0.5)')
               )
               
               fig <- fig %>%
@@ -370,7 +370,35 @@ server <- function(input, output, session) {
                 )
               fig
             })
-          #}
+          
+            
+            output$boxplot <- renderPlot({
+              extracted_df %>%
+              rename(Soil = soil_fz, Resilience = resil_fz, Biodiversity = bio_fz, Water = water_fz) %>%
+              pivot_longer(cols=c(Soil, Resilience, Biodiversity, Water)) %>%
+              group_by(name) %>%
+              mutate(mean_value = mean(value)) %>%
+              ungroup() %>%
+              arrange(mean_value) %>%
+              mutate(name = factor(name, levels = unique(name))) %>%
+              ggplot(aes(x=name, y=value, fill=name)) +
+              geom_boxplot(color="black", alpha=0.9, lwd=0.3, outlier.size=0.7, 
+                           outlier.stroke=0, outlier.alpha=0.5, outlier.color="black") +
+              scale_fill_manual(values=palette) +
+              theme_minimal() +
+              labs(x="", y="") +
+              theme(plot.title = element_text(hjust = 0.5, size=14),
+                    axis.text.y = element_text( size=12, face="bold"),
+                    axis.text.x = element_text(angle=45, vjust=0.7, hjust=0.7,
+                                               size=10, face="bold"),
+                    panel.grid.major.y = element_blank(),
+                    panel.grid.minor.y = element_blank(),
+                    panel.grid.major.x = element_line(),
+                    panel.grid.minor.x = element_blank(),
+                    panel.background = element_blank(),
+                    legend.position="none") +
+              coord_flip()
+            },bg="transparent",height = 230, width = 400 )
         }
       }
 

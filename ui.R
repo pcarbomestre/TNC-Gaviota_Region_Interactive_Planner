@@ -106,7 +106,7 @@ body <- dashboardBody(
                                    draggable = FALSE, 
                                    top = 80, left = "auto", 
                                    right = 70, bottom = "auto",
-                                   width = 200, height = "75",
+                                   width = 200, height = 50,
                                    style="background-color: white;
                                           opacity: 0.95;
                                           padding: 20px 20px 20px 20px;
@@ -116,17 +116,33 @@ body <- dashboardBody(
                                           padding-bottom: 2mm;
                                           padding-top: 1mm;",
                                    setSliderColor("#97af9e",1),
-                                   
-          
+
                                    sliderInput(inputId = "alpha",
-                                               label = "Transparency",
+                                               label = NULL,
                                                ticks = FALSE,
                                                min = 0,
                                                max = 1,
-                                               value = 0.9,
-                                   ), # End sliderInput
-
-                                   
+                                               value = 0.9), # End sliderInput
+                     ),
+                     
+                     absolutePanel(id = "transparency_control_title", 
+                                   class = "panel panel-default", 
+                                   fixed = TRUE,
+                                   draggable = FALSE, 
+                                   top = 80, left = "auto", 
+                                   right = 70, bottom = "auto",
+                                   width = 200, height = 20,
+                                   style="background-color: rgba(0,0,0,0);
+                                          border-color: rgba(0,0,0,0);
+                                          border-style: hidden;
+                                          box-shadow: 0px;
+                                          padding-left: 20px;
+                                          padding-bottom: 20px;
+                                          padding-top: 5px;
+                                          color: #000000;
+                                          font-weight: bold;",
+                                   tags$p("Transparency",
+                                          style="text-align: justify")
                      ),
                      
                      absolutePanel(id = "controls", 
@@ -284,7 +300,7 @@ body <- dashboardBody(
                                    class = "panel panel-default", 
                                    fixed = TRUE,
                                    draggable = FALSE, 
-                                   top = 160, left = "auto", 
+                                   top = 140, left = "auto", 
                                    right = 70, bottom = "auto",
                                    width = "auto", height = "auto",
                                    style="background-color: white;
@@ -295,7 +311,7 @@ body <- dashboardBody(
                                    actionButton("printShapes", h5(strong("Generate Stats")))
                      ),
                      
-              column(6,
+              column(4,
                      br(),
                      selectInput("stakeholder_w", label = "Select stakeholder's weights:", 
                                  choices = c("None",ahp_weights$group), 
@@ -303,15 +319,13 @@ body <- dashboardBody(
                      #uiOutput("statsBut"),
                      
                      h2("How to use this map?"),
-                     tags$p("The Santa Barbara Countys Interactive Planner allows you to adjust weights given to each of the four 
-                            Conservation Goals to create an integrated assessment map that reflects your unique vision for the 
-                            region priorities. It may also be used to reveal areas for potential collaborations with partners 
-                            whose organizations may focus on different goals, or explore areas where funding for a given goal may be 
-                            leveraged to achieve conservation of other goals.",
+                     tags$p("The Santa Barbara County Interactive Planner maps 
+                     the degree of overlap of natural resources. Darker areas have more resources. 
+                     Use the sliders to adjust the relative influence of each item.",
                             style="text-align: justify")
                   ),
              
-               column(6,
+               column(8,
                       tabsetPanel(
                         tags$style(HTML(".tabbable > .nav > li > a {margin-top:5px;float:right;display:inline-block;}")),
                         tags$style(HTML(
@@ -334,7 +348,17 @@ body <- dashboardBody(
                                           )
                                  ),
 
-                        tabPanel("Plot",plotlyOutput("radar_graph", inline=T, height = 210)),
+                        tabPanel("Plot",
+                                 fluidRow(column(5,
+                                                 plotOutput("boxplot",inline=T, height = 210)),
+                                          column(7,align="right",
+                                                 br(),
+                                                 plotlyOutput("radar_graph", inline=T, height = 190)))
+                                 )
+                                 
+                                 
+                                 
+                                 ,
                       
                         )
                 ),
