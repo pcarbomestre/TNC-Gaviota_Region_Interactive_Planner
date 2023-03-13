@@ -17,9 +17,9 @@ options(spinner.color="#629871",
         spinner.type=8)
 
 # Header ------------------------------------------------------------------
-header<- dashboardHeader(title = HTML("Interactive planner"),
+header<- dashboardHeader(title = HTML("SBC Interactive planner"),
                          disable = FALSE,
-                         titleWidth = 350,
+                         titleWidth = 400,
                          dropdownMenuCustom( type = 'message',
                                                customSentence = customSentence_share,
                                                icon = icon("share-alt"),
@@ -340,36 +340,54 @@ body <- dashboardBody(
                         )),
                         tabPanel("About",
                                  h3("Area statistics:"),
-                                 br(),
-                                 h4("To extract statistics from your area of interest, simply create a polygon on the map and then click on the Generate Stats button.",
-                                    style="text-align: center")
-                                 ),
+                                 h4("To extract statistics from your area of interest, draw a shape on the map and then click on the 'Generate Stats' button.",
+                                    style="text-align: left"),
+                                 tags$p("The 'Summary' tab displays the average score of each available resource, along with the combined score calculated by applying weights.
+                                 The 'Plot' tab shows the actual scores of each resource graphically and offers insights into the data distribution within the selected area.
+                                        When no area is selected, the values for the entire region of interest are displayed."
+                                 )),
                         tabPanel("Summary",
-                                 fluidRow(column(5,
+                                 textOutput("data_displayed_note_summary"),
+                                        tags$head(tags$style("#data_displayed_note_summary{margin-top: -1.6em;
+                                           margin-left: 1em;
+                                          margin-bottom: 0.1em;
+                                           color: #808080;
+                                           font-size:12px;
+                                           font-style: italic;}"
+                                        )),
+                                 
+                                 fluidRow(column(7,
                                                  gt_output("mytable")
                                                  ),
-                                          column(6,
+                                          column(5,
+                                                 h4("Aggregated Score:",
+                                                    style="color: #808080;
+                                                    padding-top: 5px;"),
                                                  br(),
-                                                 h4("Aggregated Score:"),
                                                  gaugeOutput("gauge"))
                                           )
                                  ),
 
                         tabPanel("Plot",
+                                 textOutput("data_displayed_note_plot"),
+                                 tags$head(tags$style("#data_displayed_note_plot{margin-top: -1.6em;
+                                           margin-left: 1em;
+                                          margin-bottom: 0.1em;
+                                           color: #808080;
+                                           font-size:12px;
+                                           font-style: italic;}"
+                                 )),
                                  fluidRow(column(7,
-                                                 plotOutput("boxplot",inline=T, height = 210)),
+                                                 plotOutput("boxplot",inline=T, height = 210)
+                                                 ),
                                           column(5,
                                                  br(),
                                                  plotlyOutput("radar_graph", inline=T, height = 190),
-                                                 align="right"))
+                                                 align="right"
+                                          )
                                  )
-                                 
-                                 
-                                 
-                                 ,
-                      
                         )
-                ),
+                )),
 
               # column(1,
               #        br(),

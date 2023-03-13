@@ -41,7 +41,8 @@ packs = c("tidyverse",
           "flexdashboard",
           "htmltools",
           "gt",
-          "gtExtras"
+          "gtExtras",
+          "RColorBrewer"
           )
 
 
@@ -66,13 +67,6 @@ resources_axis_sf <- st_read(here('data','shiny_inputs','natural_resources','nat
   st_transform("EPSG:4326") # Reproject so it can be visualized using leaflet
 
 resources_axis_r <- st_rasterize(resources_axis_sf %>% dplyr::select(-id)) # Rasterizing shapefile
-
-# agricultur,
-# community,
-# flora_faun,
-# water_raw, 
-# eems_synth, 
-# geometry
 
 resources_axis_df <- st_drop_geometry(resources_axis_sf)
 

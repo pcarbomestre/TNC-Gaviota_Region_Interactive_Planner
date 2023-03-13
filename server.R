@@ -272,6 +272,118 @@ server <- function(input, output, session) {
 # -----------------------------------------------------------------------------------------
     
     
+    
+    # Summary and plots for all study area
+    observe({
+    if(!input$printShapes) {
+      # Output to be displayed if button has been clicked
+    
+    extracted_df <- cbind(soil_fz= as.numeric(resources_axis_r$soil_fz),
+                          resil_fz= as.numeric(resources_axis_r$resil_fz),
+                          bio_fz= as.numeric(resources_axis_r$bio_fz),
+                          water_fz= as.numeric(resources_axis_r$water_fz),
+                          agg_val= as.numeric(resources_axis_r$agg_val)) %>%
+      as.data.frame() %>% 
+      na.omit()
+    
+    mean_extracted_values <- apply(extracted_df,2,mean,na.rm=T)
+    
+    summary_data <- data.frame(Resource=c("Soil","Resilience","Biodiversity","Water resources","Aggregated score"),
+                               Score= mean_extracted_values)
+    rownames(summary_data)<-NULL
+    
+    output$mytable =  render_gt({
+      dplyr::tibble(img=c( "www/img/soil_icon.png",
+                           "www/img/resilience_icon.png",
+                           "www/img/bio_icon.png",
+                           "www/img/water_icon.png"),
+                    summary_data %>%
+                      filter(!Resource %in% "Aggregated score")) %>% 
+        arrange(desc(Score)) %>%
+        gt() %>% 
+        fmt_number(columns = Score,decimals = 3) %>% 
+        cols_label(img = "") %>% 
+        gt_img_rows(columns = img, height = 25, img_source = "local") %>% 
+        tab_caption("Average scores without weighting:") %>% 
+        tab_options(table.background.color = "transparent",
+                    table.font.size = 17,
+                    data_row.padding = px(2),
+                    table.width = 300)
+    })
+    
+    output$gauge = renderGauge({
+      gauge(mean(as.numeric(weights_reactive()$norm_score), na.rm=T), 
+            min = 0, 
+            max = 1, 
+            abbreviateDecimals=2,
+            label ="Aggregated score",
+            sectors = gaugeSectors(success = c(0.6, 1), 
+                                   warning = c(0.35, 0.6),
+                                   danger = c(0, 0.35),
+                                   colors = c("#3e8536","#83c47c","#bad9b6"))
+      )
+    })
+    
+    output$boxplot <- renderPlot({
+      extracted_df %>%
+        rename(Soil = soil_fz, Resilience = resil_fz, Biodiversity = bio_fz, Water = water_fz) %>%
+        pivot_longer(cols=c(Soil, Resilience, Biodiversity, Water)) %>%
+        group_by(name) %>%
+        mutate(mean_value = mean(value)) %>%
+        ungroup() %>%
+        arrange(mean_value) %>%
+        mutate(name = factor(name, levels = unique(name))) %>%
+        ggplot(aes(x=name, y=value, fill=name)) +
+        geom_boxplot(color="black", alpha=0.9, lwd=0.3, outlier.size=0.7, 
+                     outlier.stroke=0, outlier.alpha=0.5, outlier.color="black") +
+        scale_fill_manual(values=brewer.pal(n=4, name="Greens")) +
+        theme_minimal() +
+        labs(x="", y="", title="Original resources data distribution:") +
+        theme(plot.title = element_text(hjust = -2, vjust = -2,size=17,
+                                        color="#808080", margin = margin(0,0,15,0)),
+              axis.text.y = element_text( size=12, face="bold"),
+              axis.text.x = element_text(angle=45, vjust=0.7, hjust=0.7,
+                                         size=10, face="bold"),
+              panel.grid.major.y = element_blank(),
+              panel.grid.minor.y = element_blank(),
+              panel.grid.major.x = element_line(color = "gray87"),
+              panel.grid.minor.x = element_blank(),
+              panel.background = element_blank(),
+              legend.position="none") +
+        coord_flip()
+    },bg="transparent",height = 230, width = 400 )
+    
+    output$radar_graph <- renderPlotly({
+      
+      selected <- as.data.frame(df)
+      
+      fig <- plot_ly(
+        type = 'scatterpolar',
+        r = as.numeric(mean_extracted_values[1:4]),
+        theta = c("Soil", "Resilience", "Biodiversity", "Water"),
+        fill = 'toself',
+        marker = list(color = 'rgba(23, 135, 53, 0.9)', size = 5),
+        fillcolor = list(color = 'rgba(27, 181, 68, 0.5)')
+      )
+      
+      fig <- fig %>%
+        layout(
+          polar = list(radialaxis = list(
+            visible = T,
+            range = c(0,1))
+          ),
+          plot_bgcolor  = "rgba(0, 0, 0, 0)",
+          paper_bgcolor = "rgba(0, 0, 0, 0)",
+          fig_bgcolor   = "rgba(0, 0, 0, 0)",
+          showlegend = F
+        )
+      fig
+    })
+    
+    
+    } else {
+      # Output to be displayed if button has not been clicked
+  
     # Generate Shape List Action Button
     
     observeEvent(input$printShapes, {
@@ -284,9 +396,9 @@ server <- function(input, output, session) {
       if(sum(dim(sh)) == 0){
         shinyalert("Draw a shape", 
                    "Draw a polygon to extract statistics", 
-                   type = "warning",
+                   type = "info",
                    size="xs",
-                   animation=T)
+                   animation=F)
       } else {
     
         polygon <- sh %>% 
@@ -342,7 +454,11 @@ server <- function(input, output, session) {
                 fmt_number(columns = Score,decimals = 3) %>% 
                 cols_label(img = "") %>% 
                 gt_img_rows(columns = img, height = 25, img_source = "local") %>% 
-                tab_options(table.background.color = "transparent")
+                tab_caption("Average scores without weighting:") %>% 
+                tab_options(table.background.color = "transparent",
+                            table.font.size = 17,
+                            data_row.padding = px(2),
+                            table.width = 300)
             },height = 210)
             
             output$gauge = renderGauge({
@@ -384,7 +500,8 @@ server <- function(input, output, session) {
                 )
               fig
             })
-          
+        
+        
             
             output$boxplot <- renderPlot({
               extracted_df %>%
@@ -398,10 +515,11 @@ server <- function(input, output, session) {
               ggplot(aes(x=name, y=value, fill=name)) +
               geom_boxplot(color="black", alpha=0.9, lwd=0.3, outlier.size=0.7, 
                            outlier.stroke=0, outlier.alpha=0.5, outlier.color="black") +
-              scale_fill_manual(values=palette) +
+              scale_fill_manual(values=brewer.pal(n=4, name="Greens")) +
               theme_minimal() +
-              labs(x="", y="") +
-              theme(plot.title = element_text(hjust = 0.5, size=14),
+              labs(x="", y="", title="Original resources data distribution:") +
+              theme(plot.title = element_text(hjust = -2, vjust = -2,size=17,
+                                              color="#808080", margin = margin(0,0,15,0)),
                     axis.text.y = element_text( size=12, face="bold"),
                     axis.text.x = element_text(angle=45, vjust=0.7, hjust=0.7,
                                                size=10, face="bold"),
@@ -489,11 +607,29 @@ server <- function(input, output, session) {
             #####
         }
     })
+    }
     
-    # output$printShapes <- renderUI({
-    #   actionButton("printShapes", h5(strong("Generate Stats")))
-    # })
-    # 
+    output$data_displayed_note_summary <- renderText({
+      if(!input$printShapes) {
+        # Output to be displayed if button has been clicked
+        "Data for the entire region"
+      } else {
+        # Output to be displayed if button has not been clicked
+        "Data for the selected area"
+      }
+    })
+    
+    output$data_displayed_note_plot <- renderText({
+      if(!input$printShapes) {
+        # Output to be displayed if button has been clicked
+        "Data for the entire region"
+      } else {
+        # Output to be displayed if button has not been clicked
+        "Data for the selected area"
+      }
+    })
+    })
+    
 
     
     
