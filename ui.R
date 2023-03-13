@@ -174,7 +174,11 @@ body <- dashboardBody(
                                       });
                                   
                                       </script>
-                                      ")
+                                      "),
+                       # Avoid scroll THIS SHOULD BE TEMPORARY, REMOVE FOR THE FINAL VERSION
+                       tags$style(
+                                        "body {overflow-y: hidden;}"
+                                      )
                      ),
                      
                      #This CSS hack first hides the text within the span tags of the specified classes
@@ -325,7 +329,8 @@ body <- dashboardBody(
                             style="text-align: justify")
                   ),
              
-               column(8,
+              column(1),
+               column(7,
                       tabsetPanel(
                         tags$style(HTML(".tabbable > .nav > li > a {margin-top:5px;float:right;display:inline-block;}")),
                         tags$style(HTML(
@@ -340,20 +345,23 @@ body <- dashboardBody(
                                     style="text-align: center")
                                  ),
                         tabPanel("Summary",
-                                 fluidRow(column(4,
-                                                 tableOutput("mytable")),
+                                 fluidRow(column(5,
+                                                 gt_output("mytable")
+                                                 ),
                                           column(6,
+                                                 br(),
                                                  h4("Aggregated Score:"),
                                                  gaugeOutput("gauge"))
                                           )
                                  ),
 
                         tabPanel("Plot",
-                                 fluidRow(column(5,
+                                 fluidRow(column(7,
                                                  plotOutput("boxplot",inline=T, height = 210)),
-                                          column(7,align="right",
+                                          column(5,
                                                  br(),
-                                                 plotlyOutput("radar_graph", inline=T, height = 190)))
+                                                 plotlyOutput("radar_graph", inline=T, height = 190),
+                                                 align="right"))
                                  )
                                  
                                  

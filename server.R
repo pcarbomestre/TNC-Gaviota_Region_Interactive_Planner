@@ -21,7 +21,7 @@ server <- function(input, output, session) {
   
   observeEvent(input$checkbox_water, {
     if (input$checkbox_water) {
-      updateSliderInput(session, "water_w", value = 5)
+      updateSliderInput(session, "water_w", value = 100)
       updateSliderInput(session, "soil_w", value = 0)
       updateSliderInput(session, "biodiversity_w", value = 0)
       updateSliderInput(session, "resil_w", value = 0)
@@ -30,7 +30,7 @@ server <- function(input, output, session) {
   
   observeEvent(input$checkbox_agri, {
     if (input$checkbox_agri) {
-      updateSliderInput(session, "soil_w", value = 5)
+      updateSliderInput(session, "soil_w", value = 100)
       updateSliderInput(session, "water_w", value = 0)
       updateSliderInput(session, "biodiversity_w", value = 0)
       updateSliderInput(session, "resil_w", value = 0)
@@ -39,7 +39,7 @@ server <- function(input, output, session) {
     
   observeEvent(input$checkbox_bio, {
     if (input$checkbox_bio) {
-      updateSliderInput(session, "biodiversity_w", value = 5)
+      updateSliderInput(session, "biodiversity_w", value = 100)
       updateSliderInput(session, "soil_w", value = 0)
       updateSliderInput(session, "water_w", value = 0)
       updateSliderInput(session, "resil_w", value = 0)
@@ -48,7 +48,7 @@ server <- function(input, output, session) {
       
   observeEvent(input$checkbox_com, {
     if (input$checkbox_com) {
-      updateSliderInput(session, "resil_w", value = 5)
+      updateSliderInput(session, "resil_w", value = 100)
       updateSliderInput(session, "soil_w", value = 0)
       updateSliderInput(session, "biodiversity_w", value = 0)
       updateSliderInput(session, "water_w", value = 0)
@@ -328,20 +328,34 @@ server <- function(input, output, session) {
                                        Score=mean_extracted_values)
             rownames(summary_data)<-NULL
             
-          
-            output$mytable = renderTable({
-              summary_data %>% 
-                filter(!Resource %in% "Aggregated score")
-            })
+           
+            
+            output$mytable =  render_gt({
+              dplyr::tibble(img=c( "www/img/soil_icon.png",
+                                   "www/img/resilience_icon.png",
+                                   "www/img/bio_icon.png",
+                                   "www/img/water_icon.png"),
+                            summary_data %>%
+                              filter(!Resource %in% "Aggregated score")) %>% 
+                arrange(desc(Score)) %>%
+                gt() %>% 
+                fmt_number(columns = Score,decimals = 3) %>% 
+                cols_label(img = "") %>% 
+                gt_img_rows(columns = img, height = 25, img_source = "local") %>% 
+                tab_options(table.background.color = "transparent")
+            },height = 210)
             
             output$gauge = renderGauge({
               gauge(as.numeric(mean_extracted_values[5]), 
                     min = 0, 
                     max = 1, 
                     abbreviateDecimals=2,
-                    sectors = gaugeSectors(success = c(0.5, 1), 
-                                           warning = c(0.3, 0.5),
-                                           danger = c(0, 0.3)))
+                    label ="Aggregated score",
+                    sectors = gaugeSectors(success = c(0.6, 1), 
+                                           warning = c(0.35, 0.6),
+                                           danger = c(0, 0.35),
+                                           colors = c("#3e8536","#83c47c","#bad9b6"))
+              )
             })
             
             output$radar_graph <- renderPlotly({
@@ -393,7 +407,7 @@ server <- function(input, output, session) {
                                                size=10, face="bold"),
                     panel.grid.major.y = element_blank(),
                     panel.grid.minor.y = element_blank(),
-                    panel.grid.major.x = element_line(),
+                    panel.grid.major.x = element_line(color = "gray87"),
                     panel.grid.minor.x = element_blank(),
                     panel.background = element_blank(),
                     legend.position="none") +

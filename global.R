@@ -38,7 +38,10 @@ packs = c("tidyverse",
           "kableExtra",
           "rgeos",
           "shinyalert",
-          "flexdashboard"
+          "flexdashboard",
+          "htmltools",
+          "gt",
+          "gtExtras"
           )
 
 
