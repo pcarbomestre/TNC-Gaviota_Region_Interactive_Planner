@@ -300,19 +300,13 @@ body <- dashboardBody(
                      )
                      ),
                      
-                     absolutePanel(id = "printShapes", 
-                                   class = "panel panel-default", 
+                     absolutePanel(id = "removeShapes", 
+                                   class = "panel panel-default",
                                    fixed = FALSE,
                                    draggable = FALSE, 
-                                   top = 70, left = "auto", 
-                                   right = 70, bottom = "auto",
-                                   width = "auto", height = "auto",
-                                   style="background-color: white;
-                                          opacity: 0.95;
-                                          margin: auto;
-                                          padding-bottom: 0mm;
-                                          padding-top: 0mm;",
-                                   actionButton("printShapes", h5(strong("Generate Stats")))
+                                   top = 125, left = "auto", 
+                                   right = 25, bottom = "auto",
+                                   actionButton("removeShapes","", icon = icon("fa-regular fa-trash"))
                      ),
                      
               column(4,
@@ -347,7 +341,7 @@ body <- dashboardBody(
                                    padding: 0 3px;
                                  }"),
                                  h3("Area statistics:"),
-                                 HTML("<h4 style=text-align: left>To extract statistics from your area of interest, draw a shape on the map and then click on the <code>Generate Stats</code> button.</h4>"),
+                                 HTML("<h4 style=text-align: left>To extract statistics from your area of interest, draw a shape on the map.</h4>"),
                                  HTML('<p align= "justify">The <code>Summary</code> tab displays the average score of each available resource, along with the combined score calculated by applying weights.
                                  The <code>Plot</code> tab shows the actual scores of each resource graphically and offers insights into the data distribution within the selected area.
                                         When no area is selected, the values for the entire region of interest are displayed.</p>')

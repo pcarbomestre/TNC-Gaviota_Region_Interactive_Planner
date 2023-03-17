@@ -247,7 +247,9 @@ server <- function(input, output, session) {
                            markerOptions = FALSE,
                            circleMarkerOptions = FALSE,
                            editOptions = editToolbarOptions(
-                               selectedPathOptions = selectedPathOptions()),
+                             edit = TRUE, remove = FALSE, selectedPathOptions = NULL,
+                             allowIntersection = FALSE
+                               ),
                            position = "topright",
                            singleFeature = TRUE)
         
@@ -315,7 +317,7 @@ server <- function(input, output, session) {
           proxy %>% addPolygons(lng = ~lng, lat = ~lat, group = "draw")
           
           output$statsBut <- renderUI({
-            actionButton("printShapes", h5(strong("Generate Stats")))
+            actionButton("removeShapes", h5(strong("Generate Stats")))
           })
           
         }
@@ -337,127 +339,127 @@ server <- function(input, output, session) {
     
     ## All study area Summary and plot tabs  --------------------
     observe({
-    if(!input$printShapes) {
-      # Output to be displayed if button has been clicked
-    extracted_df <- cbind(soil_fz= as.numeric(resources_axis_r$soil_fz),
-                          resil_fz= as.numeric(resources_axis_r$resil_fz),
-                          bio_fz= as.numeric(resources_axis_r$bio_fz),
-                          water_fz= as.numeric(resources_axis_r$water_fz),
-                          agg_val= as.numeric(resources_axis_r$agg_val)) %>%
-      as.data.frame() %>% 
-      na.omit()
-    
-    mean_extracted_values <- apply(extracted_df,2,mean,na.rm=T)
-    
-    summary_data <- data.frame(Resource=c("Soil","Resilience","Biodiversity","Water resources","Aggregated score"),
-                               Score= mean_extracted_values)
-    rownames(summary_data)<-NULL
-    
-    ### Table  --------------------
-    output$mytable =  render_gt({
-      dplyr::tibble(img=c( "www/img/soil_icon.png",
-                           "www/img/resilience_icon.png",
-                           "www/img/bio_icon.png",
-                           "www/img/water_icon.png"),
-                    summary_data %>%
-                      filter(!Resource %in% "Aggregated score")) %>% 
-        arrange(desc(Score)) %>%
-        gt() %>% 
-        fmt_number(columns = Score,decimals = 3) %>% 
-        cols_label(img = "") %>% 
-        gt_img_rows(columns = img, height = 25, img_source = "local") %>% 
-        tab_caption("Average scores without weighting:") %>% 
-        tab_options(table.background.color = "transparent",
-                    table.font.size = 17,
-                    data_row.padding = px(2),
-                    table.width = 300) %>% 
-        tab_style(
-          style = list(
-            cell_text(weight = "bold")
-          ),
-          locations = cells_column_labels()
-        )
-    })
-    
-    ### Gauge --------------------
-    output$gauge = renderGauge({
-      gauge(mean(as.numeric(weights_reactive()$norm_score), na.rm=T), 
-            min = 0, 
-            max = 1, 
-            abbreviateDecimals=2,
-            label ="Aggregated score",
-            sectors = gaugeSectors(success = c(0.6, 1), 
-                                   warning = c(0.35, 0.6),
-                                   danger = c(0, 0.35),
-                                   colors = c("#3e8536","#83c47c","#bad9b6"))
-      )
-    })
-    
-    ### Boxplot   --------------------
-    output$boxplot <- renderPlot({
-      extracted_df %>%
-        rename(Soil = soil_fz, Resilience = resil_fz, Biodiversity = bio_fz, Water = water_fz) %>%
-        pivot_longer(cols=c(Soil, Resilience, Biodiversity, Water)) %>%
-        group_by(name) %>%
-        mutate(mean_value = mean(value)) %>%
-        ungroup() %>%
-        arrange(mean_value) %>%
-        mutate(name = factor(name, levels = unique(name))) %>%
-        ggplot(aes(x=name, y=value, fill=name)) +
-        geom_boxplot(color="black", alpha=0.9, lwd=0.3, outlier.size=0.7, 
-                     outlier.stroke=0, outlier.alpha=0.5, outlier.color="black") +
-        scale_fill_manual(values=brewer.pal(n=4, name="Greens")) +
-        theme_minimal() +
-        labs(x="", y="", title="Resources data distribution (without weighting):") +
-        theme(plot.title = element_text(hjust = 6, vjust = -2,size=15,
-                                        color="#808080", margin = margin(0,0,15,0)),
-              axis.text.y = element_text( size=12, face="bold"),
-              axis.text.x = element_text(angle=45, vjust=0.7, hjust=0.7,
-                                         size=10, face="bold"),
-              panel.grid.major.y = element_blank(),
-              panel.grid.minor.y = element_blank(),
-              panel.grid.major.x = element_line(color = "gray87"),
-              panel.grid.minor.x = element_blank(),
-              panel.background = element_blank(),
-              legend.position="none") +
-        coord_flip()
-    },bg="transparent",height = 230, width = 400 )
-    
-    
-    ### Radar graph   --------------------
-    output$radar_graph <- renderPlotly({
-      
-      selected <- as.data.frame(df)
-      
-      fig <- plot_ly(
-        type = 'scatterpolar',
-        r = as.numeric(mean_extracted_values[1:4]),
-        theta = c("Soil", "Resilience", "Biodiversity", "Water"),
-        fill = 'toself',
-        marker = list(color = 'rgba(23, 135, 53, 0.9)', size = 5),
-        fillcolor = list(color = 'rgba(27, 181, 68, 0.5)')
-      )
-      
-      fig <- fig %>%
-        layout(
-          polar = list(radialaxis = list(
-            visible = T,
-            range = c(0,1))
-          ),
-          plot_bgcolor  = "rgba(0, 0, 0, 0)",
-          paper_bgcolor = "rgba(0, 0, 0, 0)",
-          fig_bgcolor   = "rgba(0, 0, 0, 0)",
-          showlegend = F
-        )
-      fig
-    })
-    
-    
-    } else if (input$printShapes) {
+    # if(!input$printShapes) {
+    #   # Output to be displayed if button has been clicked
+    # extracted_df <- cbind(soil_fz= as.numeric(resources_axis_r$soil_fz),
+    #                       resil_fz= as.numeric(resources_axis_r$resil_fz),
+    #                       bio_fz= as.numeric(resources_axis_r$bio_fz),
+    #                       water_fz= as.numeric(resources_axis_r$water_fz),
+    #                       agg_val= as.numeric(resources_axis_r$agg_val)) %>%
+    #   as.data.frame() %>% 
+    #   na.omit()
+    # 
+    # mean_extracted_values <- apply(extracted_df,2,mean,na.rm=T)
+    # 
+    # summary_data <- data.frame(Resource=c("Soil","Resilience","Biodiversity","Water resources","Aggregated score"),
+    #                            Score= mean_extracted_values)
+    # rownames(summary_data)<-NULL
+    # 
+    # ### Table  --------------------
+    # output$mytable =  render_gt({
+    #   dplyr::tibble(img=c( "www/img/soil_icon.png",
+    #                        "www/img/resilience_icon.png",
+    #                        "www/img/bio_icon.png",
+    #                        "www/img/water_icon.png"),
+    #                 summary_data %>%
+    #                   filter(!Resource %in% "Aggregated score")) %>% 
+    #     arrange(desc(Score)) %>%
+    #     gt() %>% 
+    #     fmt_number(columns = Score,decimals = 3) %>% 
+    #     cols_label(img = "") %>% 
+    #     gt_img_rows(columns = img, height = 25, img_source = "local") %>% 
+    #     tab_caption("Average scores without weighting:") %>% 
+    #     tab_options(table.background.color = "transparent",
+    #                 table.font.size = 17,
+    #                 data_row.padding = px(2),
+    #                 table.width = 300) %>% 
+    #     tab_style(
+    #       style = list(
+    #         cell_text(weight = "bold")
+    #       ),
+    #       locations = cells_column_labels()
+    #     )
+    # })
+    # 
+    # ### Gauge --------------------
+    # output$gauge = renderGauge({
+    #   gauge(mean(as.numeric(weights_reactive()$norm_score), na.rm=T), 
+    #         min = 0, 
+    #         max = 1, 
+    #         abbreviateDecimals=2,
+    #         label ="Aggregated score",
+    #         sectors = gaugeSectors(success = c(0.6, 1), 
+    #                                warning = c(0.35, 0.6),
+    #                                danger = c(0, 0.35),
+    #                                colors = c("#3e8536","#83c47c","#bad9b6"))
+    #   )
+    # })
+    # 
+    # ### Boxplot   --------------------
+    # output$boxplot <- renderPlot({
+    #   extracted_df %>%
+    #     rename(Soil = soil_fz, Resilience = resil_fz, Biodiversity = bio_fz, Water = water_fz) %>%
+    #     pivot_longer(cols=c(Soil, Resilience, Biodiversity, Water)) %>%
+    #     group_by(name) %>%
+    #     mutate(mean_value = mean(value)) %>%
+    #     ungroup() %>%
+    #     arrange(mean_value) %>%
+    #     mutate(name = factor(name, levels = unique(name))) %>%
+    #     ggplot(aes(x=name, y=value, fill=name)) +
+    #     geom_boxplot(color="black", alpha=0.9, lwd=0.3, outlier.size=0.7, 
+    #                  outlier.stroke=0, outlier.alpha=0.5, outlier.color="black") +
+    #     scale_fill_manual(values=brewer.pal(n=4, name="Greens")) +
+    #     theme_minimal() +
+    #     labs(x="", y="", title="Resources data distribution (without weighting):") +
+    #     theme(plot.title = element_text(hjust = 6, vjust = -2,size=15,
+    #                                     color="#808080", margin = margin(0,0,15,0)),
+    #           axis.text.y = element_text( size=12, face="bold"),
+    #           axis.text.x = element_text(angle=45, vjust=0.7, hjust=0.7,
+    #                                      size=10, face="bold"),
+    #           panel.grid.major.y = element_blank(),
+    #           panel.grid.minor.y = element_blank(),
+    #           panel.grid.major.x = element_line(color = "gray87"),
+    #           panel.grid.minor.x = element_blank(),
+    #           panel.background = element_blank(),
+    #           legend.position="none") +
+    #     coord_flip()
+    # },bg="transparent",height = 230, width = 400 )
+    # 
+    # 
+    # ### Radar graph   --------------------
+    # output$radar_graph <- renderPlotly({
+    #   
+    #   selected <- as.data.frame(df)
+    #   
+    #   fig <- plot_ly(
+    #     type = 'scatterpolar',
+    #     r = as.numeric(mean_extracted_values[1:4]),
+    #     theta = c("Soil", "Resilience", "Biodiversity", "Water"),
+    #     fill = 'toself',
+    #     marker = list(color = 'rgba(23, 135, 53, 0.9)', size = 5),
+    #     fillcolor = list(color = 'rgba(27, 181, 68, 0.5)')
+    #   )
+    #   
+    #   fig <- fig %>%
+    #     layout(
+    #       polar = list(radialaxis = list(
+    #         visible = T,
+    #         range = c(0,1))
+    #       ),
+    #       plot_bgcolor  = "rgba(0, 0, 0, 0)",
+    #       paper_bgcolor = "rgba(0, 0, 0, 0)",
+    #       fig_bgcolor   = "rgba(0, 0, 0, 0)",
+    #       showlegend = F
+    #     )
+    #   fig
+    # })
+    # 
+    # 
+    # } else if (input$printShapes) {
       
       ## Selected area Summary and plot tabs  --------------------
 
-    observeEvent(input$printShapes, {
+    observeEvent(input$map_draw_all_features, {
 
       shapedf <- data.frame()
       reactive(shapedf)
@@ -466,19 +468,19 @@ server <- function(input, output, session) {
 
       ### Alert not drawn shape --------------------
 
-      num_features <- length(input$map_draw_all_features$features)
-      
-      if(is.null(unlist(input$map_draw_all_features$features[num_features]))){
-        shinyalert("Draw a shape", 
-                   "Draw a polygon to extract statistics", 
-                   type = "info",
-                   size="xs",
-                   animation=F,
-                   closeOnClickOutside = TRUE)
-      } 
-      
-      ### Clip raster --------------------
-      else {
+      # num_features <- length(input$map_draw_all_features$features)
+      # 
+      # if(is.null(unlist(input$map_draw_all_features$features[num_features]))){
+      #   shinyalert("Draw a shape",
+      #              "Draw a polygon to extract statistics",
+      #              type = "info",
+      #              size="xs",
+      #              animation=F,
+      #              closeOnClickOutside = TRUE)
+      # }
+      # 
+      # ### Clip raster --------------------
+      # else {
         polygon <- sh %>% 
             dplyr::select(starts_with("features.geometry.coordinates")) %>% 
             as.numeric() %>% 
@@ -628,16 +630,16 @@ server <- function(input, output, session) {
               coord_flip()
             },bg="transparent",height = 230, width = 400 )
         }
-      }
+      # }
 
     })
-    }
     })
+
     
 
     ## Return to the whole area if the map is refreshed --------------------
     
-    observeEvent(c(input$soil_w,input$water_w,input$biodiversity_w,input$resil_w), {
+    observeEvent(c(input$removeShapes, input$soil_w,input$water_w,input$biodiversity_w,input$resil_w), {
       
       extracted_df <- cbind(soil_fz= as.numeric(resources_axis_r$soil_fz),
                             resil_fz= as.numeric(resources_axis_r$resil_fz),
@@ -766,7 +768,7 @@ server <- function(input, output, session) {
           })
         })
         
-        observeEvent(input$printShapes, {
+        observeEvent(input$map_draw_all_features, {
           output$data_displayed_note_summary <- renderText({
             "Data for the selected area"
           })
@@ -778,7 +780,7 @@ server <- function(input, output, session) {
         ## Select summary tab when stats are generated if About tab is open  ------------------
         
 
-        observeEvent(input$printShapes, {
+        observeEvent(input$map_draw_all_features, {
           if (input$tabs == "about") {
             # Add a new tab panel to the tabset
             updateTabsetPanel(session, "tabs",
@@ -787,9 +789,12 @@ server <- function(input, output, session) {
           }
           })
 
-    
-
-    
+        ## Reset map to remove shapes
+        ### Uses the update of the alpha slider to force refresh
+        observeEvent(input$removeShapes,{
+          reset_value = input$alpha
+          updateSliderInput(session, "alpha", value = reset_value+0.01)
+        })
 
     
     
