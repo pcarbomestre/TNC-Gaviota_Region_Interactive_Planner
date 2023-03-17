@@ -15,7 +15,6 @@
 # ----------------------
 # Used packages
 packs = c("tidyverse",
-          "tmap",
           "shinydashboard",
           "shinythemes",
           "shinyjs",

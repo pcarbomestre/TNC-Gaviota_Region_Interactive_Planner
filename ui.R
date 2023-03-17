@@ -17,9 +17,9 @@ options(spinner.color="#629871",
         spinner.type=8)
 
 # Header ------------------------------------------------------------------
-header<- dashboardHeader(title = HTML("SBC Interactive planner"),
+header<- dashboardHeader(title = HTML("Gaviota Region Interactive planner"),
                          disable = FALSE,
-                         titleWidth = 400,
+                         titleWidth = 500,
                          dropdownMenuCustom( type = 'message',
                                                customSentence = customSentence_share,
                                                icon = icon("share-alt"),
@@ -102,9 +102,9 @@ body <- dashboardBody(
                      
                      absolutePanel(id = "transparency_control", 
                                    class = "panel panel-default", 
-                                   fixed = TRUE,
+                                   fixed = FALSE,
                                    draggable = FALSE, 
-                                   top = 80, left = "auto", 
+                                   top = 12, left = "auto", 
                                    right = 70, bottom = "auto",
                                    width = 200, height = 50,
                                    style="background-color: white;
@@ -127,9 +127,9 @@ body <- dashboardBody(
                      
                      absolutePanel(id = "transparency_control_title", 
                                    class = "panel panel-default", 
-                                   fixed = TRUE,
+                                   fixed = FALSE,
                                    draggable = FALSE, 
-                                   top = 80, left = "auto", 
+                                   top = 12, left = "auto", 
                                    right = 70, bottom = "auto",
                                    width = 200, height = 20,
                                    style="background-color: rgba(0,0,0,0);
@@ -147,9 +147,9 @@ body <- dashboardBody(
                      
                      absolutePanel(id = "controls", 
                                    class = "panel panel-default", 
-                                   fixed = TRUE,
+                                   fixed = FALSE,
                                    draggable = TRUE, 
-                                   top = 250, left = "auto", 
+                                   top = 190, left = "auto", 
                                    right = 920, bottom = "auto",
                                    width = 250, height = "auto",
                                    style="background-color: white;
@@ -176,9 +176,9 @@ body <- dashboardBody(
                                       </script>
                                       "),
                        # Avoid scroll THIS SHOULD BE TEMPORARY, REMOVE FOR THE FINAL VERSION
-                       tags$style(
-                                        "body {overflow-y: hidden;}"
-                                      )
+                       # tags$style(
+                       #                  "body {overflow-y: hidden;}"
+                       #                )
                      ),
                      
                      #This CSS hack first hides the text within the span tags of the specified classes
@@ -302,9 +302,9 @@ body <- dashboardBody(
                      
                      absolutePanel(id = "printShapes", 
                                    class = "panel panel-default", 
-                                   fixed = TRUE,
+                                   fixed = FALSE,
                                    draggable = FALSE, 
-                                   top = 140, left = "auto", 
+                                   top = 70, left = "auto", 
                                    right = 70, bottom = "auto",
                                    width = "auto", height = "auto",
                                    style="background-color: white;
@@ -325,28 +325,34 @@ body <- dashboardBody(
                      h2("How to use this map?"),
                      tags$p("The Santa Barbara County Interactive Planner maps 
                      the degree of overlap of natural resources. Darker areas have more resources. 
-                     Use the sliders to adjust the relative influence of each item.",
+                     Use the sliders to adjust the relative influence of each item.
+                            Select higher values for the resources you prioritize.",
                             style="text-align: justify")
                   ),
              
               column(1),
                column(7,
-                      tabsetPanel(
+                      tabsetPanel(id="tabs",
                         tags$style(HTML(".tabbable > .nav > li > a {margin-top:5px;float:right;display:inline-block;}")),
                         tags$style(HTML(
                           ".tabbable ul li:nth-child(4) { float: right;} 
                           .tabbable ul li:nth-child(3) { float: right;}
                           .tabbable ul li:nth-child(5) { float: right;}"
                         )),
-                        tabPanel("About",
+                        tabPanel(value = "about",title="About",
+                                 tags$style("code {
+                        color:#303e52;
+                                   background-color: #c1d7f5;
+                                     border-radius: 3px;
+                                   padding: 0 3px;
+                                 }"),
                                  h3("Area statistics:"),
-                                 h4("To extract statistics from your area of interest, draw a shape on the map and then click on the 'Generate Stats' button.",
-                                    style="text-align: left"),
-                                 tags$p("The 'Summary' tab displays the average score of each available resource, along with the combined score calculated by applying weights.
-                                 The 'Plot' tab shows the actual scores of each resource graphically and offers insights into the data distribution within the selected area.
-                                        When no area is selected, the values for the entire region of interest are displayed."
-                                 )),
-                        tabPanel("Summary",
+                                 HTML("<h4 style=text-align: left>To extract statistics from your area of interest, draw a shape on the map and then click on the <code>Generate Stats</code> button.</h4>"),
+                                 HTML('<p align= "justify">The <code>Summary</code> tab displays the average score of each available resource, along with the combined score calculated by applying weights.
+                                 The <code>Plot</code> tab shows the actual scores of each resource graphically and offers insights into the data distribution within the selected area.
+                                        When no area is selected, the values for the entire region of interest are displayed.</p>')
+                        ),
+                        tabPanel(value = "summary", title ="Summary",
                                  textOutput("data_displayed_note_summary"),
                                         tags$head(tags$style("#data_displayed_note_summary{margin-top: -1.6em;
                                            margin-left: 1em;
@@ -364,9 +370,9 @@ body <- dashboardBody(
                                                     style="color: #808080;
                                                     padding-top: 5px;"),
                                                  br(),
-                                                 gaugeOutput("gauge"))
-                                          )
-                                 ),
+                                                 gaugeOutput("gauge")),
+                                      
+                                 )),
 
                         tabPanel("Plot",
                                  textOutput("data_displayed_note_plot"),
@@ -388,15 +394,6 @@ body <- dashboardBody(
                                  )
                         )
                 )),
-
-              # column(1,
-              #        br(),
-              #        br(),
-              #        tableOutput("mytable")),
-              # column(5,
-              #        br(),
-              #        br(),
-              #        plotlyOutput("radar_graph", inline=T,height = 210))
               
               )
               )
@@ -497,6 +494,9 @@ body <- dashboardBody(
   )
      
 
-ui <- dashboardPage(header, siderbar, body , skin = "black")
+ui <- dashboardPage(header, siderbar, body , skin = "black",
+                    tags$head(tags$style(HTML('* {font-family: "Whitney A", "Whitney B", Whitney, "Trebuchet MS", sans-serif;')))
+                    )
+
 
 
