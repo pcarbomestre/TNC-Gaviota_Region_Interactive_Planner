@@ -75,12 +75,14 @@ ahp_weights <- read_csv2(here('data','ahp_results.csv')) %>%
 
 
 ## Environmental Threats Axis spatial data ----
-threats_axis_sf <- st_read(here('data','shiny_inputs','natural_resources','natural_resources.shp')) %>% 
+threats_axis_sf <- st_read(here('data','shiny_inputs','environmental_threats','environmental_threats.shp')) %>% 
   clean_names() %>% 
   st_transform("EPSG:4326") # Reproject so it can be visualized using leaflet
 
+threats_axis_r <- st_rasterize(threats_axis_sf %>% dplyr::select(-id)) # Rasterizing shapefile
 
 threats_axis_df <- st_drop_geometry(threats_axis_sf)
+
 
 # Equity Issues Axis spatial data
 equity_axis_sf <- st_read(here('data','small_MB_area','small_MB_area.shp')) %>% 
