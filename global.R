@@ -1,15 +1,15 @@
-## ---------------------------
+## _____________________________
 ### File: global.R
 ##
 ## Date created: 2023-02-23
 ## Author: Pol Carbó Mestre
 ## Contact: pcarbomestre@bren.ucsb.edu
 ##
-## ---------------------------
+## _____________________________
 ## Description:
 ##  Global functions to load packages, datasets and define functions
-## ---------------------------
-##
+## _____________________________
+
 
 # PACKAGES SETUP
 # ----------------------
@@ -44,8 +44,6 @@ packs = c("tidyverse",
           "RColorBrewer"
           )
 
-
-
 # Run the following command to verify that the required packages are installed. 
 # If some package is missing, it will be installed automatically
 package.check <- lapply(packs, FUN = function(x) {
@@ -57,10 +55,9 @@ package.check <- lapply(packs, FUN = function(x) {
 library(shiny)
 
 
-# DATASETS READ IN
-# ----------------------
+# DATASETS READ IN ----------------------
 
-# Natural Resources Axis spatial data
+## Natural Resources Axis spatial data ----
 resources_axis_sf <- st_read(here('data','shiny_inputs','natural_resources','natural_resources.shp')) %>% 
   clean_names() %>% 
   st_transform("EPSG:4326") # Reproject so it can be visualized using leaflet
@@ -69,16 +66,19 @@ resources_axis_r <- st_rasterize(resources_axis_sf %>% dplyr::select(-id)) # Ras
 
 resources_axis_df <- st_drop_geometry(resources_axis_sf)
 
-# AHP weights
+### AHP weights ----
 ahp_weights <- read_csv2(here('data','ahp_results.csv')) %>%
   clean_names() %>% 
   mutate(agg_pref = as.numeric(agg_pref)) %>% 
   group_by(group) %>% 
   mutate(weight = round(100*(agg_pref)/max(agg_pref),0))
 
-# Environmental Threats Axis spatial data
-threats_axis_sf <- st_read(here('data','small_MB_area','small_MB_area.shp')) %>% 
-  clean_names()
+
+## Environmental Threats Axis spatial data ----
+threats_axis_sf <- st_read(here('data','shiny_inputs','natural_resources','natural_resources.shp')) %>% 
+  clean_names() %>% 
+  st_transform("EPSG:4326") # Reproject so it can be visualized using leaflet
+
 
 threats_axis_df <- st_drop_geometry(threats_axis_sf)
 

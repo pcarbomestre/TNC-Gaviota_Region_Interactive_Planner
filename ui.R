@@ -1,15 +1,14 @@
-## ---------------------------
+## _____________________________
 ### File: ui.R
 ##
 ## Date created: 2023-02-23
 ## Author: Pol Carbó Mestre
 ## Contact: pcarbomestre@bren.ucsb.edu
 ##
-## ---------------------------
+## _____________________________
 ## Description:
 ##  Fluid page for the Interactive Planner app
-## ---------------------------
-##
+## _____________________________
 
 #Global displaying options
 options(spinner.color="#629871",
@@ -94,12 +93,12 @@ body <- dashboardBody(
   introjsUI(),  
   
   tabItems(
-    # Natural Resources ------------------------------------------------------------------
+    ## Natural Resources ------------------------------------------------------------------
     tabItem(tabName = "Map",
             fluidRow(
               column(12,
                      shinycssloaders::withSpinner(leafletOutput("map", height='60vh')),
-                     
+                     ### Transparency panel ----
                      absolutePanel(id = "transparency_control", 
                                    class = "panel panel-default", 
                                    fixed = FALSE,
@@ -145,6 +144,7 @@ body <- dashboardBody(
                                           style="text-align: justify")
                      ),
                      
+                     ### Sliders panel ----
                      absolutePanel(id = "controls", 
                                    class = "panel panel-default", 
                                    fixed = FALSE,
@@ -162,7 +162,7 @@ body <- dashboardBody(
                                           padding-top: 1mm;",
                                    
                        tags$head(
-                       #Using ionRangeSlider's javascript options you can hide/show selector labels and min/max labels
+                       # Using ionRangeSlider's javascript options you can hide/show selector labels and min/max labels
                        HTML("
                                      <script>
                                       $(document).ready(function(){
@@ -176,14 +176,12 @@ body <- dashboardBody(
                                       </script>
                                       "),
                        # Avoid scroll THIS SHOULD BE TEMPORARY, REMOVE FOR THE FINAL VERSION
-                       # tags$style(
-                       #                  "body {overflow-y: hidden;}"
-                       #                )
+                       # tags$style("body {overflow-y: hidden;}")
                      ),
                      
-                     #This CSS hack first hides the text within the span tags of the specified classes
-                     #Then it adds desired text and CSS properties. !important parameter is to override
-                     #inline css parameters.
+                     # This CSS hack first hides the text within the span tags of the specified classes
+                     # Then it adds desired text and CSS properties. !important parameter is to override
+                     # inline css parameters.
                      tags$style(HTML(
                                 ".irs-min {visibility:hidden !important;}
                                     .irs-max {visibility:hidden !important;}
@@ -235,8 +233,10 @@ body <- dashboardBody(
                                      a.action-button {color: #000000;font-weight: bold;}
                                      #checkbox1{padding-left: 25px;}
                                                      ")),
-                                   
+                                   # Set slides color
                                    setSliderColor(c("#629871", "#629871", "#629871", "#629871","#629871"), c(1,2,3,4,5)),
+                     
+                     #### Sliders and checkbox set up ----
                      fluidRow(
                        column(10,
                                    actionLink("checkbox_water", label = "Water resources"),
@@ -300,6 +300,7 @@ body <- dashboardBody(
                      )
                      ),
                      
+                     ### Remove shapes button ----
                      absolutePanel(id = "removeShapes", 
                                    class = "panel panel-default",
                                    fixed = FALSE,
@@ -309,13 +310,13 @@ body <- dashboardBody(
                                    actionButton("removeShapes","", icon = icon("fa-regular fa-trash"))
                      ),
                      
-              column(4,
+                     
+                     ### Select Picker and planner use note ----
+                     column(4,
                      br(),
                      selectInput("stakeholder_w", label = "Select stakeholder's weights:", 
                                  choices = c("None",ahp_weights$group), 
                                  selected = NULL),
-                     #uiOutput("statsBut"),
-                     
                      h2("How to use this map?"),
                      tags$p("The Santa Barbara County Interactive Planner maps 
                      the degree of overlap of natural resources. Darker areas have more resources. 
@@ -323,7 +324,7 @@ body <- dashboardBody(
                             Select higher values for the resources you prioritize.",
                             style="text-align: justify")
                   ),
-             
+                  ### Data tab ----
               column(1),
                column(7,
                       tabsetPanel(id="tabs",
@@ -333,6 +334,8 @@ body <- dashboardBody(
                           .tabbable ul li:nth-child(3) { float: right;}
                           .tabbable ul li:nth-child(5) { float: right;}"
                         )),
+                        
+                        #### About tab ----
                         tabPanel(value = "about",title="About",
                                  tags$style("code {
                         color:#303e52;
@@ -341,11 +344,12 @@ body <- dashboardBody(
                                    padding: 0 3px;
                                  }"),
                                  h3("Area statistics:"),
-                                 HTML("<h4 style=text-align: left>To extract statistics from your area of interest, draw a shape on the map.</h4>"),
+                                 HTML("<h4 style=text-align: left>To extract statistics from your area of interest draw a shape on the map.</h4>"),
                                  HTML('<p align= "justify">The <code>Summary</code> tab displays the average score of each available resource, along with the combined score calculated by applying weights.
                                  The <code>Plot</code> tab shows the actual scores of each resource graphically and offers insights into the data distribution within the selected area.
                                         When no area is selected, the values for the entire region of interest are displayed.</p>')
                         ),
+                        #### Summary tab ----
                         tabPanel(value = "summary", title ="Summary",
                                  textOutput("data_displayed_note_summary"),
                                         tags$head(tags$style("#data_displayed_note_summary{margin-top: -1.6em;
@@ -355,7 +359,6 @@ body <- dashboardBody(
                                            font-size:12px;
                                            font-style: italic;}"
                                         )),
-                                 
                                  fluidRow(column(7,
                                                  gt_output("mytable")
                                                  ),
@@ -365,9 +368,8 @@ body <- dashboardBody(
                                                     padding-top: 5px;"),
                                                  br(),
                                                  gaugeOutput("gauge")),
-                                      
                                  )),
-
+                        #### Plot tab ----
                         tabPanel("Plot",
                                  textOutput("data_displayed_note_plot"),
                                  tags$head(tags$style("#data_displayed_note_plot{margin-top: -1.6em;
@@ -383,12 +385,9 @@ body <- dashboardBody(
                                           column(5,
                                                  br(),
                                                  plotlyOutput("radar_graph", inline=T, height = 190),
-                                                 align="right"
-                                          )
-                                 )
-                        )
-                )),
-              
+                                                 align="right")
+                                 ))
+                        )),
               )
               )
             ),

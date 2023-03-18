@@ -1,31 +1,32 @@
-## ---------------------------
+## _____________________________
 ### File: server.R
 ##
 ## Date created: 2023-02-23
 ## Author: Pol Carbó Mestre
 ## Contact: pcarbomestre@bren.ucsb.edu
 ##
-## ---------------------------
+## _____________________________
 ## Description:
 ##  Server for the Interactive Planner app
-## ---------------------------
-##
+## _____________________________
+
 
 server <- function(input, output, session) {
 
- 
-# Defining Map Elements ------------------------------------------------------------------------
   
-## Select layers individualy  ---------------------------------------------------------
   
+# NATURAL RESOURCES AXIS (MAIN TAB) ----
+# Defining Map Elements ----
+  
+  ## Select layers individually ----
   observeEvent(input$checkbox_water, {
     if (input$checkbox_water) {
       updateSliderInput(session, "water_w", value = 100)
       updateSliderInput(session, "soil_w", value = 0)
       updateSliderInput(session, "biodiversity_w", value = 0)
       updateSliderInput(session, "resil_w", value = 0)
-    }
-  })
+      }
+    })
   
   observeEvent(input$checkbox_agri, {
     if (input$checkbox_agri) {
@@ -33,7 +34,7 @@ server <- function(input, output, session) {
       updateSliderInput(session, "water_w", value = 0)
       updateSliderInput(session, "biodiversity_w", value = 0)
       updateSliderInput(session, "resil_w", value = 0)
-    }
+      }
     })
     
   observeEvent(input$checkbox_bio, {
@@ -42,8 +43,8 @@ server <- function(input, output, session) {
       updateSliderInput(session, "soil_w", value = 0)
       updateSliderInput(session, "water_w", value = 0)
       updateSliderInput(session, "resil_w", value = 0)
-    }
-  })
+      }
+    })
       
   observeEvent(input$checkbox_com, {
     if (input$checkbox_com) {
@@ -51,12 +52,12 @@ server <- function(input, output, session) {
       updateSliderInput(session, "soil_w", value = 0)
       updateSliderInput(session, "biodiversity_w", value = 0)
       updateSliderInput(session, "water_w", value = 0)
-    }
-  })
+      }
+    })
   
-## AHP weights  -----------------------------------------------------------------------
-
-### Calculate aggregated preference values from weights --------------------
+  ## AHP weights ----
+  
+  ### Calculate aggregated preference values from weights ----
   agg_pref_df <- reactive({
     data.frame(resources = c("soil_fz","resil_fz","bio_fz","water_fz"),
                weights= c(input$soil_w,
@@ -64,24 +65,21 @@ server <- function(input, output, session) {
                           input$biodiversity_w,
                           input$water_w)) %>% 
       mutate(agg_pref = weights/sum(weights))
-  })
+    })
   
   output$soil_agg_pref <- renderText(paste(round(as.numeric(agg_pref_df()[1,3]),2)))
   output$resilience_agg_pref <- renderText(paste(round(as.numeric(agg_pref_df()[2,3]),2)))
   output$biodiversity_agg_pref <- renderText(paste(round(as.numeric(agg_pref_df()[3,3]),2)))
   output$water_agg_pref <- renderText(paste(round(as.numeric(agg_pref_df()[4,3]),2)))
   
-
-### initialize the weights --------------------
+  ### Set group weights ----
     water_weights = reactiveValues(None=NULL,
                                    All=88,
                                    Government=78,
                                    "Non-profit"=100,
                                    "Farm/Ranch"=76,
                                    Indigenous=58)
-    
-    
-### If selected element changes, then update the slider --------------------
+  # If selected element changes, then update the slider
     observeEvent(input$stakeholder_w, {
       selected_weight = water_weights[[input$stakeholder_w]]
       updateSliderInput(session, "water_w", value = selected_weight)
@@ -124,7 +122,7 @@ server <- function(input, output, session) {
     
     })
     
-### If slide bar values do not match group weights --------------------
+    ### Update selection to "None" ----
     observe({
       if(input$resil_w == com_weights[["Government"]] &
          input$biodiversity_w == bio_weights[["Government"]] &
@@ -151,12 +149,10 @@ server <- function(input, output, session) {
       }
     })
 
-    
-## Apply selected weights -------------------------------------------------------------
+    ## Apply selected weights ----
 
     weights_reactive <- reactive({
-        
-      ### Using Aggregated Preference values  --------------------
+      ### Using Aggregated Preference values ----
       resources_axis_r %>% 
             mutate("soil_fz" = soil_fz * agg_pref_df()[1,3]) %>%
             mutate("resil_fz" = resil_fz * agg_pref_df()[2,3]) %>%
@@ -165,8 +161,7 @@ server <- function(input, output, session) {
             mutate(score = soil_fz + resil_fz + bio_fz + water_fz) %>%
             mutate(norm_score = range_norm_manual(score))
       
-      
-      ### Applying weights directly  --------------------
+      #### Applying weights directly ----
         #### Process for Raster data
         # resources_axis_r %>% 
         #     mutate("soil_fz" = soil_fz * input$soil_w) %>% 
@@ -189,7 +184,10 @@ server <- function(input, output, session) {
     }) # end weights_reactive
     
     
-    ## Create palette  --------------------
+    
+    # Leaflet Map Display ----
+    
+    ## Create palette ----
     pallete_reactive <- reactive({
         
         #### Process for Raster data
@@ -211,8 +209,7 @@ server <- function(input, output, session) {
     # }) # end map_reactive
     
     
-# Leaflet Map Display ------------------------------------------------------------------------
-
+    ## Create Map ----
     output$map <- renderLeaflet({
 
         ### Process for Raster data
@@ -266,9 +263,9 @@ server <- function(input, output, session) {
     
     })
     
-# Extract data from the map ---------------------------------------------------------------
-
-    ## Extract polygon spatial information ------------------
+# Extracting data from the map ----
+    
+    ## Extract drawn polygon ----
     observeEvent(input$drawing, {
       
       ddf <- data.frame() # The drawing dataframe
@@ -318,10 +315,9 @@ server <- function(input, output, session) {
           
           output$statsBut <- renderUI({
             actionButton("removeShapes", h5(strong("Generate Stats")))
-          })
-          
-        }
-
+            })
+          }
+        
         else if(thisShape[3] == "rectangle"){
           rlng1 <- as.numeric(thisShape[5])
           rlat1 <- as.numeric(thisShape[6])
@@ -331,14 +327,17 @@ server <- function(input, output, session) {
           proxy <- leafletProxy("map")
           proxy %>% addRectangles(lng1 = rlng1, lat1 = rlat1, lng2 = rlng2, lat2 = rlat2,
                                   group = "draw")
-          
         }
-
-      }
-    })
+        }
+      })
     
-    ## All study area Summary and plot tabs  --------------------
+    
+    ## Extract statistics  ----
+    
+    ### All study area Summary and plot tabs ----
+    
     observe({
+    #### Using Generate Stats button ----
     # if(!input$printShapes) {
     #   # Output to be displayed if button has been clicked
     # extracted_df <- cbind(soil_fz= as.numeric(resources_axis_r$soil_fz),
@@ -457,30 +456,31 @@ server <- function(input, output, session) {
     # 
     # } else if (input$printShapes) {
       
-      ## Selected area Summary and plot tabs  --------------------
+      ## Selected area Summary and plot tabs ----
+      
+      observeEvent(input$map_draw_all_features, {
+        
+        shapedf <- data.frame()
+        reactive(shapedf)
+        shapedf <- input$map_draw_all_features
+        sh <- as.data.frame(shapedf)
 
-    observeEvent(input$map_draw_all_features, {
-
-      shapedf <- data.frame()
-      reactive(shapedf)
-      shapedf <- input$map_draw_all_features
-      sh <- as.data.frame(shapedf)
-
-      ### Alert not drawn shape --------------------
-
-      # num_features <- length(input$map_draw_all_features$features)
-      # 
-      # if(is.null(unlist(input$map_draw_all_features$features[num_features]))){
-      #   shinyalert("Draw a shape",
-      #              "Draw a polygon to extract statistics",
-      #              type = "info",
-      #              size="xs",
-      #              animation=F,
-      #              closeOnClickOutside = TRUE)
-      # }
-      # 
-      # ### Clip raster --------------------
-      # else {
+          ### Alert not drawn shape if Generate stats button is used
+          # num_features <- length(input$map_draw_all_features$features)
+          # 
+          # if(is.null(unlist(input$map_draw_all_features$features[num_features]))){
+          #   shinyalert("Draw a shape",
+          #              "Draw a polygon to extract statistics",
+          #              type = "info",
+          #              size="xs",
+          #              animation=F,
+          #              closeOnClickOutside = TRUE)
+          # }
+          # 
+          # 
+          # else {
+        
+        ### Clip raster ----        
         polygon <- sh %>% 
             dplyr::select(starts_with("features.geometry.coordinates")) %>% 
             as.numeric() %>% 
@@ -491,8 +491,7 @@ server <- function(input, output, session) {
         
         polygon_sp <- as(polygon, Class = "Spatial")
         
-        ### Alert not invalid shape --------------------
-        
+        ### Alert for invalid shape ----
         if (gIsValid(polygon_sp) == FALSE){
             shinyalert(html = TRUE,
                        "Shape edges can not cross!", 
@@ -501,12 +500,11 @@ server <- function(input, output, session) {
                        size="xs",
                        animation=F,
                        closeOnClickOutside = TRUE)
-          
           remove(shapedf)
         }
       
-        
-        else {
+        ### Extract data ----
+                else {
 
             extracted_area <- st_crop(resources_axis_r, polygon) # Original spatial data
             extracted_area_aggr <- st_crop(weights_reactive(), polygon) # Aggregated spatial data
@@ -526,13 +524,12 @@ server <- function(input, output, session) {
                                        Score=mean_extracted_values)
             rownames(summary_data)<-NULL
             
-            ### Table --------------------
-            
+            #### Table ----
             output$mytable =  render_gt({
-              dplyr::tibble(img=c( "www/img/soil_icon.png",
-                                   "www/img/resilience_icon.png",
-                                   "www/img/bio_icon.png",
-                                   "www/img/water_icon.png"),
+              dplyr::tibble(img=c(here("www","img","soil_icon.png"),
+                                  here("www","img","resilience_icon.png"),
+                                  here("www","img","bio_icon.png"),
+                                  here("www","img","water_icon.png")),
                             summary_data %>%
                               filter(!Resource %in% "Aggregated score")) %>% 
                 arrange(desc(Score)) %>%
@@ -545,16 +542,11 @@ server <- function(input, output, session) {
                             table.font.size = 17,
                             data_row.padding = px(2),
                             table.width = 300) %>% 
-                tab_style(
-                  style = list(
-                    cell_text(weight = "bold")
-                  ),
-                  locations = cells_column_labels()
-                )
+                tab_style(style = list(cell_text(weight = "bold")),
+                  locations = cells_column_labels())
             },height = 210)
             
-            ### Gauge --------------------
-            
+            #### Gauge ----
             output$gauge = renderGauge({
               gauge(as.numeric(mean_extracted_values[5]), 
                     min = 0, 
@@ -565,12 +557,11 @@ server <- function(input, output, session) {
                                            warning = c(0.35, 0.6),
                                            danger = c(0, 0.35),
                                            colors = c("#3e8536","#83c47c","#bad9b6"))
-              )
-            })
+                    )
+              })
             
             
-            ### Radar graph --------------------
-            
+            #### Radar graph ----
             output$radar_graph <- renderPlotly({
               
               selected <- as.data.frame(df)
@@ -599,8 +590,7 @@ server <- function(input, output, session) {
             })
         
         
-            ### Boxplot --------------------
-            
+            #### Boxplot ----
             output$boxplot <- renderPlot({
               extracted_df %>%
               rename(Soil = soil_fz, Resilience = resil_fz, Biodiversity = bio_fz, Water = water_fz) %>%
@@ -631,13 +621,10 @@ server <- function(input, output, session) {
             },bg="transparent",height = 230, width = 400 )
         }
       # }
-
     })
     })
-
     
-
-    ## Return to the whole area if the map is refreshed --------------------
+    ## Return to the whole area if the map is refreshed  ----
     
     observeEvent(c(input$removeShapes, input$soil_w,input$water_w,input$biodiversity_w,input$resil_w), {
       
@@ -655,12 +642,12 @@ server <- function(input, output, session) {
                                  Score= mean_extracted_values)
       rownames(summary_data)<-NULL
       
-      ### Table  --------------------
+      ### Table ----
       output$mytable =  render_gt({
-        dplyr::tibble(img=c( "www/img/soil_icon.png",
-                             "www/img/resilience_icon.png",
-                             "www/img/bio_icon.png",
-                             "www/img/water_icon.png"),
+        dplyr::tibble(img=c(here("www","img","soil_icon.png"),
+                            here("www","img","resilience_icon.png"),
+                            here("www","img","bio_icon.png"),
+                            here("www","img","water_icon.png")),
                       summary_data %>%
                         filter(!Resource %in% "Aggregated score")) %>% 
           arrange(desc(Score)) %>%
@@ -681,7 +668,7 @@ server <- function(input, output, session) {
           )
       })
       
-      ### Gauge --------------------
+      ### Gauge ----
       output$gauge = renderGauge({
         gauge(mean(as.numeric(weights_reactive()$norm_score), na.rm=T), 
               min = 0, 
@@ -695,7 +682,7 @@ server <- function(input, output, session) {
         )
       })
       
-      ### Boxplot   --------------------
+      ### Boxplot ----
       output$boxplot <- renderPlot({
         extracted_df %>%
           rename(Soil = soil_fz, Resilience = resil_fz, Biodiversity = bio_fz, Water = water_fz) %>%
@@ -726,7 +713,7 @@ server <- function(input, output, session) {
       },bg="transparent",height = 230, width = 400 )
       
       
-      ### Radar graph   --------------------
+      ### Radar graph ----
       output$radar_graph <- renderPlotly({
         
         selected <- as.data.frame(df)
@@ -755,10 +742,9 @@ server <- function(input, output, session) {
       })
       
     })
+
     
-    
-        ## Edit tab's note about data displayed  ------------------
-        
+    ## Edit tab's note about data displayed ----
         observeEvent(c(input$alpha, input$soil_w,input$water_w,input$biodiversity_w,input$resil_w), {
           output$data_displayed_note_summary <- renderText({
             "Data for the entire region"
@@ -777,9 +763,7 @@ server <- function(input, output, session) {
           })
         })
     
-        ## Select summary tab when stats are generated if About tab is open  ------------------
-        
-
+        ## Select summary tab when stats are generated if About tab is open ----
         observeEvent(input$map_draw_all_features, {
           if (input$tabs == "about") {
             # Add a new tab panel to the tabset
@@ -789,14 +773,16 @@ server <- function(input, output, session) {
           }
           })
 
-        ## Reset map to remove shapes
-        ### Uses the update of the alpha slider to force refresh
+        ## Reset map to remove shapes ----
+        # Uses the update of the alpha slider to force refresh (there must be a better solution)
         observeEvent(input$removeShapes,{
           reset_value = input$alpha
           updateSliderInput(session, "alpha", value = reset_value+0.01)
         })
 
-    
-    
+# ENVIRONMENTAL THREATS AXIS (MAIN TAB) ----
+        
+        
+        
 }
     
