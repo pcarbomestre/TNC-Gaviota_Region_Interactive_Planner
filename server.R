@@ -782,6 +782,7 @@ server <- function(input, output, session) {
     updateSliderInput(session, "alpha", value = reset_value+0.01)
   })
 
+# >-----
 # ENVIRONMENTAL THREATS AXIS (MAIN TAB) ----
 
   # Defining Map Elements ----
@@ -884,7 +885,7 @@ server <- function(input, output, session) {
       addLegend(pal = pallete_reactive_threats(),
                 values = weights_reactive_threats()["norm_score"][[1]],
                 position = "bottomright",
-                opacity = input$alpha,
+                opacity = input$alpha_threats,
                 labFormat = labelFormat(transform = function(x) sort(x, decreasing = TRUE))) %>%
       fitBounds(lng1=as.numeric(bb(weights_reactive_threats())[1]),
                 lat1=as.numeric(bb(weights_reactive_threats())[2]),
@@ -991,21 +992,6 @@ server <- function(input, output, session) {
       reactive(shapedf)
       shapedf <- input$map_threats_draw_all_features
       sh <- as.data.frame(shapedf)
-      
-      ### Alert not drawn shape if Generate stats button is used
-      # num_features <- length(input$map_draw_all_features$features)
-      #
-      # if(is.null(unlist(input$map_draw_all_features$features[num_features]))){
-      #   shinyalert("Draw a shape",
-      #              "Draw a polygon to extract statistics",
-      #              type = "info",
-      #              size="xs",
-      #              animation=F,
-      #              closeOnClickOutside = TRUE)
-      # }
-      #
-      #
-      # else {
       
       ### Clip raster ----
       polygon <- sh %>%
@@ -1309,7 +1295,499 @@ server <- function(input, output, session) {
     updateSliderInput(session, "alpha_threats", value = reset_value+0.01)
   })
 
+  # >-----
+  # EQUITY ISSUES AXIS (MAIN TAB) ----
   
+  # Defining Map Elements ----
+  ## Select layers individually ----
+  observeEvent(input$checkbox_pollution, {
+    if (input$checkbox_pollution) {
+      updateSliderInput(session, "pol_w", value = 100)
+      updateSliderInput(session, "demo_w", value = 0)
+      updateSliderInput(session, "access_w", value = 0)
+    }
+  })
+  
+  observeEvent(input$checkbox_demographics, {
+    if (input$checkbox_demographics) {
+      updateSliderInput(session, "demo_w", value = 100)
+      updateSliderInput(session, "pol_w", value = 0)
+      updateSliderInput(session, "access_w", value = 0)
+    }
+  })
+  
+  observeEvent(input$checkbox_access, {
+    if (input$checkbox_access) {
+      updateSliderInput(session, "access_w", value = 100)
+      updateSliderInput(session, "pol_w", value = 0)
+      updateSliderInput(session, "demo_w", value = 0)
+    }
+  })
+  
+  ## AHP weights ----
+  
+  ### Calculate aggregated preference values from weights ----
+  agg_pref_df_equity <- reactive({
+    data.frame(resources = c("pol_fz","demo_fz","access_fz"),
+               weights= c(input$pol_w,
+                          input$demo_w,
+                          input$access_w)) %>%
+      mutate(agg_pref = weights/sum(weights))
+  })
+  
+  output$pol_agg_pref <- renderText(paste(round(as.numeric(agg_pref_df_equity()[1,3]),2)))
+  output$demo_agg_pref <- renderText(paste(round(as.numeric(agg_pref_df_equity()[2,3]),2)))
+  output$access_agg_pref <- renderText(paste(round(as.numeric(agg_pref_df_equity()[3,3]),2)))
+
+  ## Apply selected weights ----
+  
+  weights_reactive_equity <- reactive({
+    ### Using Aggregated Preference values ----
+    equity_axis_r %>%
+      mutate("pol_fz" = pol_fz * agg_pref_df_equity()[1,3]) %>%
+      mutate("demo_fz" = demo_fz * agg_pref_df_equity()[2,3]) %>%
+      mutate("access_fz" = access_fz * agg_pref_df_equity()[3,3]) %>%
+      mutate(score = pol_fz + demo_fz + access_fz) %>%
+      mutate(norm_score = range_norm_manual(score))
+  }) # end weights_reactive_equity
+  
+  
+  
+  # Leaflet Map Display ----
+  
+  ## Create palette ----
+  pallete_reactive_equity <- reactive({
+    colorNumeric(palette= "Purples",
+                 domain = weights_reactive_equity()["norm_score"][[1]],
+                 na.color = "transparent",
+                 reverse = TRUE)
+    
+  }) # end pallete_reactive
+  
+  ## Create Map ----
+  output$map_equity <- renderLeaflet({
+    
+    ### Process for Raster data
+    map_equity <- leaflet(options = leafletOptions(minZoom = 9)) %>% addTiles() %>%
+      addGeoRaster(weights_reactive_equity()["norm_score"],
+                   opacity = input$alpha_equity,
+                   colorOptions =leafem:::colorOptions(
+                     palette = "Purples",
+                     breaks = seq(min(weights_reactive_equity()["norm_score"][[1]], na.rm = TRUE),
+                                  max(weights_reactive_equity()["norm_score"][[1]], na.rm = TRUE),
+                                  100),
+                     na.color = "transparent"
+                   ),
+                   resolution=10000) %>%
+      addProviderTiles(providers$Stamen.Terrain) %>%
+      addLegend(pal = pallete_reactive_equity(),
+                values = weights_reactive_equity()["norm_score"][[1]],
+                position = "bottomright",
+                opacity = input$alpha_equity,
+                labFormat = labelFormat(transform = function(x) sort(x, decreasing = TRUE))) %>%
+      fitBounds(lng1=as.numeric(bb(weights_reactive_equity())[1]),
+                lat1=as.numeric(bb(weights_reactive_equity())[2]),
+                lng2=as.numeric(bb(weights_reactive_equity())[3]),
+                lat2=as.numeric(bb(weights_reactive_equity())[4])) %>%
+      setMaxBounds(lng1=as.numeric(bb(weights_reactive_equity())[1])-1,
+                   lat1=as.numeric(bb(weights_reactive_equity())[2])-0.4,
+                   lng2=as.numeric(bb(weights_reactive_equity())[3])+1,
+                   lat2=as.numeric(bb(weights_reactive_equity())[4])+0.4) %>%
+      addDrawToolbar(targetGroup = "draw",
+                     polylineOptions = FALSE,
+                     circleOptions = FALSE,
+                     markerOptions = FALSE,
+                     circleMarkerOptions = FALSE,
+                     editOptions = editToolbarOptions(
+                       edit = TRUE, remove = FALSE, selectedPathOptions = NULL,
+                       allowIntersection = FALSE
+                     ),
+                     position = "topright",
+                     singleFeature = TRUE)
+  })
+  
+  # Extracting data from the map ----
+  
+  ## Extract drawn polygon ----
+  observeEvent(input$drawing, {
+    
+    ddf <- data.frame() # The drawing dataframe
+    ind <- which(ddf == "Feature") # Index for drawing df to break up the df to redraw the shapes.
+    ind <- as.array(ind)
+    
+    for (i in 1:nrow(ind)) {
+      if(i != nrow(ind)) thisShape <- ddf[ind[i]:ind[i+1]]
+      else thisShape <- ddf[ind[i]:ncol(ddf)]
+      
+      
+      if(thisShape[3] == "polygon") {
+        tf <- array(startsWith(names(thisShape),"features.geometry.coordinates"))
+        w <- 1
+        pnts <- array()
+        for (i in 1:nrow(tf)) {
+          if(tf[i] == TRUE) {
+            pnts[w] <- thisShape[i]
+            w <- w+1
+          }
+        }
+        n <- 1
+        m <- 1
+        plng <- array()
+        plat <- array()
+        pnts <- as.array(pnts)
+        for (j in 1:nrow(pnts)) {
+          if(j %% 2 == 1) {
+            plng[n] <- pnts[j]
+            n <- n+1
+          }
+          else if(j %% 2 == 0) {
+            plat[m] <- pnts[j]
+            m <- m+1
+          }
+        }
+        as.vector(plng, mode = "any")
+        as.vector(plat, mode = "any")
+        PG <- data.frame(matrix(unlist(plng)))
+        PGsub <- data.frame(matrix(unlist(plat)))
+        PG <- cbind(PG, PGsub)
+        colnames(PG) <- c("lng","lat")
+        PG1 <- reactiveVal(PG)
+        
+        proxy <- leafletProxy("map", data = PG1())
+        proxy %>% addPolygons(lng = ~lng, lat = ~lat, group = "draw")
+        
+        output$statsBut <- renderUI({
+          actionButton("removeShapes_equity", h5(strong("Generate Stats")))
+        })
+      }
+      
+      else if(thisShape[3] == "rectangle"){
+        rlng1 <- as.numeric(thisShape[5])
+        rlat1 <- as.numeric(thisShape[6])
+        rlng2 <- as.numeric(thisShape[9])
+        rlat2 <- as.numeric(thisShape[10])
+        
+        proxy <- leafletProxy("map")
+        proxy %>% addRectangles(lng1 = rlng1, lat1 = rlat1, lng2 = rlng2, lat2 = rlat2,
+                                group = "draw")
+      }
+    }
+  })
+  
+  
+  ## Extract statistics  ----
+  
+  ### All study area Summary and plot tabs ----
+  
+  observe({
+    
+    
+    ## Selected area Summary and plot tabs ----
+    
+    observeEvent(input$map_equity_draw_all_features, {
+      
+      shapedf <- data.frame()
+      reactive(shapedf)
+      shapedf <- input$map_equity_draw_all_features
+      sh <- as.data.frame(shapedf)
+      
+      ### Clip raster ----
+      polygon <- sh %>%
+        dplyr::select(starts_with("features.geometry.coordinates")) %>%
+        as.numeric() %>%
+        matrix(ncol=2, byrow=TRUE) %>%
+        list() %>%
+        st_polygon() %>%
+        st_sfc(crs="EPSG:4326")
+      
+      polygon_sp <- as(polygon, Class = "Spatial")
+      
+      ### Alert for invalid shape ----
+      if (gIsValid(polygon_sp) == FALSE){
+        shinyalert(html = TRUE,
+                   "Shape edges can not cross!",
+                   "Draw again the polygon to extract statistics",
+                   type = "warning",
+                   size="xs",
+                   animation=F,
+                   closeOnClickOutside = TRUE)
+        remove(shapedf)
+      }
+      
+      ### Extract data ----
+      else {
+        
+        extracted_area <- st_crop(equity_axis_r, polygon) # Original spatial data
+        extracted_area_aggr <- st_crop(weights_reactive_equity(), polygon) # Aggregated spatial data
+        
+        extracted_df <- cbind(pol_fz= as.numeric(extracted_area$pol_fz),
+                              demo_fz= as.numeric(extracted_area$demo_fz),
+                              access_fz= as.numeric(extracted_area$access_fz),
+                              aggregated_val= as.numeric(extracted_area_aggr$norm_score)) %>%
+          as.data.frame() %>%
+          na.omit()
+        
+        
+        mean_extracted_values <- apply(extracted_df,2,mean,na.rm=T)
+        
+        summary_data <- data.frame(Threat=c("Pollution","Demographics","Access","Aggregated score"),
+                                   Score=mean_extracted_values)
+        rownames(summary_data)<-NULL
+        
+        #### Table ----
+        output$mytable_equity =  render_gt({
+          dplyr::tibble(img=c(here("www","img","climate_icon.png"),
+                              here("www","img","drought_icon.png"),
+                              here("www","img","flood_icon.png")),
+                        summary_data %>%
+                          filter(!Threat %in% "Aggregated score")) %>%
+            arrange(desc(Score)) %>%
+            gt() %>%
+            fmt_number(columns = Score,decimals = 3) %>%
+            cols_label(img = "") %>%
+            gt_img_rows(columns = img, height = 28, img_source = "local") %>%
+            tab_caption("Average scores without weighting:") %>%
+            tab_options(table.background.color = "transparent",
+                        table.font.size = 17,
+                        data_row.padding = px(2),
+                        table.width = 300) %>%
+            tab_style(style = list(cell_text(weight = "bold")),
+                      locations = cells_column_labels())
+        },height = 210)
+        
+        #### Gauge ----
+        output$gauge_equity = renderGauge({
+          gauge(as.numeric(mean_extracted_values[4]),
+                min = 0,
+                max = 1,
+                abbreviateDecimals=2,
+                label ="Aggregated score",
+                sectors = gaugeSectors(success = c(0.70, 1),
+                                       warning = c(0.35, 0.70),
+                                       danger = c(0, 0.35),
+                                       colors = c("#eb7900","#ff9900","#f5c57d"))
+          )
+        })
+        
+        
+        #### Radar graph ----
+        output$radar_graph_equity <- renderPlotly({
+          
+          selected <- as.data.frame(df)
+          
+          fig <- plot_ly(
+            type = 'scatterpolar',
+            r = as.numeric(mean_extracted_values[1:3]),
+            theta = c("Pollution", "Demographics", "Acces"),
+            fill = 'toself',
+            marker = list(color = 'rgba(224, 136, 4, 0.9)', size = 5),
+            fillcolor = list(color = 'rgba(237, 164, 55, 0.5)')
+          )
+          
+          fig <- fig %>%
+            layout(
+              polar = list(radialaxis = list(
+                visible = T,
+                range = c(0,1))
+              ),
+              plot_bgcolor  = "rgba(0, 0, 0, 0)",
+              paper_bgcolor = "rgba(0, 0, 0, 0)",
+              fig_bgcolor   = "rgba(0, 0, 0, 0)",
+              showlegend = F
+            )
+          fig
+        })
+        
+        
+        #### Boxplot ----
+        output$boxplot_equity <- renderPlot({
+          extracted_df %>%
+            rename(Pollution = pol_fz, Demographics = demo_fz, Access = access_fz) %>%
+            pivot_longer(cols=c(Pollution, Demographics, Access)) %>%
+            group_by(name) %>%
+            mutate(mean_value = mean(value)) %>%
+            ungroup() %>%
+            arrange(mean_value) %>%
+            mutate(name = factor(name, levels = unique(name))) %>%
+            ggplot(aes(x=name, y=value, fill=name)) +
+            geom_boxplot(color="black", alpha=0.9, lwd=0.3, outlier.size=0.7,
+                         outlier.stroke=0, outlier.alpha=0.5, outlier.color="black") +
+            scale_fill_manual(values=brewer.pal(n=4, name="Oranges")) +
+            theme_minimal() +
+            labs(x="", y="", title="Threats data distribution (without weighting):") +
+            theme(plot.title = element_text(hjust = -3, vjust = -2,size=15,
+                                            color="#808080", margin = margin(0,0,15,0)),
+                  axis.text.y = element_text( size=12, face="bold"),
+                  axis.text.x = element_text(angle=45, vjust=0.7, hjust=0.7,
+                                             size=10, face="bold"),
+                  panel.grid.major.y = element_blank(),
+                  panel.grid.minor.y = element_blank(),
+                  panel.grid.major.x = element_line(color = "gray87"),
+                  panel.grid.minor.x = element_blank(),
+                  panel.background = element_blank(),
+                  legend.position="none") +
+            coord_flip()
+        },bg="transparent",height = 230, width = 400 )
+      }
+      # }
+    })
+  })
+  
+  
+  
+  ## Return to the whole area if the map is refreshed  ----
+  
+  observeEvent(c(input$removeShapes_equity, input$pol_w,input$demo_w,input$access_w), {
+    
+    extracted_df <- cbind(pol_fz= as.numeric(equity_axis_r$pol_fz),
+                          demo_fz= as.numeric(equity_axis_r$demo_fz),
+                          access_fz= as.numeric(equity_axis_r$access_fz),
+                          agg_val= as.numeric(equity_axis_r$agg_val)) %>%
+      as.data.frame() %>%
+      na.omit()
+    
+    mean_extracted_values <- apply(extracted_df,2,mean,na.rm=T)
+    
+    summary_data <- data.frame(Issues=c("Pollution","Demographics","Access","Aggregated score"),
+                               Score= mean_extracted_values)
+    rownames(summary_data)<-NULL
+    
+    ### Table ----
+    output$mytable_equity =  render_gt({
+      dplyr::tibble(img=c(here("www","img","climate_icon.png"),
+                          here("www","img","drought_icon.png"),
+                          here("www","img","flood_icon.png")),
+                    summary_data %>%
+                      filter(!Issues %in% "Aggregated score")) %>%
+        arrange(desc(Score)) %>%
+        gt() %>%
+        fmt_number(columns = Score,decimals = 3) %>%
+        cols_label(img = "") %>%
+        gt_img_rows(columns = img, height = 28, img_source = "local") %>%
+        tab_caption("Average scores without weighting:") %>%
+        tab_options(table.background.color = "transparent",
+                    table.font.size = 17,
+                    data_row.padding = px(2),
+                    table.width = 300) %>%
+        tab_style(
+          style = list(
+            cell_text(weight = "bold")
+          ),
+          locations = cells_column_labels()
+        )
+    })
+    
+    ### Gauge ----
+    output$gauge_equity = renderGauge({
+      gauge(mean(as.numeric(weights_reactive_equity()$norm_score), na.rm=T),
+            min = 0,
+            max = 1,
+            abbreviateDecimals=2,
+            label ="Aggregated score",
+            sectors = gaugeSectors(success = c(0.70, 1),
+                                   warning = c(0.35, 0.70),
+                                   danger = c(0, 0.35),
+                                   colors = c("#eb7900","#ff9900","#f5c57d"))
+      )
+    })
+    
+    ### Boxplot ----
+    output$boxplot_equity <- renderPlot({
+      extracted_df %>%
+        rename(Pollution = pol_fz, Demographics = demo_fz, Access = access_fz) %>%
+        pivot_longer(cols=c(Pollution, Demographics, Access)) %>%
+        group_by(name) %>%
+        mutate(mean_value = mean(value)) %>%
+        ungroup() %>%
+        arrange(mean_value) %>%
+        mutate(name = factor(name, levels = unique(name))) %>%
+        ggplot(aes(x=name, y=value, fill=name)) +
+        geom_boxplot(color="black", alpha=0.9, lwd=0.3, outlier.size=0.7,
+                     outlier.stroke=0, outlier.alpha=0.5, outlier.color="black") +
+        scale_fill_manual(values=brewer.pal(n=4, name="Oranges")) +
+        theme_minimal() +
+        labs(x="", y="", title="Threats data distribution (without weighting):") +
+        theme(plot.title = element_text(hjust = -3, vjust = -2,size=15,
+                                        color="#808080", margin = margin(0,0,15,0)),
+              axis.text.y = element_text( size=12, face="bold"),
+              axis.text.x = element_text(angle=45, vjust=0.7, hjust=0.7,
+                                         size=10, face="bold"),
+              panel.grid.major.y = element_blank(),
+              panel.grid.minor.y = element_blank(),
+              panel.grid.major.x = element_line(color = "gray87"),
+              panel.grid.minor.x = element_blank(),
+              panel.background = element_blank(),
+              legend.position="none") +
+        coord_flip()
+    },bg="transparent",height = 230, width = 400 )
+    
+    
+    ### Radar graph ----
+    output$radar_graph_equity <- renderPlotly({
+      
+      selected <- as.data.frame(df)
+      
+      fig <- plot_ly(
+        type = 'scatterpolar',
+        r = as.numeric(mean_extracted_values[1:3]),
+        theta = c("Pollution", "Demographics", "Access"),
+        fill = 'toself',
+        marker = list(color = 'rgba(224, 136, 4, 0.9)', size = 5),
+        fillcolor = list(color = 'rgba(237, 164, 55, 0.5)')
+      )
+      
+      fig <- fig %>%
+        layout(
+          polar = list(radialaxis = list(
+            visible = T,
+            range = c(0,1))
+          ),
+          plot_bgcolor  = "rgba(0, 0, 0, 0)",
+          paper_bgcolor = "rgba(0, 0, 0, 0)",
+          fig_bgcolor   = "rgba(0, 0, 0, 0)",
+          showlegend = F
+        )
+      fig
+    })
+    
+  })
+  
+  
+  ## Edit tab's note about data displayed ----
+  observeEvent(c(input$alpha_equity, input$pol_w,input$demo_w,input$access_w), {
+    output$data_displayed_note_summary_equity <- renderText({
+      "Data for the entire region"
+    })
+    output$data_displayed_note_plot_equity <- renderText({
+      "Data for the entire region"
+    })
+  })
+  
+  observeEvent(input$map_equity_draw_all_features, {
+    output$data_displayed_note_summary_equity <- renderText({
+      "Data for the selected area"
+    })
+    output$data_displayed_note_plot_equity <- renderText({
+      "Data for the selected area"
+    })
+  })
+  
+  ## Select summary tab when stats are generated if About tab is open ----
+  observeEvent(input$map_equity_draw_all_features, {
+    if (input$tabs_equity == "about_equity") {
+      # Add a new tab panel to the tabset
+      updateTabsetPanel(session, "tabs_equity",
+                        selected = paste0("summary_equity", input$controller)
+      )
+    }
+  })
+  
+  ## Reset map to remove shapes ----
+  # Uses the update of the alpha slider to force refresh (there must be a better solution)
+  observeEvent(input$removeShapes_equity,{
+    reset_value = input$alpha_equity
+    updateSliderInput(session, "alpha_equity", value = reset_value+0.01)
+  })
         
 }
     

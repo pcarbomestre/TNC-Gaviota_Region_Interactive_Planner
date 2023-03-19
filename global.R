@@ -85,8 +85,11 @@ threats_axis_df <- st_drop_geometry(threats_axis_sf)
 
 
 # Equity Issues Axis spatial data
-equity_axis_sf <- st_read(here('data','small_MB_area','small_MB_area.shp')) %>% 
-  clean_names()
+equity_axis_sf <- st_read(here('data','shiny_inputs','equity_issues','equity_issues.shp')) %>% 
+  clean_names() %>% 
+  st_transform("EPSG:4326")
+
+equity_axis_r <- st_rasterize(equity_axis_sf %>% dplyr::select(-id)) # Rasterizing shapefile
 
 equity_axis_df <- st_drop_geometry(equity_axis_sf)
 
