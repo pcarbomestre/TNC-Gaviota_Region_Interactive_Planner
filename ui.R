@@ -57,7 +57,7 @@ siderbar<- dashboardSidebar(
     menuItem("Resources Axis", tabName = "Initial", icon = icon("fa-brands fa-pagelines"),
              menuSubItem("Natural Resources",tabName = "natural_resources_map", icon = icon("map")),
              menuSubItem("Stakeholders priorities",tabName = "Map", icon = icon("fa-solid fa-layer-group")),
-             menuSubItem("Data Information",tabName = "Details", icon = icon("info-circle"))),
+             menuSubItem("Data Information",tabName = "testitemhtml", icon = icon("info-circle"))),
     menuItem("Threats Axis",tabName = "landings", icon = icon("fa-regular fa-fire"),
              menuSubItem("Environmental Threats",tabName = "environmental_threats_map", icon = icon("map")),
              menuSubItem("Data Information",tabName = "Details", icon = icon("info-circle"))),
@@ -149,8 +149,8 @@ body <- dashboardBody(
                                    class = "panel panel-default",
                                    fixed = FALSE,
                                    draggable = TRUE,
-                                   top = 190, left = "auto",
-                                   right = 920, bottom = "auto",
+                                   top = 190, left = 40,
+                                   right = "auto", bottom = "auto",
                                    width = 250, height = "auto",
                                    style="background-color: white;
                                           opacity: 0.95;
@@ -312,21 +312,43 @@ body <- dashboardBody(
 
 
                      ### Select Picker and planner use note ----
-                     column(4,
-                     br(),
-                     selectInput("stakeholder_w", label = "Select stakeholder's weights:",
-                                 choices = c("None",ahp_weights$group),
-                                 selected = NULL),
-                     h2("How to use this map?"),
-                     tags$p("The Santa Barbara County Interactive Planner maps
-                     the degree of overlap of natural resources. Darker areas have more resources.
-                     Use the sliders to adjust the relative influence of each item.
-                            Select higher values for the resources you prioritize.",
-                            style="text-align: justify")
-                  ),
+                     
+                     column(5,offset = 0, style='padding-left:30px;padding-right:30px;',
+                            br(),
+                            selectInput("stakeholder_w", label = "Select stakeholder's weights:",
+                                        choices = c("None",ahp_weights$group),
+                                        selected = NULL),
+                            ### Text Information ----
+                            tags$div(
+                              style = "display: flex; align-items: center; margin-top: 5px; margin-bottom: 5px;",
+                              tags$h4(
+                                style = "text-align: left; margin-right: 10px; margin-bottom: 0;",
+                                tags$mark("Natural resources map",style = "color:#ffffff;
+                            background-color: #629871;
+                            border-radius: 0px;
+                            padding: 3px 10px;
+                            font-weight: bold;
+                            position:relative;
+                            filter:url(#marker-shape);
+                            width:100%;
+                            height:1em;
+                            left:-0.25em;
+                            top:0.1em;
+                            padding:0 0.25em;
+                            font-family: 'Chronicle Text G2 A', 'Chronicle Text G2 B', 
+                            'Chronicle Text G2', Georgia, sans-serif")
+                              ),
+                              tags$h4("How to use it?", style = "font-weight: bold ;margin-bottom: 0; margin-top: 2;")
+                            ),
+                            tags$p("The Gaviota Region Interactive Planner maps the degree of overlap of natural resources. 
+                                   Darker areas have more resources. Use the sliders to adjust the relative influence of each item. 
+                                   Select higher values for the resources you prioritize.", 
+                                   style="text-align: justify; margin-top: 15px; margin-bottom: 5px;")
+                     )
+                     
+                     ,
                   ### Data tab ----
-              column(1),
-               column(7,
+               column(7,offset = 0,
                       tabsetPanel(id="tabs",
                         tags$style(HTML(".tabbable > .nav > li > a {margin-top:5px;float:right;display:inline-block;}")),
                         tags$style(HTML(
@@ -447,8 +469,8 @@ body <- dashboardBody(
                                    class = "panel panel-default",
                                    fixed = FALSE,
                                    draggable = TRUE,
-                                   top = 190, left = "auto",
-                                   right = 920, bottom = "auto",
+                                   top = 190, left = 40,
+                                   right = "auto", bottom = "auto",
                                    width = 250, height = "auto",
                                    style="background-color: white;
                                           opacity: 0.95;
@@ -608,18 +630,37 @@ body <- dashboardBody(
                      ),
 
 
-                     ### Select Picker and planner use note ----
-                     column(4,
+                     ### Text Information ----
+                     column(5,offset = 0, style='padding-left:30px;padding-right:30px;padding-top:40px',
                             br(),
-                            h2("How to use this map?"),
-                            tags$p("The Santa Barbara County Interactive Planner maps
-                     the degree of overlap of natural resources. Darker areas have more resources.
-                     Use the sliders to adjust the relative influence of each item.
-                            Select higher values for the resources you prioritize.",
-                                   style="text-align: justify")
+                            tags$div(
+                              style = "display: flex; align-items: center; margin-top: 5px; margin-bottom: 5px;",
+                              tags$h4(
+                                style = "text-align: left; margin-right: 10px; margin-bottom: 0;",
+                                tags$mark("Environmental threats map",style = "color:#ffffff;
+                            background-color: #f78800;
+                            border-radius: 0px;
+                            padding: 3px 10px;
+                            font-weight: bold;
+                            position:relative;
+                            filter:url(#marker-shape);
+                            width:100%;
+                            height:1em;
+                            left:-0.25em;
+                            top:0.1em;
+                            padding:0 0.25em;
+                            font-family: 'Chronicle Text G2 A', 'Chronicle Text G2 B', 
+                            'Chronicle Text G2', Georgia, sans-serif")
+                              ),
+                              tags$h4("How to use it?", style = "font-weight: bold ;margin-bottom: 0; margin-top: 1;")
+                            ),
+                            tags$p("This map shows the degree of overlap of environmental threats. 
+                                   Each category represents a projection estimate for the next 20 years. 
+                                   Areas where threats concentrate are shown darker, suggesting that they are currently or will be in the future more susceptible to these hazards. 
+                                   You can use the sliders to adjust the relative influence of each item that you want to display.", 
+                                   style="text-align: justify; margin-top: 15px; margin-bottom: 5px;")
                      ),
                      ### Data tab ----
-                     column(1),
                      column(7,
                             tabsetPanel(id="tabs_threats",
                                         tags$style(HTML(".tabbable > .nav > li > a {margin-top:5px;float:right;display:inline-block;}")),
@@ -742,8 +783,8 @@ body <- dashboardBody(
                                    class = "panel panel-default",
                                    fixed = FALSE,
                                    draggable = TRUE,
-                                   top = 260, left = "auto",
-                                   right = 920, bottom = "auto",
+                                   top = 260, left = 40,
+                                   right = "auto", bottom = "auto",
                                    width = 250, height = "auto",
                                    style="background-color: white;
                                           opacity: 0.95;
@@ -860,7 +901,7 @@ body <- dashboardBody(
                                    ),
                                    fluidRow(
                                      column(10,
-                                            actionLink("checkbox_access", label = "Access to nature"),
+                                            actionLink("checkbox_access", label = "Nature exclusion"),
                                             sliderInput(inputId = "access_w",
                                                         label = NULL,
                                                         ticks = FALSE,
@@ -885,19 +926,36 @@ body <- dashboardBody(
                                    actionButton("removeShapes_equity","", icon = icon("fa-regular fa-trash"))
                      ),
                      
-                     
-                     ### Select Picker and planner use note ----
-                     column(4,
+                     ### Text Information ----
+                     column(5,offset = 0, style='padding-left:30px;padding-right:30px;padding-top:40px',
                             br(),
-                            h2("How to use this map?"),
-                            tags$p("The Santa Barbara County Interactive Planner maps
-                     the degree of overlap of natural resources. Darker areas have more resources.
-                     Use the sliders to adjust the relative influence of each item.
-                            Select higher values for the resources you prioritize.",
-                                   style="text-align: justify")
+                            tags$div(
+                              style = "display: flex; align-items: center; margin-top: 5px; margin-bottom: 5px;",
+                              tags$h4(
+                                style = "text-align: left; margin-right: 10px; margin-bottom: 0;",
+                                tags$mark("Equity issues map",style = "color:#ffffff;
+                            background-color: #9760a8;
+                            border-radius: 0px;
+                            padding: 3px 10px;
+                            font-weight: bold;
+                            position:relative;
+                            filter:url(#marker-shape);
+                            width:100%;
+                            height:1em;
+                            left:-0.25em;
+                            top:0.1em;
+                            padding:0 0.25em;
+                            font-family: 'Chronicle Text G2 A', 'Chronicle Text G2 B', 
+                            'Chronicle Text G2', Georgia, sans-serif")
+                              ),
+                              tags$h4("How to use it?", style = "font-weight: bold ;margin-bottom: 0; margin-top: 1;")
+                            ),
+                            tags$p("This map illustrates the degree of overlap among different environmental justice, diversity, equity, and inclusion issues. 
+                                   Darker areas represent a higher concentration of the selected factors, indicating that certain communities in those areas may be disproportionately affected. 
+                                   You can adjust the sliders to modify the relative influence of each item that you wish to display.", 
+                                   style="text-align: justify; margin-top: 15px; margin-bottom: 5px;")
                      ),
                      ### Data tab ----
-                     column(1),
                      column(7,
                             tabsetPanel(id="tabs_equity",
                                         tags$style(HTML(".tabbable > .nav > li > a {margin-top:5px;float:right;display:inline-block;}")),
@@ -966,7 +1024,10 @@ body <- dashboardBody(
 
 
 
-
+    tabItem(tabName = "testitemhtml",
+            fluidPage(
+              htmltools::tags$iframe(src = "EDS232_lab1_pcarbomestre.html", width = '100%',  height = 1000,  style = "border:none;"))
+  ),
 
 
 
