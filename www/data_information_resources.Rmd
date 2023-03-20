@@ -36,23 +36,12 @@ library(htmltools)
                             'Chronicle Text G2', Georgia, sans-serif">Data information</mark></h2>
 
 
-<br>
-<h4 style="display: inline-block;"><img src="img/water_icon.png" alt="description of the image" style="vertical-align: middle; margin: 0px 10px; width: 5%">Water resources</h4>
-
-```{r out.width='30%', out.extra='style="float:right; padding:10px"'}
-knitr::include_graphics("img/maps/water_map.png")
-```
-
-This layer corresponds to the Water Resource Areas of Interest developed by the Conservation Biology Institute for the Santa Barbara County Conservation Blueprint. The map highlights areas of interest for water resources by overlaying a variety of inputs, including information on wetlands, waterways, groundwater, and watershed assessments.
-
-You can access the original data here: 
-[Water Resource "Areas of Interest"](https://sbcblueprint.databasin.org/datasets/fc3d91cbadf849d296e20a63ec2c2ac9/)
 
 
 <br>
 <h4 style="display: inline-block;"><img src="img/bio_icon.png" alt="description of the image" style="vertical-align: middle; margin: 0px 10px; width: 5%">Biodiversity</h4>
 
-```{r out.width='30%', out.extra='style="float:right; padding:10px"'}
+```{r out.width='30%', out.extra='style="float:right; padding:10px;-webkit-filter: drop-shadow(1px 1px 1px #666666)"'}
 knitr::include_graphics("img/maps/bio_map.png")
 ```
 
@@ -62,9 +51,9 @@ You can access the original data here:
 [Flora and Fauna "Areas of Interest"](https://sbcblueprint.databasin.org/datasets/b1e62c59d66b4f2f9ab0b9eb3f435843/)
 
 <br>
-<h4 style="display: inline-block;"><img src="img/soil_icon.png" alt="description of the image" style="vertical-align: middle; margin: 0px 10px; width: 5%">Soil</h4>
+<h4 style="display: inline-block;"><img src="img/soil_icon.png" alt="soil icon" style="vertical-align: middle; margin: 0px 10px; width: 5%">Soil</h4>
 
-```{r out.width='30%', out.extra='style="float:right; padding:10px"'}
+```{r out.width='30%', out.extra='style="float:right; padding:10px; -webkit-filter: drop-shadow(1px 1px 1px #666666)"'}
 knitr::include_graphics("img/maps/soil_map.png")
 ```
 
@@ -74,13 +63,28 @@ You can access the original data here:
 [Agricultural "Areas of Importance"](https://sbcblueprint.databasin.org/datasets/807abc2dc06a49b88e815751ffa8a75a/)
 
 <br>
+<h4 style="display: inline-block;"><img src="img/water_icon.png" alt="description of the image" style="vertical-align: middle; margin: 0px 10px; width: 5%">Water resources</h4>
+
+```{r out.width='30%', out.extra='style="float:right; padding:10px;-webkit-filter: drop-shadow(1px 1px 1px #666666)"'}
+knitr::include_graphics("img/maps/water_map.png")
+```
+
+This layer corresponds to the Water Resource Areas of Interest developed by the Conservation Biology Institute for the Santa Barbara County Conservation Blueprint. The map highlights areas of interest for water resources by overlaying a variety of inputs, including information on wetlands, waterways, groundwater, and watershed assessments.
+
+You can access the original data here: 
+[Water Resource "Areas of Interest"](https://sbcblueprint.databasin.org/datasets/fc3d91cbadf849d296e20a63ec2c2ac9/)
+
+
+
+<br>
 <h4 style="display: inline-block;"><img src="img/resilience_icon.png" alt="description of the image" style="vertical-align: middle; margin: 0px 10px; width: 5%">Resilience</h4>
 
-```{r out.width='30%', out.extra='style="float:right; padding:10px"'}
+```{r out.width='30%', out.extra='style="float:right; padding:10px;-webkit-filter: drop-shadow(1px 1px 1px #666666)"'}
 knitr::include_graphics("img/maps/resil_map.png")
 ```
 
+The layer was adapted from the Agricultural Areas of Importance originally created by the Conservation Biology Institute for the Santa Barbara County Conservation Blueprint. The map highlights areas of interest for farming and ranching by overlaying a variety of metrics, including information on precipitation, grazing lands, soil characteristics, farmland and feasible agricultural and ranch lands.
 
-
-
+You can access the original data here:
+[Agricultural "Areas of Importance"](https://sbcblueprint.databasin.org/datasets/807abc2dc06a49b88e815751ffa8a75a/)
 

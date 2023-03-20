@@ -239,7 +239,9 @@ body <- dashboardBody(
                      #### Sliders and checkbox set up ----
                      fluidRow(
                        column(10,
-                                   actionLink("checkbox_water", label = "Water resources"),
+
+                                   actionLink("checkbox_water", label = "Water resources",
+                                              style="display: block;padding-top: 15px;}"),
                                    sliderInput(inputId = "water_w",
                                                label = NULL,
                                                ticks = FALSE,
@@ -564,7 +566,8 @@ body <- dashboardBody(
                                    #### Sliders and checkbox set up ----
                                    fluidRow(
                                      column(10,
-                                            actionLink("checkbox_climate", label = "Climate exposure"),
+                                            actionLink("checkbox_climate", label = "Climate exposure",
+                                                       style="display: block;padding-top: 15px;}"),
                                             sliderInput(inputId = "cli_w",
                                                         label = NULL,
                                                         ticks = FALSE,
@@ -881,7 +884,8 @@ body <- dashboardBody(
                                    #### Sliders and checkbox set up ----
                                    fluidRow(
                                      column(10,
-                                            actionLink("checkbox_pollution", label = "Pollution"),
+                                            actionLink("checkbox_pollution", label = "Pollution",
+                                                       style="display: block;padding-top: 15px;}"),
                                             sliderInput(inputId = "pol_w",
                                                         label = NULL,
                                                         ticks = FALSE,

@@ -39,7 +39,7 @@ library(htmltools)
 <br>
 <h4 style="display: inline-block;"><img src="img/drought_icon.png" alt="description of the image" style="vertical-align: middle; margin: 0px 10px; width: 5%">Droughts</h4>
 
-```{r out.width='30%', out.extra='style="float:right; padding:10px"'}
+```{r out.width='30%', out.extra='style="float:right; padding:10px;-webkit-filter: drop-shadow(1px 1px 1px #666666)"'}
 knitr::include_graphics("img/maps/droughts_map.png")
 ```
 
@@ -57,20 +57,19 @@ You can access the original data here:
 <br>
 <h4 style="display: inline-block;"><img src="img/climate_icon.png" alt="description of the image" style="vertical-align: middle; margin: 0px 10px; width: 5%">Climate exposure</h4>
 
-```{r out.width='30%', out.extra='style="float:right; padding:10px"'}
+```{r out.width='30%', out.extra='style="float:right; padding:10px;-webkit-filter: drop-shadow(1px 1px 1px #666666)"'}
 knitr::include_graphics("img/maps/climate_map.png")
 ```
 
 The Climate Exposure Layer was derived from the Climate Exposure Model developed by the Conservation Biology Institute. Similar to the Droughts Layer, it calculates the variance between the projected future climate (2016-2045) and the variability in climate during a historical reference period. Higher climate exposure values indicate a more significant difference between the projected climate and past climate. The model considers aridity and climate, where climate factors include maximum and minimum temperatures, as well as precipitation on both seasonal and annual bases. Three climate futures projections were used along with the ensemble mean values from those models.
 
 You can access the original data here:
-
 [California Climate Exposure (Ensemble), 2016-2045](https://databasin.org/datasets/15e8a1a8ad604c2681590dc68d4ec1cf/)
 
 <br>
 <h4 style="display: inline-block;"><img src="img/fire_icon.png" alt="description of the image" style="vertical-align: middle; margin: 0px 10px; width: 5%">Wildfires</h4>
 
-```{r out.width='30%', out.extra='style="float:right; padding:10px"'}
+```{r out.width='30%', out.extra='style="float:right; padding:10px;-webkit-filter: drop-shadow(1px 1px 1px #666666)"'}
 knitr::include_graphics("img/maps/fires_map.png")
 ```
 
@@ -85,7 +84,7 @@ You can access the original data here:
 <br>
 <h4 style="display: inline-block;"><img src="img/flood_icon.png" alt="description of the image" style="vertical-align: middle; margin: 0px 10px; width: 5%">Floods</h4>
 
-```{r out.width='30%', out.extra='style="float:right; padding:10px"'}
+```{r out.width='30%', out.extra='style="float:right; padding:10px;-webkit-filter: drop-shadow(1px 1px 1px #666666)"'}
 knitr::include_graphics("img/maps/flood_map.png")
 ```
 

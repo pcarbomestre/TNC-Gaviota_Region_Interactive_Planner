@@ -34,11 +34,22 @@ library(htmltools)
                             font-family: 'Chronicle Text G2 A', 'Chronicle Text G2 B', 
                             'Chronicle Text G2', Georgia, sans-serif">Data information</mark></h2>
 
+<br>
+<h4 style="display: inline-block;"><img src="img/demo_icon.png" alt="description of the image" style="vertical-align: middle; margin: 0px 10px; width: 5%">Demographics</h4>
+
+```{r out.width='30%', out.extra='style="float:right; padding:10px;-webkit-filter: drop-shadow(1px 1px 1px #666666)"'}
+knitr::include_graphics("img/maps/demo_map.png")
+```
+
+This layer is from CalEnviroScreen 3.0 indicator map for population characteristics. The data represents demographic characteristics of populations that make them more vulnerable to pollution and other environmental harms, grouped into categories of physiological traits, health status, or community characteristics. The specific components of this dataset include asthma, cardiovascular disease, low birth weight, education, housing burden, linguistic isolation, poverty, and unemployment. 
+
+You can access the original data here: 
+[CalEnviroScreen 3.0, Pollution Burden, Percentile, 2017](https://sbcblueprint.databasin.org/datasets/77b443653446408fbe31aa9e86b6948d/)
 
 <br>
 <h4 style="display: inline-block;"><img src="img/pollution_icon.png" alt="description of the image" style="vertical-align: middle; margin: 0px 10px; width: 5%">Pollution</h4>
 
-```{r out.width='30%', out.extra='style="float:right; padding:10px"'}
+```{r out.width='30%', out.extra='style="float:right; padding:10px;-webkit-filter: drop-shadow(1px 1px 1px #666666)"'}
 knitr::include_graphics("img/maps/pollution_map.png")
 ```
 
@@ -49,23 +60,10 @@ You can access the original data here:
 
 
 <br>
-<h4 style="display: inline-block;"><img src="img/demo_icon.png" alt="description of the image" style="vertical-align: middle; margin: 0px 10px; width: 5%">Demographics</h4>
-
-```{r out.width='30%', out.extra='style="float:right; padding:10px"'}
-knitr::include_graphics("img/maps/demo_map.png")
-```
-
-This layer is from CalEnviroScreen 3.0 indicator map for population characteristics. The data represents demographic characteristics of populations that make them more vulnerable to pollution and other environmental harms, grouped into categories of physiological traits, health status, or community characteristics. The specific components of this dataset include asthma, cardiovascular disease, low birth weight, education, housing burden, linguistic isolation, poverty, and unemployment. 
-
-You can access the original data here: 
-[CalEnviroScreen 3.0, Pollution Burden, Percentile, 2017](https://sbcblueprint.databasin.org/datasets/77b443653446408fbe31aa9e86b6948d/)
-
-
-<br>
 <h4 style="display: inline-block;"><img src="img/access_icon.png" alt="description of the image" style="vertical-align: middle; margin: 0px 10px; width: 5%">Isolation from Nature
 </h4>
 
-```{r out.width='30%', out.extra='style="float:right; padding:10px"'}
+```{r out.width='30%', out.extra='style="float:right; padding:10px;-webkit-filter: drop-shadow(1px 1px 1px #666666)"'}
 knitr::include_graphics("img/maps/access_map.png")
 ```
 
