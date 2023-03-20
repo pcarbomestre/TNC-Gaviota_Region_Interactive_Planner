@@ -149,8 +149,8 @@ body <- dashboardBody(
                                    class = "panel panel-default",
                                    fixed = FALSE,
                                    draggable = TRUE,
-                                   top = "auto", left = 40,
-                                   right = "auto", bottom = 250,
+                                   top = 140, left = 40,
+                                   right = "auto", bottom = "auto",
                                    width = 250, height = "auto",
                                    style="background-color: white;
                                           opacity: 0.95;
@@ -475,8 +475,8 @@ body <- dashboardBody(
                                    class = "panel panel-default",
                                    fixed = FALSE,
                                    draggable = TRUE,
-                                   top = "auto", left = 40,
-                                   right = "auto", bottom = 260,
+                                   top = 140, left = 40,
+                                   right = "auto", bottom = "auto",
                                    width = 250, height = "auto",
                                    style="background-color: white;
                                           opacity: 0.95;
@@ -794,8 +794,8 @@ body <- dashboardBody(
                                    class = "panel panel-default",
                                    fixed = FALSE,
                                    draggable = TRUE,
-                                   top = "auto", left = 40,
-                                   right = "auto", bottom = 260,
+                                   top = 210, left = 40,
+                                   right = "auto", bottom = "auto",
                                    width = 250, height = "auto",
                                    style="background-color: white;
                                           opacity: 0.95;
