@@ -1,5 +1,0 @@
-Improvements:
-
-Prevent crashing if pressing generate stats after removing shape
-
-Keep zoom and box on the map when selecting new weights

@@ -1530,7 +1530,7 @@ server <- function(input, output, session) {
         
         mean_extracted_values <- apply(extracted_df,2,mean,na.rm=T)
         
-        summary_data <- data.frame(Issue=c("Pollution","Demographics","Nature exclusion","Aggregated score"),
+        summary_data <- data.frame(Issue=c("Pollution","Demographics","Isolation from Nature","Aggregated score"),
                                    Score=mean_extracted_values)
         rownames(summary_data)<-NULL
         
@@ -1578,7 +1578,7 @@ server <- function(input, output, session) {
           fig <- plot_ly(
             type = 'scatterpolar',
             r = as.numeric(mean_extracted_values[1:3]),
-            theta = c("Pollution", "Demographics", "Nature exclusion"),
+            theta = c("Pollution", "Demographics", "Isolation"),
             fill = 'toself',
             marker = list(color = 'rgba(96, 1, 133, 0.9)', size = 5),
             fillcolor = list(color = 'rgba(160, 107, 181, 0.5)')
@@ -1602,8 +1602,8 @@ server <- function(input, output, session) {
         #### Boxplot ----
         output$boxplot_equity <- renderPlot({
           extracted_df %>%
-            rename(Pollution = pol_fz, Demographics = demo_fz, "Nature exclusion" = access_fz) %>%
-            pivot_longer(cols=c(Pollution, Demographics, "Nature exclusion")) %>%
+            rename(Pollution = pol_fz, Demographics = demo_fz, "Isolation from Nature" = access_fz) %>%
+            pivot_longer(cols=c(Pollution, Demographics, "Isolation from Nature")) %>%
             group_by(name) %>%
             mutate(mean_value = mean(value)) %>%
             ungroup() %>%
@@ -1613,9 +1613,10 @@ server <- function(input, output, session) {
             geom_boxplot(color="black", alpha=0.9, lwd=0.3, outlier.size=0.7,
                          outlier.stroke=0, outlier.alpha=0.5, outlier.color="black") +
             scale_fill_manual(values=brewer.pal(n=4, name="Purples")) +
+            scale_x_discrete(labels = function(x) str_wrap(x, width = 20)) +
             theme_minimal() +
             labs(x="", y="", title="DEIJ/EJ data distribution (without weighting):") +
-            theme(plot.title = element_text(hjust = 4.5, vjust = -2,size=15,
+            theme(plot.title = element_text(hjust = 9.5, vjust = -2,size=15,
                                             color="#808080", margin = margin(0,0,15,0)),
                   axis.text.y = element_text( size=12, face="bold"),
                   axis.text.x = element_text(angle=45, vjust=0.7, hjust=0.7,
@@ -1648,7 +1649,7 @@ server <- function(input, output, session) {
     
     mean_extracted_values <- apply(extracted_df,2,mean,na.rm=T)
     
-    summary_data <- data.frame(Issue=c("Pollution","Demographics","Nature exclusion","Aggregated score"),
+    summary_data <- data.frame(Issue=c("Pollution","Demographics","Isolation from Nature","Aggregated score"),
                                Score= mean_extracted_values)
     rownames(summary_data)<-NULL
     
@@ -1694,8 +1695,8 @@ server <- function(input, output, session) {
     ### Boxplot ----
     output$boxplot_equity <- renderPlot({
       extracted_df %>%
-        rename(Pollution = pol_fz, Demographics = demo_fz, "Nature exclusion" = access_fz) %>%
-        pivot_longer(cols=c(Pollution, Demographics, "Nature exclusion")) %>%
+        rename(Pollution = pol_fz, Demographics = demo_fz, "Isolation from Nature" = access_fz) %>%
+        pivot_longer(cols=c(Pollution, Demographics, "Isolation from Nature")) %>%
         group_by(name) %>%
         mutate(mean_value = mean(value)) %>%
         ungroup() %>%
@@ -1705,9 +1706,10 @@ server <- function(input, output, session) {
         geom_boxplot(color="black", alpha=0.9, lwd=0.3, outlier.size=0.7,
                      outlier.stroke=0, outlier.alpha=0.5, outlier.color="black") +
         scale_fill_manual(values=brewer.pal(n=4, name="Purples")) +
+        scale_x_discrete(labels = function(x) str_wrap(x, width = 20)) +
         theme_minimal() +
         labs(x="", y="", title="DEIJ/EJ data distribution (without weighting):") +
-        theme(plot.title = element_text(hjust = 4.5, vjust = -2,size=15,
+        theme(plot.title = element_text(hjust = 9.5, vjust = -2,size=15,
                                         color="#808080", margin = margin(0,0,15,0)),
               axis.text.y = element_text( size=12, face="bold"),
               axis.text.x = element_text(angle=45, vjust=0.7, hjust=0.7,
@@ -1730,7 +1732,7 @@ server <- function(input, output, session) {
       fig <- plot_ly(
         type = 'scatterpolar',
         r = as.numeric(mean_extracted_values[1:3]),
-        theta = c("Pollution", "Demographics", "Nature exclusion"),
+        theta = c("Pollution", "Demographics", "Isolation"),
         fill = 'toself',
         marker = list(color = 'rgba(96, 1, 133, 0.9)', size = 5),
         fillcolor = list(color = 'rgba(160, 107, 181, 0.5)')

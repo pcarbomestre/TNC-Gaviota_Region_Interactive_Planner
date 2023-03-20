@@ -63,7 +63,7 @@ siderbar<- dashboardSidebar(
              menuSubItem("Data Information",tabName = "data_information_threats", icon = icon("info-circle"))),
     menuItem("Equity Axis",tabName = "Assessment", icon = icon("fa-duotone fa-people-arrows"),
              menuSubItem("Equity Issues",tabName = "equity_issues_map", icon = icon("map")),
-             menuSubItem("Data Information",tabName = "Details", icon = icon("info-circle"))),
+             menuSubItem("Data Information",tabName = "data_information_equity", icon = icon("info-circle"))),
     menuItem("Other Information",tabName = "Oinfo", icon = icon("info-circle"))
     )
   #)
@@ -912,7 +912,7 @@ body <- dashboardBody(
                                    ),
                                    fluidRow(
                                      column(10,
-                                            actionLink("checkbox_access", label = "Nature exclusion"),
+                                            actionLink("checkbox_access", label = "Isolation from Nature"),
                                             sliderInput(inputId = "access_w",
                                                         label = NULL,
                                                         ticks = FALSE,
@@ -1033,7 +1033,11 @@ body <- dashboardBody(
             )
     ),
 
-
+    ### DATA INFORMATION ----
+    tabItem(tabName = "data_information_equity",
+            fluidPage(
+              htmltools::tags$iframe(src = "data_information_equity.html", width = '100%',  height = 1000,  style = "border:none;"))
+    ),
 
     tabItem(tabName = "Oinfo",
             br(),

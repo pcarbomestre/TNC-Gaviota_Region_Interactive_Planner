@@ -109,6 +109,10 @@ range_norm <- function(new_score) {
   return(gfg)
 }
 
+range_norm_manual <- function(new_score) {
+  (new_score - min(new_score,na.rm = TRUE)) / (max(new_score,na.rm = TRUE) - min(new_score,na.rm = TRUE))
+}
+
 #Additional functions and Shinny formatting
 source("./lib/help_funs.R",
        encoding="latin1")
