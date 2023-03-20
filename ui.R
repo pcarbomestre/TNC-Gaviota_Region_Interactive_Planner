@@ -57,10 +57,10 @@ siderbar<- dashboardSidebar(
     menuItem("Resources Axis", tabName = "Initial", icon = icon("fa-brands fa-pagelines"),
              menuSubItem("Natural Resources",tabName = "natural_resources_map", icon = icon("map")),
              menuSubItem("Stakeholders priorities",tabName = "Map", icon = icon("fa-solid fa-layer-group")),
-             menuSubItem("Data Information",tabName = "testitemhtml", icon = icon("info-circle"))),
+             menuSubItem("Data Information",tabName = "data_information_resources", icon = icon("info-circle"))),
     menuItem("Threats Axis",tabName = "landings", icon = icon("fa-regular fa-fire"),
              menuSubItem("Environmental Threats",tabName = "environmental_threats_map", icon = icon("map")),
-             menuSubItem("Data Information",tabName = "Details", icon = icon("info-circle"))),
+             menuSubItem("Data Information",tabName = "data_information_threats", icon = icon("info-circle"))),
     menuItem("Equity Axis",tabName = "Assessment", icon = icon("fa-duotone fa-people-arrows"),
              menuSubItem("Equity Issues",tabName = "equity_issues_map", icon = icon("map")),
              menuSubItem("Data Information",tabName = "Details", icon = icon("info-circle"))),
@@ -149,8 +149,8 @@ body <- dashboardBody(
                                    class = "panel panel-default",
                                    fixed = FALSE,
                                    draggable = TRUE,
-                                   top = 190, left = 40,
-                                   right = "auto", bottom = "auto",
+                                   top = "auto", left = 40,
+                                   right = "auto", bottom = 250,
                                    width = 250, height = "auto",
                                    style="background-color: white;
                                           opacity: 0.95;
@@ -414,6 +414,12 @@ body <- dashboardBody(
               )
             ),
     
+    ### DATA INFORMATION ----
+    tabItem(tabName = "data_information_resources",
+            fluidPage(
+              htmltools::tags$iframe(src = "data_information_resources.html", width = '100%',  height = 1000,  style = "border:none;"))
+    ),
+    
     ## ENVIRONMENTAL THREATS ------------------------------------------------------------------
     tabItem(tabName = "environmental_threats_map",
             fluidRow(
@@ -469,8 +475,8 @@ body <- dashboardBody(
                                    class = "panel panel-default",
                                    fixed = FALSE,
                                    draggable = TRUE,
-                                   top = 190, left = 40,
-                                   right = "auto", bottom = "auto",
+                                   top = "auto", left = 40,
+                                   right = "auto", bottom = 260,
                                    width = 250, height = "auto",
                                    style="background-color: white;
                                           opacity: 0.95;
@@ -655,7 +661,7 @@ body <- dashboardBody(
                               tags$h4("How to use it?", style = "font-weight: bold ;margin-bottom: 0; margin-top: 1;")
                             ),
                             tags$p("This map shows the degree of overlap of environmental threats. 
-                                   Each category represents a projection estimate for the next 20 years. 
+                                   Each category represents a projection estimate for the next 20-30 years. 
                                    Areas where threats concentrate are shown darker, suggesting that they are currently or will be in the future more susceptible to these hazards. 
                                    You can use the sliders to adjust the relative influence of each item that you want to display.", 
                                    style="text-align: justify; margin-top: 15px; margin-bottom: 5px;")
@@ -727,6 +733,11 @@ body <- dashboardBody(
             )
     ),
 
+    ### DATA INFORMATION ----
+    tabItem(tabName = "data_information_threats",
+            fluidPage(
+              htmltools::tags$iframe(src = "data_information_threats.html", width = '100%',  height = 1000,  style = "border:none;"))
+    ),
 
     ## EQUITY ISSUES ------------------------------------------------------------------
     tabItem(tabName = "equity_issues_map",
@@ -783,8 +794,8 @@ body <- dashboardBody(
                                    class = "panel panel-default",
                                    fixed = FALSE,
                                    draggable = TRUE,
-                                   top = 260, left = 40,
-                                   right = "auto", bottom = "auto",
+                                   top = "auto", left = 40,
+                                   right = "auto", bottom = 260,
                                    width = 250, height = "auto",
                                    style="background-color: white;
                                           opacity: 0.95;
@@ -1023,78 +1034,6 @@ body <- dashboardBody(
     ),
 
 
-
-    tabItem(tabName = "testitemhtml",
-            fluidPage(
-              htmltools::tags$iframe(src = "EDS232_lab1_pcarbomestre.html", width = '100%',  height = 1000,  style = "border:none;"))
-  ),
-
-
-
-
-    tabItem(tabName = "Details",
-            br(),
-            tags$p("This tab provides a brief description of the different data sources relevant to Shellfish Stocks
-                   around Ireland. Not all data sources are currently included in the app, as work is ongoing"),
-            br(),
-            tags$b("Shellfish Surveys"),
-            HTML('<p align= "justify">Every year, the Marine Institute in collaboration with the fishing industry carry a number of scientific surveys
-            around Ireland, mainly focusing on <i>Cerastoderma edule</i> (Cockles), <i>Ensis siliqua</i>
-            (Razor clams) and <i>Ostrea edulis</i> (Native Oysters). The data collected during these surveys
-            is assessed using a geostatistical model which provides important information about the biomass
-            and size profile of the stocks. The outputs from this model, are directly reported to the industry. More information about
-                 the different surveys carried annually is found in the "Assessment and Advice" tab</p>'),
-            br(),
-            tags$b("Sentinel Vessel Programme"),
-            HTML('<p align="justify">Since 2013 a total of approximately 80 Inshore fishing vessels
-            around Ireland have been providing self-sample information about their daily fishing
-            operations. The programme is administered by BIM as a pilot project funded
-            by the Data Collection Framework. Vessels are chosen from different length
-            and gear categories representative of fishing activities by vessels under 12 m
-            around the Irish coast. BIM send hard copies of SVP logbooks to the Marine Institute who extract and
-            manage the data from the SVP books, uploading it to the FEAS Inshore Database.
-            A small number of Skippers in recent years have submitted data via a phone app
-            directly to the Marine Institute (so called eSVP). The data recorded in the SVP logbooks includes the
-            catches, landings and discards of several species, i.e. <i>Homarus gammarus</i>
-            (Lobster), <i>Cancer pagurus</i> (Brown Crab), <i>Maja brachydactyla</i> (Spider Crab),
-            <i>Necora puber</i> (Velvet Crab), <i>Buccinum undatum</i> (Whelk), <i>Ensis sp</i>. (Razor clams),
-            <i>Cerastoderma edule</i> (Cockle) and various finfish species.  The fishing location
-            is recorded at either ICES Statistical Rectangle or Inshore Grid Resolution and
-            additional details such as the type and amount of bait used or vessel operating
-            costs (i.e. fuel consumption, number of crew, hours worked.). Additionally, although
-            to a lesser extent (every five fishing days), length frequency data for lobsters and
-            crabs may be included.</p>'),
-            br(),
-            tags$b("Observer programme"),
-            HTML('<p align="justify">Each year since 2009, Marine Institute staff and contractors go to sea
-                   on inshore fishing vessels to observe and record fishing activity.
-                   About 50-80 day trips are completed annually, although this varies year
-                   on year and was lower earlier in the time series.  The data recorded in
-                   observer trips includes the catches, landings and discards of several species
-                   such as <i>Homarus gammarus</i> (Lobster), <i>Cancer pagurus</i> (Brown Crab), <i>Maja brachydactyla</i>
-                   (Spider Crab), <i>Necora puber</i> (Velvet Crab), <i>Buccinum undatum</i> (Whelk), and the bycatch
-                   associated with these fishing events. Furthermore, all individuals or a sample
-                   (depending on catch volume) of the target species captured  are measured to the nearest
-                   mm and their sex is determined, providing a significant amount of valuable biological
-                   information for these species. The observer programme provides data at the level of individual
-                   fishing operations in contrast to fishery dependent data collection programmes which report aggregated
-                   data. The sampling levels of 50-80 trips per year is low relative to the thousands of trips undertaken by the
-                   Inshore fishing fleet annually. Furthermore there is high variance between vessels (related to location of fishing).
-                   The low sampling level and high variance reduces precision and even accuracy in these data sets especially when reported
-                   to local level where the data supports are diluted.</p>'),
-            br(),
-            tags$b("Skipper Self-Sampling programme"),
-            HTML('<p align="justify">Since 2021, a number of commercial inshore boats around the Irish coast report daily information on a haul by haul level on
-            catches, landings and discards,as well as biological information of several species. This programme is administered fully by the MI
-                   and the information provided enhances both the resolution (haul-by haul), and quantity (number of trips) of the SVP and observer programme respectively.
-                   As the time-series of this programme is still short, data from this programme is not yet included in the Shellfish Fisheries app.</p>'),
-            br(),
-            tags$b("Port Sampling"),
-            HTML('<p align= "justify">As part of the European Union (EU) Data Collection Framework (DCF) (or previous versions of it), since the early 90s, the Marine Institute has been requested to report catch sampling
-            information to aid in the assessment of fish stocks.This generally include both commercial at sea sampling and port sampling. In the case of Shellfish stocks, port samples
-                   provide valuable data related to the size distribution and biological information of landings and the area (at ICES Rectangle level) where fishing occured. Some of the species routinely sampled around Irish harbours include <i>Pecten maximus</i> (Scallops),
-                   <i>Buccinum undatum</i> (whelk) or <i>Cancer pagurus</i> (Brown crab) among others.</p>')
-    ),
 
     tabItem(tabName = "Oinfo",
             br(),
