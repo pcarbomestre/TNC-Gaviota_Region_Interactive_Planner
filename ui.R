@@ -583,7 +583,25 @@ body <- dashboardBody(
 
                                    fluidRow(
                                      column(10,
+                                            fluidRow(
+                                              column(4,
                                             actionLink("checkbox_droughts", label = "Droughts"),
+                                            style = "margin-top:0px;margin-bottom:-12px"),
+                                            column(7,
+                                            selectInput("model_drgh",label=NULL,
+                                                        choices = c("(Ensemble)","(MIROC-esm)","(CCSM4)"),
+                                                        selected = NULL),
+                                           tags$head(tags$style(HTML('.selectize-input {white-space: nowrap}
+                                                                     #model_drgh+ div>.selectize-input{
+                                                                     width: 90px;
+                                                                     font-size: 8pt;
+                                                                     line-height: 10px;
+                                                                     min-height: 5px;
+                                                                     border:0;
+                                                                     padding: 0px 0px 0px 0px; !important}
+                                                                     #model_drgh+ div>.selectize-dropdown{font-size: 8pt;  !important}'))),
+                                           style = "margin-top:0px;margin-bottom:-12px"),
+                                           ),
                                             sliderInput(inputId = "drgh_w",
                                                         label = NULL,
                                                         ticks = FALSE,
@@ -598,14 +616,32 @@ body <- dashboardBody(
                                    ),
                                    fluidRow(
                                      column(10,
-                                            actionLink("checkbox_floods", label = "Floods"),
+                                            fluidRow(
+                                              column(3,
+                                                     actionLink("checkbox_floods", label = "Floods"),
+                                                     style = "margin-top:0px;margin-bottom:-12px"),
+                                              column(7,
+                                                     selectInput("model_flood",label=NULL,
+                                                                 choices = c("(Ensemble)","(MIROC-esm)","(CCSM4)"),
+                                                                 selected = NULL),
+                                                     tags$head(tags$style(HTML('.selectize-input {white-space: nowrap}
+                                                                     #model_flood+ div>.selectize-input{
+                                                                     width: 90px;
+                                                                     font-size: 8pt;
+                                                                     line-height: 10px;
+                                                                     min-height: 5px;
+                                                                     border:0;
+                                                                     padding: 0px 0px 0px 0px; !important}
+                                                                     #model_flood+ div>.selectize-dropdown{font-size: 8pt;  !important}'))),
+                                                     style = "margin-top:0px;margin-bottom:-12px"),
+                                            ),
                                             sliderInput(inputId = "fld_w",
                                                         label = NULL,
                                                         ticks = FALSE,
                                                         min = 0,
                                                         max = 100,
                                                         value = 25), # End sliderInput
-                                     ),
+                                            ),
                                      column(1,offset = 0, style='padding: 15px 10px 0px 0px;',
                                             br(),
                                             textOutput("fld_agg_pref")
@@ -613,7 +649,25 @@ body <- dashboardBody(
                                    ),
                                    fluidRow(
                                      column(10,
-                                            actionLink("checkbox_wildfires", label = "Wildfires"),
+                                            fluidRow(
+                                              column(4,
+                                                     actionLink("checkbox_wildfires", label = "Wildfires"),
+                                                     style = "margin-top:0px;margin-bottom:-12px"),
+                                              column(7,
+                                                     selectInput("model_fire",label=NULL,
+                                                                 choices = c("(Ensemble)","(MIROC5)","(CNRM-CM5)"),
+                                                                 selected = NULL),
+                                                     tags$head(tags$style(HTML('.selectize-input {white-space: nowrap}
+                                                                     #model_fire+ div>.selectize-input{
+                                                                     width: 90px;
+                                                                     font-size: 8pt;
+                                                                     line-height: 10px;
+                                                                     min-height: 5px;
+                                                                     border:0;
+                                                                     padding: 0px 0px 0px 0px; !important}
+                                                                     #model_fire+ div>.selectize-dropdown{font-size: 8pt;  !important}'))),
+                                                     style = "margin-top:0px;margin-bottom:-12px"),
+                                            ),
                                             sliderInput(inputId = "wf_w",
                                                         label = NULL,
                                                         ticks = FALSE,
