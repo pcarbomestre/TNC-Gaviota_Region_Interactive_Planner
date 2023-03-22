@@ -519,7 +519,6 @@ server <- function(input, output, session) {
           as.data.frame() %>%
           na.omit()
 
-
         mean_extracted_values <- apply(extracted_df,2,mean,na.rm=T)
 
         summary_data <- data.frame(Resource=c("Soil","Resilience","Biodiversity","Water resources","Aggregated score"),
@@ -1018,6 +1017,7 @@ server <- function(input, output, session) {
       
       ### Extract data ----
       else {
+        
         
         extracted_area <- st_crop(threats_axis_r, polygon) # Original spatial data
         extracted_area_aggr <- st_crop(weights_reactive_threats(), polygon) # Aggregated spatial data
