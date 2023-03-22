@@ -781,6 +781,99 @@ server <- function(input, output, session) {
     updateSliderInput(session, "alpha", value = reset_value+0.01)
   })
 
+  
+  
+  
+  # >-----
+  # STAKEHODLERS PRIORITIES  ----
+  
+  observeEvent(c(input$group_1, input$group_2), {
+  
+  if(input$group_1 == "Yours") {
+    resources_axis_1 <- weights_reactive()
+    }
+    else {
+      group1 <- ahp_weights %>% 
+        filter(group %in% paste0(input$group_1))
+      
+      resources_axis_1 <-  resources_axis_r %>%
+        mutate("soil_fz" = soil_fz * as.numeric(group1[3,3])) %>%
+        mutate("resil_fz" = resil_fz * as.numeric(group1[4,3])) %>%
+        mutate("bio_fz" = bio_fz * as.numeric(group1[1,3])) %>%
+        mutate("water_fz" = water_fz * as.numeric(group1[2,3])) %>%
+        mutate(score = soil_fz + resil_fz + bio_fz + water_fz) %>%
+        mutate(norm_score = range_norm_manual(score))
+      
+      }
+  
+    if(input$group_2 == "Yours") {
+      resources_axis_2 <- weights_reactive()
+    }
+    else {
+      group2 <- ahp_weights %>% 
+        filter(group %in% paste0(input$group_2))
+  
+      resources_axis_2 <-  resources_axis_r %>%
+        mutate("soil_fz" = soil_fz * as.numeric(group2[3,3])) %>%
+        mutate("resil_fz" = resil_fz * as.numeric(group2[4,3])) %>%
+        mutate("bio_fz" = bio_fz * as.numeric(group2[1,3])) %>%
+        mutate("water_fz" = water_fz * as.numeric(group2[2,3])) %>%
+        mutate(score = soil_fz + resil_fz + bio_fz + water_fz) %>%
+        mutate(norm_score = range_norm_manual(score))
+    }
+    
+    if (input$group_1 == input$group_2) {
+      shinyalert(html = TRUE,
+                 "Select another group",
+                 "Same group comparison leads to no detectable differences",
+                 type = "warning",
+                 size="xs",
+                 animation=F,
+                 closeOnClickOutside = TRUE)
+    }
+    
+  resources_comp <- reactive({resources_axis_1-resources_axis_2})
+  
+  output$map_stake <- renderLeaflet({
+    leaflet(options = leafletOptions(minZoom = 9)) %>% addTiles() %>%
+    addGeoRaster(resources_comp()["norm_score"],
+                 opacity = input$alpha_stake,
+                 colorOptions =leafem:::colorOptions(
+                   palette = "PiYG",
+                   breaks = seq(min(resources_comp()["norm_score"][[1]], na.rm = TRUE),
+                                max(resources_comp()["norm_score"][[1]], na.rm = TRUE),
+                                100),
+                   na.color = "transparent"
+                 ),
+                 resolution=10000) %>%
+    addProviderTiles(providers$Stamen.Terrain) %>%
+    addLegend(pal = colorNumeric(palette= "PiYG", domain = resources_comp()["norm_score"][[1]],na.color = "transparent"),
+              values = resources_comp()["norm_score"][[1]],
+              opacity = input$alpha_stake,
+              position = "bottomright",
+                  #labFormat = labelFormat(transform = function(x) sort(x, decreasing = TRUE))
+              ) %>%
+        fitBounds(lng1=as.numeric(bb(resources_comp())[1]),
+                  lat1=as.numeric(bb(resources_comp())[2]),
+                  lng2=as.numeric(bb(resources_comp())[3]),
+                  lat2=as.numeric(bb(resources_comp())[4])) %>%
+        setMaxBounds(lng1=as.numeric(bb(resources_comp())[1])-1,
+                     lat1=as.numeric(bb(resources_comp())[2])-0.4,
+                     lng2=as.numeric(bb(resources_comp())[3])+1,
+                     lat2=as.numeric(bb(resources_comp())[4])+0.4) %>%
+        addDrawToolbar(targetGroup = "draw",
+                       polylineOptions = FALSE,
+                       circleOptions = FALSE,
+                       markerOptions = FALSE,
+                       circleMarkerOptions = FALSE,
+                       editOptions = editToolbarOptions(
+                         edit = TRUE, remove = FALSE, selectedPathOptions = NULL,
+                         allowIntersection = FALSE
+                       ),
+                       position = "topright",
+                       singleFeature = TRUE)
+    })
+  })
 # >-----
 # ENVIRONMENTAL THREATS AXIS (MAIN TAB) ----
 

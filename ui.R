@@ -56,7 +56,7 @@ siderbar<- dashboardSidebar(
   sidebarMenu(
     menuItem("Resources Axis", tabName = "Initial", icon = icon("fa-brands fa-pagelines"),
              menuSubItem("Natural Resources",tabName = "natural_resources_map", icon = icon("map")),
-             menuSubItem("Stakeholders priorities",tabName = "Map", icon = icon("fa-solid fa-layer-group")),
+             menuSubItem("Stakeholders priorities",tabName = "environmental_stake_map", icon = icon("fa-solid fa-layer-group")),
              menuSubItem("Data Information",tabName = "data_information_resources", icon = icon("info-circle"))),
     menuItem("Threats Axis",tabName = "landings", icon = icon("fa-regular fa-fire"),
              menuSubItem("Environmental Threats",tabName = "environmental_threats_map", icon = icon("map")),
@@ -416,11 +416,206 @@ body <- dashboardBody(
               )
             ),
     
+    ### STAKE HOLDERS ----
+    tabItem(tabName = "environmental_stake_map",
+            fluidRow(
+              column(12,
+                     shinycssloaders::withSpinner(leafletOutput("map_stake", height='60vh')),
+                     ### Transparency panel ----
+                     absolutePanel(id = "transparency_control_stake",
+                                   class = "panel panel-default",
+                                   fixed = FALSE,
+                                   draggable = FALSE,
+                                   top = 12, left = "auto",
+                                   right = 70, bottom = "auto",
+                                   width = 200, height = 50,
+                                   style="background-color: white;
+                                          opacity: 0.95;
+                                          padding: 20px 20px 20px 20px;
+                                          margin: auto;
+                                          border-radius: 5pt;
+                                          box-shadow: 0pt 0pt 6pt 0px rgba(61,59,61,0.48);
+                                          padding-bottom: 2mm;
+                                          padding-top: 1mm;",
+                                   setSliderColor("#97af9e",5),
+                                   sliderInput(inputId = "alpha_stake",
+                                               label = NULL,
+                                               ticks = FALSE,
+                                               min = 0,
+                                               max = 1,
+                                               value = 0.9), # End sliderInput
+                     ),
+                     
+                     absolutePanel(id = "transparency_control_title_stake",
+                                   class = "panel panel-default",
+                                   fixed = FALSE,
+                                   draggable = FALSE,
+                                   top = 12, left = "auto",
+                                   right = 70, bottom = "auto",
+                                   width = 200, height = 20,
+                                   style="background-color: rgba(0,0,0,0);
+                                          border-color: rgba(0,0,0,0);
+                                          border-style: hidden;
+                                          box-shadow: 0px;
+                                          padding-left: 20px;
+                                          padding-bottom: 20px;
+                                          padding-top: 5px;
+                                          color: #000000;
+                                          font-weight: bold;",
+                                   tags$p("Transparency",
+                                          style="text-align: justify")
+                     ),
+
+                     ## selectInput panel ----
+                     absolutePanel(id = "controls_stake",
+                                   class = "panel panel-default",
+                                   fixed = FALSE,
+                                   draggable = TRUE,
+                                   top = 140, left = 40,
+                                   right = "auto", bottom = "auto",
+                                   width = 250, height = "auto",
+                                   style="background-color: white;
+                                          opacity: 0.95;
+                                          padding: 20px 20px 20px 20px;
+                                          margin: auto;
+                                          border-radius: 5pt;
+                                          box-shadow: 0pt 0pt 6pt 0px rgba(61,59,61,0.48);
+                                          padding-bottom: 2mm;
+                                          padding-top: 1mm;",
+                                   selectInput("group_1", label = "Compare",
+                                               choices = c("Yours",unique(ahp_weights$group)),
+                                               selected = "Yours"),
+                                    selectInput("group_2", label = "with",
+                                               choices = c("Yours",unique(ahp_weights$group)),
+                                               selected = unique(ahp_weights$group)[1]),
+                                   tags$head(tags$style(HTML('.selectize-input {white-space: nowrap}
+                                                                     #group_1+ div>.selectize-input{
+                                                                     background-color: #a9dea2;!important}
+                                                                     #group_2+ div>.selectize-input{
+                                                                     background-color: #cdaed4; !important}'))),
+                                   
+                                   
+
+
+                     ),
+                     
+                     ### Remove shapes button ----
+                     absolutePanel(id = "removeShapes_stake",
+                                   class = "panel panel-default",
+                                   fixed = FALSE,
+                                   draggable = FALSE,
+                                   top = 125, left = "auto",
+                                   right = 25, bottom = "auto",
+                                   actionButton("removeShapes_stake","", icon = icon("fa-regular fa-trash"))
+                     ),
+                     
+                     
+                     ### Text Information ----
+                     column(5,offset = 0, style='padding-left:30px;padding-right:30px;padding-top:40px',
+                            br(),
+                            tags$div(
+                              style = "display: flex; align-items: center; margin-top: 5px; margin-bottom: 5px;",
+                              tags$h4(
+                                style = "text-align: left; margin-right: 10px; margin-bottom: 0;",
+                                tags$mark("Environmental threats map",style = "color:#ffffff;
+                            background-color: #f78800;
+                            border-radius: 0px;
+                            padding: 3px 10px;
+                            font-weight: bold;
+                            position:relative;
+                            filter:url(#marker-shape);
+                            width:100%;
+                            height:1em;
+                            left:-0.25em;
+                            top:0.1em;
+                            padding:0 0.25em;
+                            font-family: 'Chronicle Text G2 A', 'Chronicle Text G2 B', 
+                            'Chronicle Text G2', Georgia, sans-serif")
+                              ),
+                              tags$h4("How to use it?", style = "font-weight: bold ;margin-bottom: 0; margin-top: 1;")
+                            ),
+                            tags$p("This map shows the degree of overlap of environmental threats. 
+                                   Each category represents a projection estimate for the next 20-30 years. 
+                                   Areas where threats concentrate are shown darker, suggesting that they are currently or will be in the future more susceptible to these hazards. 
+                                   You can use the sliders to adjust the relative influence of each item that you want to display.", 
+                                   style="text-align: justify; margin-top: 15px; margin-bottom: 5px;")
+                     ),
+                     ### Data tab ----
+                     column(7,
+                            tabsetPanel(id="tabs_stake",
+                                        tags$style(HTML(".tabbable > .nav > li > a {margin-top:5px;float:right;display:inline-block;}")),
+                                        tags$style(HTML(
+                                          ".tabbable ul li:nth-child(4) { float: right;}
+                          .tabbable ul li:nth-child(3) { float: right;}
+                          .tabbable ul li:nth-child(5) { float: right;}"
+                                        )),
+                                        
+                                        #### About tab ----
+                                        tabPanel(value = "about_stake",title="About",
+                                                 tags$style("code {
+                                                 color:#303e52;
+                                                 background-color: #c1d7f5;
+                                                 border-radius: 3px;
+                                                padding: 0 3px;}"),
+                                                 h3("Area statistics:"),
+                                                 HTML("<h4 style=text-align: left>To extract statistics from your area of interest draw a shape on the map.</h4>"),
+                                                 HTML('<p align= "justify">The <code>Summary</code> tab displays the average score of each available resource, along with the combined score calculated by applying weights.
+                                                 The <code>Plot</code> tab shows the actual scores of each resource graphically and offers insights into the data distribution within the selected area.
+                                                      When no area is selected, the values for the entire region of interest are displayed.</p>')
+                                        ),
+                                        #### Summary tab ----
+                                        tabPanel(value = "summary_stake", title ="Summary",
+                                                 textOutput("data_displayed_note_summary_stake"),
+                                                 tags$head(tags$style("#data_displayed_note_summary_stake{margin-top: -1.6em;
+                                           margin-left: 1em;
+                                          margin-bottom: 0.1em;
+                                           color: #808080;
+                                           font-size:12px;
+                                           font-style: italic;}"
+                                                 )),
+                                                 fluidRow(column(7,
+                                                                 gt_output("mytable_stake")
+                                                 ),
+                                                 column(5,
+                                                        h4("Aggregated Score:",
+                                                           style="color: #808080;
+                                                    padding-top: 5px;"),
+                                                        br(),
+                                                        gaugeOutput("gauge_stake")),
+                                                 )),
+                                        #### Plot tab ----
+                                        tabPanel(value = "plot_stake", title ="Plot",
+                                                 textOutput("data_displayed_note_plot_stake"),
+                                                 tags$head(tags$style("#data_displayed_note_plot_stake{
+                                                 margin-top: -1.6em;
+                                                 margin-left: 1em;
+                                                 margin-bottom: 0.1em;
+                                                 color: #808080;
+                                                 font-size:12px;
+                                                 font-style: italic;}"
+                                                 )),
+                                                 fluidRow(column(6,
+                                                                 plotOutput("boxplot_stake",inline=T, height = 210)
+                                                 ),
+                                                 column(6,
+                                                        br(),
+                                                        plotlyOutput("radar_graph_stake", inline=T, height = 190),
+                                                        align="right")
+                                                 ))
+                            )),
+              )
+            )
+    ),
+    
     ### DATA INFORMATION ----
     tabItem(tabName = "data_information_resources",
             fluidPage(
               htmltools::tags$iframe(src = "data_information_resources.html", width = '100%',  height = 1000,  style = "border:none;"))
     ),
+    
+    
+   
+    
     
     ## ENVIRONMENTAL THREATS ------------------------------------------------------------------
     tabItem(tabName = "environmental_threats_map",
@@ -513,14 +708,14 @@ body <- dashboardBody(
                                    tags$style(HTML(
                                      ".irs-min {visibility:hidden !important;}
                                     .irs-max {visibility:hidden !important;}
-                                    .js-irs-6 .irs .irs-min:after {content:'Lowest' !important;}
-                                    .js-irs-6 .irs .irs-max:after {content:'Highest' !important;}
                                     .js-irs-7 .irs .irs-min:after {content:'Lowest' !important;}
                                     .js-irs-7 .irs .irs-max:after {content:'Highest' !important;}
                                     .js-irs-8 .irs .irs-min:after {content:'Lowest' !important;}
                                     .js-irs-8 .irs .irs-max:after {content:'Highest' !important;}
                                     .js-irs-9 .irs .irs-min:after {content:'Lowest' !important;}
                                     .js-irs-9 .irs .irs-max:after {content:'Highest' !important;}
+                                    .js-irs-10 .irs .irs-min:after {content:'Lowest' !important;}
+                                    .js-irs-1o .irs .irs-max:after {content:'Highest' !important;}
                                     .irs-min:after {
                                         visibility: visible !important;
                                         display: block;
@@ -562,7 +757,7 @@ body <- dashboardBody(
                                      #checkbox1{padding-left: 25px;}
                                                      ")),
                                   # Set slides color
-                                  setSliderColor(rep("#f7a540", 10), c(6:10)),
+                                  setSliderColor(rep("#f7a540", 11), c(7:111)),
                                    #### Sliders and checkbox set up ----
                                    fluidRow(
                                      column(10,
@@ -887,12 +1082,12 @@ body <- dashboardBody(
                                    tags$style(HTML(
                                      ".irs-min {visibility:hidden !important;}
                                     .irs-max {visibility:hidden !important;}
-                                    .js-irs-11 .irs .irs-min:after {content:'Lowest' !important;}
-                                    .js-irs-11 .irs .irs-max:after {content:'Highest' !important;}
                                     .js-irs-12 .irs .irs-min:after {content:'Lowest' !important;}
                                     .js-irs-12 .irs .irs-max:after {content:'Highest' !important;}
                                     .js-irs-13 .irs .irs-min:after {content:'Lowest' !important;}
                                     .js-irs-13 .irs .irs-max:after {content:'Highest' !important;}
+                                    .js-irs-14 .irs .irs-min:after {content:'Lowest' !important;}
+                                    .js-irs-14 .irs .irs-max:after {content:'Highest' !important;}
                                     .irs-min:after {
                                         visibility: visible !important;
                                         display: block;
@@ -934,7 +1129,7 @@ body <- dashboardBody(
                                      #checkbox1{padding-left: 25px;}
                                                      ")),
                                    # Set slides color
-                                   setSliderColor(rep("#9760a8", 14), c(11:14)),
+                                   setSliderColor(rep("#9760a8", 15), c(12:15)),
                                    #### Sliders and checkbox set up ----
                                    fluidRow(
                                      column(10,

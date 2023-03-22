@@ -251,3 +251,60 @@ threats_axis_r %>%
   mutate("wf_m_fz" = wf_m_fz * 0.25) %>%
   mutate(score = cli_exp_fz + drgh_m_fz + fld_m_fz + wf_m_fz) %>%
   mutate(norm_score = range_norm_manual(score))
+
+
+
+input1 <- "All"
+
+group1 <- ahp_weights %>% 
+  filter(group %in% input1)
+
+resources_axis_1 <-  resources_axis_r %>%
+  mutate("soil_fz" = soil_fz * as.numeric(group1[3,3])) %>%
+  mutate("resil_fz" = resil_fz * as.numeric(group1[4,3])) %>%
+  mutate("bio_fz" = bio_fz * as.numeric(group1[1,3])) %>%
+  mutate("water_fz" = water_fz * as.numeric(group1[2,3])) %>%
+  mutate(score = soil_fz + resil_fz + bio_fz + water_fz) %>%
+  mutate(norm_score = range_norm_manual(score))
+
+input2 <- "Farm/Ranch"
+
+group2 <- ahp_weights %>% 
+  filter(group %in% input2)
+
+resources_axis_2 <-  resources_axis_r %>%
+  mutate("soil_fz" = soil_fz * as.numeric(group2[3,3])) %>%
+  mutate("resil_fz" = resil_fz * as.numeric(group2[4,3])) %>%
+  mutate("bio_fz" = bio_fz * as.numeric(group2[1,3])) %>%
+  mutate("water_fz" = water_fz * as.numeric(group2[2,3])) %>%
+  mutate(score = soil_fz + resil_fz + bio_fz + water_fz) %>%
+  mutate(norm_score = range_norm_manual(score))
+
+resources_comp <- resources_axis_1-resources_axis_2
+
+
+palette <- colorNumeric(palette= "PiYG",
+             domain = resources_comp["norm_score"][[1]],
+             na.color = "transparent",
+             reverse = TRUE)
+  
+  ### Process for Raster data
+  leaflet(options = leafletOptions(minZoom = 9)) %>% addTiles() %>%
+    addGeoRaster(resources_comp["norm_score"],
+                 opacity = 0.9,
+                 colorOptions =leafem:::colorOptions(
+                   palette = "PiYG",
+                   breaks = seq(min(resources_comp["norm_score"][[1]], na.rm = TRUE),
+                                max(resources_comp["norm_score"][[1]], na.rm = TRUE),
+                                100),
+                   na.color = "transparent"
+                 ),
+                 resolution=10000) %>%
+    addProviderTiles(providers$Stamen.Terrain) %>%
+    addLegend(pal = colorNumeric(palette= "PiYG", domain = resources_comp["norm_score"][[1]],na.color = "transparent"),
+              values = resources_comp["norm_score"][[1]],
+              position = "bottomright")
+  
+
+
+  
