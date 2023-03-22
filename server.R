@@ -839,15 +839,58 @@ server <- function(input, output, session) {
   output$fld_agg_pref <- renderText(paste(round(as.numeric(agg_pref_df_threats()[3,3]),2)))
   output$wf_agg_pref <- renderText(paste(round(as.numeric(agg_pref_df_threats()[4,3]),2)))
 
-  ## Apply selected weights ----
 
+  ## Select climate model ----
+  drgh_model_selected <- reactive({
+    if (input$model_drgh == "(Ensemble)") {
+      c("drgh_h_fz","drgh_w_fz")
+    } else if (input$model_drgh == "(MIROC-esm)") {
+      c("drgh_m_fz","drgh_w_fz")
+    }
+    else if (input$model_drgh == "(CCSM4)") {
+      c("drgh_m_fz","drgh_h_fz")
+    }
+    })
+  
+  fld_model_selected <- reactive({
+    if (input$model_fld == "(Ensemble)") {
+      c("fld_h_fz","fld_w_fz")
+    } else if (input$model_fld == "(MIROC-esm)") {
+      c("fld_m_fz","fld_w_fz")
+    }
+    else if (input$model_fld == "(CCSM4)") {
+      c("fld_m_fz","fld_h_fz")
+    }
+  })
+  
+  wf_model_selected <- reactive({
+    if (input$model_wf == "(Ensemble)") {
+      c("wf_cn_fz","wf_mi_fz")
+    } else if (input$model_wf == "(MIROC5)") {
+      c("wf_m_fz","wf_cn_fz")
+    }
+    else if (input$model_wf == "(CNRM-CM5)") {
+      c("wf_m_fz","wf_mi_fz")
+    }
+  })
+  
+  
+  ## Apply selected weights ----
   weights_reactive_threats <- reactive({
     ### Using Aggregated Preference values ----
     threats_axis_r %>%
+      # Select model from the inputSelect
+      select(!all_of(drgh_model_selected())) %>% 
+      rename("drgh_fz" = starts_with("drgh")) %>% 
+      select(!all_of(fld_model_selected())) %>% 
+      rename("fld_fz" = starts_with("fld")) %>% 
+      select(!all_of(wf_model_selected())) %>% 
+      rename("wf_fz" = starts_with("wf")) %>% 
+      # Apply weights
       mutate("cli_exp_fz" = cli_exp_fz * agg_pref_df_threats()[1,3]) %>%
-      mutate("drgh_m_fz" = drgh_m_fz * agg_pref_df_threats()[2,3]) %>%
-      mutate("fld_m_fz" = fld_m_fz * agg_pref_df_threats()[3,3]) %>%
-      mutate("wf_m_fz" = wf_m_fz * agg_pref_df_threats()[4,3]) %>%
+      mutate("drgh_m_fz" = drgh_fz * agg_pref_df_threats()[2,3]) %>%
+      mutate("fld_m_fz" = fld_fz * agg_pref_df_threats()[3,3]) %>%
+      mutate("wf_m_fz" = wf_fz * agg_pref_df_threats()[4,3]) %>%
       mutate(score = cli_exp_fz + drgh_m_fz + fld_m_fz + wf_m_fz) %>%
       mutate(norm_score = range_norm_manual(score))
   }) # end weights_reactive_threats
@@ -1141,13 +1184,22 @@ server <- function(input, output, session) {
 
   ## Return to the whole area if the map is refreshed  ----
 
-  observeEvent(c(input$removeShapes_threats, input$cli_w,input$drgh_w,input$fld_w,input$wf_w), {
+  observeEvent(c(input$removeShapes_threats, input$cli_w,input$drgh_w,input$fld_w,input$wf_w,
+                 input$model_drgh,input$model_fld,input$model_wf), {
 
-    extracted_df <- cbind(cli_exp_fz= as.numeric(threats_axis_r$cli_exp_fz),
-                          drgh_m_fz= as.numeric(threats_axis_r$drgh_m_fz),
-                          fld_m_fz= as.numeric(threats_axis_r$fld_m_fz),
-                          wf_m_fz= as.numeric(threats_axis_r$wf_m_fz),
-                          agg_val= as.numeric(threats_axis_r$agg_val)) %>%
+    threats_axis_all <- threats_axis_r %>% 
+      select(!all_of(drgh_model_selected())) %>% 
+      rename("drgh_fz" = starts_with("drgh")) %>% 
+      select(!all_of(fld_model_selected())) %>% 
+      rename("fld_fz" = starts_with("fld")) %>% 
+      select(!all_of(wf_model_selected())) %>% 
+      rename("wf_fz" = starts_with("wf"))
+    
+    extracted_df <- cbind(cli_exp_fz= as.numeric(threats_axis_all$cli_exp_fz),
+                          drgh_m_fz= as.numeric(threats_axis_all$drgh_fz),
+                          fld_m_fz= as.numeric(threats_axis_all$fld_fz),
+                          wf_m_fz= as.numeric(threats_axis_all$wf_fz),
+                          agg_val= as.numeric(threats_axis_all$agg_val)) %>%
       as.data.frame() %>%
       na.omit()
 

@@ -239,3 +239,15 @@ mean_values <- st_intersection(area_sf, jldp_sf) %>%
   mutate(id=jldp_sf$global_id) # ID for map button display recognition (Shiny functionality)
 
 t(mean_values)
+
+drought <- c("drgh_m_fz","drgh_h_fz")
+
+threats_axis_r %>%
+  select(!all_of(drought)) %>% 
+  rename("drgh_fz" = starts_with("drgh")) %>% 
+  mutate("cli_exp_fz" = cli_exp_fz * 0.25) %>%
+  mutate("drgh_m_fz" = drgh_fz * 0.25) %>%
+  mutate("fld_m_fz" = fld_m_fz * 0.25) %>%
+  mutate("wf_m_fz" = wf_m_fz * 0.25) %>%
+  mutate(score = cli_exp_fz + drgh_m_fz + fld_m_fz + wf_m_fz) %>%
+  mutate(norm_score = range_norm_manual(score))

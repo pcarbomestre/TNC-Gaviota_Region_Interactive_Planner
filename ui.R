@@ -621,18 +621,18 @@ body <- dashboardBody(
                                                      actionLink("checkbox_floods", label = "Floods"),
                                                      style = "margin-top:0px;margin-bottom:-12px"),
                                               column(7,
-                                                     selectInput("model_flood",label=NULL,
+                                                     selectInput("model_fld",label=NULL,
                                                                  choices = c("(Ensemble)","(MIROC-esm)","(CCSM4)"),
                                                                  selected = NULL),
                                                      tags$head(tags$style(HTML('.selectize-input {white-space: nowrap}
-                                                                     #model_flood+ div>.selectize-input{
+                                                                     #model_fld+ div>.selectize-input{
                                                                      width: 90px;
                                                                      font-size: 8pt;
                                                                      line-height: 10px;
                                                                      min-height: 5px;
                                                                      border:0;
                                                                      padding: 0px 0px 0px 0px; !important}
-                                                                     #model_flood+ div>.selectize-dropdown{font-size: 8pt;  !important}'))),
+                                                                     #model_fld+ div>.selectize-dropdown{font-size: 8pt;  !important}'))),
                                                      style = "margin-top:0px;margin-bottom:-12px"),
                                             ),
                                             sliderInput(inputId = "fld_w",
@@ -654,18 +654,18 @@ body <- dashboardBody(
                                                      actionLink("checkbox_wildfires", label = "Wildfires"),
                                                      style = "margin-top:0px;margin-bottom:-12px"),
                                               column(7,
-                                                     selectInput("model_fire",label=NULL,
+                                                     selectInput("model_wf",label=NULL,
                                                                  choices = c("(Ensemble)","(MIROC5)","(CNRM-CM5)"),
                                                                  selected = NULL),
                                                      tags$head(tags$style(HTML('.selectize-input {white-space: nowrap}
-                                                                     #model_fire+ div>.selectize-input{
+                                                                     #model_wf+ div>.selectize-input{
                                                                      width: 90px;
                                                                      font-size: 8pt;
                                                                      line-height: 10px;
                                                                      min-height: 5px;
                                                                      border:0;
                                                                      padding: 0px 0px 0px 0px; !important}
-                                                                     #model_fire+ div>.selectize-dropdown{font-size: 8pt;  !important}'))),
+                                                                     #model_wf+ div>.selectize-dropdown{font-size: 8pt;  !important}'))),
                                                      style = "margin-top:0px;margin-bottom:-12px"),
                                             ),
                                             sliderInput(inputId = "wf_w",
