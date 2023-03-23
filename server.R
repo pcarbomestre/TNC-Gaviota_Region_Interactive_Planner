@@ -787,6 +787,7 @@ server <- function(input, output, session) {
   # >-----
   # STAKEHODLERS PRIORITIES  ----
   
+  ### Selecting group preferences ----
   observeEvent(c(input$group_1, input$group_2), {
   
   if(input$group_1 == "My") {
@@ -832,12 +833,10 @@ server <- function(input, output, session) {
                  closeOnClickOutside = TRUE)
     }
     
+    ### Calculating group differences ----
   resources_comp <- reactive({resources_axis_1-resources_axis_2})
   
-  # define the maximum and minimum values
-
-  
-  ### Map ----
+  ### Displaying differences on a map ----
   
   value <- reactive({
     max(abs(max(resources_comp()["norm_score"][[1]], na.rm = T)),
@@ -871,45 +870,6 @@ server <- function(input, output, session) {
                        position = "bottomright",
                        opacity= input$alpha_stake
       )
-    
-    # leaflet(options = leafletOptions(minZoom = 9)) %>% addTiles() %>%
-    # addGeoRaster(resources_comp()["norm_score"],
-    #              opacity = input$alpha_stake,
-    #              colorOptions =leafem:::colorOptions(
-    #                palette = "RdBu",
-    #                domain = c(-1* value(), 0,  value()),
-    #                breaks = seq(min(resources_comp()["norm_score"][[1]], na.rm = TRUE),
-    #                             max(resources_comp()["norm_score"][[1]], na.rm = TRUE),
-    #                             length.out=100),
-    #                na.color = "transparent"
-    #              ),
-    #              resolution=10000) %>%
-    # addProviderTiles(providers$Stamen.Terrain) %>%
-    # addLegend(pal = color_pal(),
-    #           values = resources_comp()["norm_score"][[1]],
-    #           opacity = 1,
-    #           position = "bottomright",
-    #               #labFormat = labelFormat(transform = function(x) sort(x, decreasing = TRUE))
-    #           ) %>%
-    #     fitBounds(lng1=as.numeric(bb(resources_comp())[1]),
-    #               lat1=as.numeric(bb(resources_comp())[2]),
-    #               lng2=as.numeric(bb(resources_comp())[3]),
-    #               lat2=as.numeric(bb(resources_comp())[4])) %>%
-    #     setMaxBounds(lng1=as.numeric(bb(resources_comp())[1])-1,
-    #                  lat1=as.numeric(bb(resources_comp())[2])-0.4,
-    #                  lng2=as.numeric(bb(resources_comp())[3])+1,
-    #                  lat2=as.numeric(bb(resources_comp())[4])+0.4) %>%
-    #     addDrawToolbar(targetGroup = "draw",
-    #                    polylineOptions = FALSE,
-    #                    circleOptions = FALSE,
-    #                    markerOptions = FALSE,
-    #                    circleMarkerOptions = FALSE,
-    #                    editOptions = editToolbarOptions(
-    #                      edit = TRUE, remove = FALSE, selectedPathOptions = NULL,
-    #                      allowIntersection = FALSE
-    #                    ),
-    #                    position = "topright",
-    #                    singleFeature = TRUE)
     })
   })
   
