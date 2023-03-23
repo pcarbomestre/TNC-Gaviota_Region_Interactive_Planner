@@ -12,7 +12,7 @@ The Gaviota Region Interactive Planner is an R Shiny app that allows users to vi
 
 ### **Contents**
 
-The application is designed to visualize and analyze spatial environmental data, with a focus on three primary areas: Natural Resources, Environmental Threats, and DEJ/EJ issues. Each axis contains multiple layers of data that define our region, highlighting areas of interest based on various metrics. Users can adjust the weight of each layer and view an aggregated representation of the data. Additionally, the app provides the ability to extract statistics for a specific area of interest selected by the user.
+The application is designed to visualize and analyze spatial environmental data, with a focus on three primary axes: Natural Resources, Environmental Threats, and DEJ/EJ issues. Each axis contains multiple layers of data that define our region, highlighting areas of interest based on different metrics. Users can adjust the weight of each layer and view an aggregated representation of the data. Additionally, the app provides the ability to extract statistics for a specific area of interest selected by the user.
 
 <p align="center">
  <img width="655" alt="demo_2" src="www/img/gif/demo2.gif">
@@ -24,7 +24,7 @@ The three axes of the app contain the following data:
 - Environmental Threats: droughts, flooding, wildfires, and climate exposure.
 - DEJ/EJ issues: pollution, isolation from nature, and demographics.
 
-The natural resources axis has an additional map that allows comparing stakeholder groups' resource priorities. Users choose two groups, and the map displays the Gaviota Region in relative preference colors.
+The natural resources axis has an additional map that allows comparing stakeholder groups' resource priorities. Users choose two groups, and the map displays the relative preferences.
 
 <p align="center">
  <img width="655" alt="demo_1" src="www/img/gif/demo1.gif">
