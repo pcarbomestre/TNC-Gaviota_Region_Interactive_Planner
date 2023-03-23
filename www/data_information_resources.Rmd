@@ -39,13 +39,13 @@ library(htmltools)
 
 
 <br>
-<h4 style="display: inline-block;"><img src="img/bio_icon.png" alt="description of the image" style="vertical-align: middle; margin: 0px 10px; width: 5%">Biodiversity</h4>
+<h4 style="display: inline-block;"><img src="img/bio_icon.png" alt="description of the image" style="vertical-align: middle; margin: 0px 10px; width: 5%">Biological significance</h4>
 
 ```{r out.width='30%', out.extra='style="float:right; padding:10px;-webkit-filter: drop-shadow(1px 1px 1px #666666)"'}
 knitr::include_graphics("img/maps/bio_map.png")
 ```
 
-The layer corresponds to the Flora and Fauna Areas of Interest created by the Conservation Biology Institute for the Santa Barbara County Conservation Blueprint. The map highlights areas of interest for ecological resources by overlaying a variety of metrics related to fluvial systems, suitability for fauna, the existence of rare and endangered species, presence of protected vegetation, and connectivity.
+This layer corresponds to the Flora and Fauna Areas of Interest created by the Conservation Biology Institute for the Santa Barbara County Conservation Blueprint. The map highlights areas of interest for ecological resources by overlaying a variety of metrics related to fluvial systems, suitability for fauna, the existence of rare and endangered species, presence of protected vegetation, and connectivity.
 
 You can access the original data here:
 [Flora and Fauna "Areas of Interest"](https://sbcblueprint.databasin.org/datasets/b1e62c59d66b4f2f9ab0b9eb3f435843/)
@@ -57,7 +57,7 @@ You can access the original data here:
 knitr::include_graphics("img/maps/soil_map.png")
 ```
 
-The layer was adapted from the Agricultural Areas of Importance originally created by the Conservation Biology Institute for the Santa Barbara County Conservation Blueprint. The map highlights areas of interest for farming and ranching by overlaying a variety of metrics, including information on precipitation, grazing lands, soil characteristics, farmland and feasible agricultural and ranch lands.
+This layer was adapted from the Agricultural Areas of Importance dataset originally created by the Conservation Biology Institute for the Santa Barbara County Conservation Blueprint. The original dataset highlights areas of interest for farming and ranching by overlaying a variety of metrics, including information on precipitation, grazing lands, soil characteristics, farmland, and feasible agricultural and ranch lands. Our layer differs slightly in that it does not include the grazing lands metric. We chose not to include grazing lands based on regional stakeholder responses regarding conservation priorities. Stakeholders and rightsholders in the area vocalized soil health in the context of crop agriculture rather than cattle and ranching.
 
 You can access the original data here:
 [Agricultural "Areas of Importance"](https://sbcblueprint.databasin.org/datasets/807abc2dc06a49b88e815751ffa8a75a/)
@@ -83,7 +83,7 @@ You can access the original data here:
 knitr::include_graphics("img/maps/resil_map.png")
 ```
 
-The layer was adapted from the Agricultural Areas of Importance originally created by the Conservation Biology Institute for the Santa Barbara County Conservation Blueprint. The map highlights areas of interest for farming and ranching by overlaying a variety of metrics, including information on precipitation, grazing lands, soil characteristics, farmland and feasible agricultural and ranch lands.
+This layer corresponds to the Resilient Sites dataset created by The Nature Conservancy. The map highlights areas throughout the region that are deemed likely to maintain species diversity and ecological function with the changing climate. The Nature Conservancy scored these sites by analyzing and evaluating the sites geophysical aspects like landscape diversity and connectedness.
 
 You can access the original data here:
 [Agricultural "Areas of Importance"](https://sbcblueprint.databasin.org/datasets/807abc2dc06a49b88e815751ffa8a75a/)

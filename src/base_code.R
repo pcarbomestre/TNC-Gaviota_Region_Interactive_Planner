@@ -280,10 +280,50 @@ resources_axis_2 <-  resources_axis_r %>%
   mutate(score = soil_fz + resil_fz + bio_fz + water_fz) %>%
   mutate(norm_score = range_norm_manual(score))
 
+extracted_df_2 <- cbind(soil_fz= as.numeric(resources_axis_2$soil_fz),
+                        resil_fz= as.numeric(resources_axis_2$resil_fz),
+                        bio_fz= as.numeric(resources_axis_2$bio_fz),
+                        water_fz= as.numeric(resources_axis_2$water_fz),
+                        agg_val= as.numeric(resources_axis_2$norm_score)) %>%
+  as.data.frame()
+  
+mean_extracted_values_2 <- apply(extracted_df_2,2,mean,na.rm=T)
+
+
+summary_data <- data.frame(Resource=c("Soil","Resilience","Biodiversity","Water resources","Aggregated score"),
+                           Score_1= mean_extracted_values_2,
+                           Score_2= mean_extracted_values_2)
+
+rownames(summary_data)<-NULL
+
+dplyr::tibble(img=c(here("www","img","soil_icon.png"),
+                    here("www","img","resilience_icon.png"),
+                    here("www","img","bio_icon.png"),
+                    here("www","img","water_icon.png")),
+              summary_data %>%
+                filter(!Resource %in% "Aggregated score")) %>%
+  gt() %>%
+  fmt_number(columns = c(Score_1,Score_2),decimals = 3) %>%
+  cols_label(img = "") %>%
+  gt_img_rows(columns = img, height = 25, img_source = "local") %>%
+  tab_caption("Average scores without weighting:") %>%
+  tab_options(table.background.color = "transparent",
+              table.font.size = 17,
+              data_row.padding = px(2),
+              table.width = 300) %>%
+  tab_style(
+    style = list(
+      cell_text(weight = "bold")
+    ),
+    locations = cells_column_labels()
+  )
+
+
+
 resources_comp <- resources_axis_1-resources_axis_2
 
 
-palette <- colorNumeric(palette= "PiYG",
+palette <- colorNumeric(palette= color_pal,
              domain = resources_comp["norm_score"][[1]],
              na.color = "transparent",
              reverse = TRUE)
@@ -293,17 +333,42 @@ palette <- colorNumeric(palette= "PiYG",
     addGeoRaster(resources_comp["norm_score"],
                  opacity = 0.9,
                  colorOptions =leafem:::colorOptions(
-                   palette = "PiYG",
+                   palette = "RdBu",
+                   domain = c(-1*value, 0, value),
                    breaks = seq(min(resources_comp["norm_score"][[1]], na.rm = TRUE),
                                 max(resources_comp["norm_score"][[1]], na.rm = TRUE),
-                                100),
+                                length.out=100),
                    na.color = "transparent"
                  ),
                  resolution=10000) %>%
     addProviderTiles(providers$Stamen.Terrain) %>%
-    addLegend(pal = colorNumeric(palette= "PiYG", domain = resources_comp["norm_score"][[1]],na.color = "transparent"),
+    addLegendNumeric(pal = color_pal,
               values = resources_comp["norm_score"][[1]],
-              position = "bottomright")
+              position = "bottomright",
+              tickLength = 2
+              ) %>% 
+    addLegend(pal = color_pal,
+              values = resources_comp["norm_score"][[1]],
+              position = "bottomright",
+              labFormat = function(type, cuts, p) {  # Here's the trick
+                paste0(c("Less Dense", "zero", "More Dense"))
+              })
+  
+  
+  # define the maximum and minimum values
+  max_value <- max(resources_comp["norm_score"][[1]],na.rm = T)
+  min_value <- min(resources_comp["norm_score"][[1]],na.rm = T)
+  
+  value <- max(abs(min_value), abs(max_value))
+  
+  color_pal <- colorNumeric(
+    palette = "RdBu", 
+    domain = c(-1*value, 0, value),
+    na.color = "transparent"
+  )
+  
+  # define the color palette
+  color_pal <- colorNumeric(palette = c("red","white","blue"), domain = c(min_value, 0 , max_value),na.color = "transparent")
   
 
 
