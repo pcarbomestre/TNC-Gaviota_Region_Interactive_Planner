@@ -44,9 +44,9 @@ library(htmltools)
 
 Spatial data representing conservation values, environmental threats, and environmental justice indicators were processed using the Environmental Evaluation Modeling System (EEMS). Developed by Sheehan and Gough (2016), EEMS is a tree-based, fuzzy logic modeling framework for environmental decision support that allows one to combine data from different sources and numerical domains. This tool has been implemented in the ArcGIS ModelBuilder environment. The versatility of this framework allowed us to integrate metrics of different types and capture them in a single spatial layer with complex environmental outputs, such as multi-benefit areas. The Santa Barbara County region has several datasets based on this framework allowing us to build up our project based on Open Data practices. EEMS is used on web applications across California, and its results are available on several online repositories, including EEMS Online, Data Basin, and the Santa Barbara Blueprint. By using EEMS, we successfully produced 7 spatial layers out of the 11, which incorporated various metrics to delineate the environmental factors of interest for our targeted region. These layers were organized according to three main axes: natural resources, environmental threats, and DEI/EJ. The metrics employed to characterize each layer were derived from a review of commonly used measures found in the literature. The remaining layers were obtained from existing studies which contained data that fit within the three axes. The layers defining each axis are as follows:
 
-Natural resources: water resources, soil, biodiversity, and resilience.
-Environmental threats: droughts, flooding, wildfires, and climate exposure.
-Equity issues: pollution, isolation from nature, and demographics.
+- Natural resources: water resources, soil, biodiversity, and resilience.
+- Environmental threats: droughts, flooding, wildfires, and climate exposure.
+- Equity issues: pollution, isolation from nature, and demographics.
  
 After integrating the conservation values into a uniform grid system for our region of interest and processing them with EEMS, we developed a Shiny application using R to display the results interactively. This web planner is designed to determine the extent of overlap between natural resources, natural hazards, and social values and to pinpoint areas that align with desired conservation objectives or environmental initiatives.
 

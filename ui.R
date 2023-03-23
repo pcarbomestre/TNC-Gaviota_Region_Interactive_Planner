@@ -495,7 +495,7 @@ body <- dashboardBody(
                             ),
                             tags$p("This map allows for the spatial comparison of resource priorities for various stakeholder or rightsholder groups. 
                             Users can select two stakeholder/rightsholder groups and the map will display the Gaviota Region colored by relative preference between those groups. 
-                            In addition to selecting stakeholder/rightsholder groups for comparison, the user can input their own resource preference values for comparison to a group of their choice. 
+                            In addition, the user can compare their own resource preference values, selected in the previous tab, to a group of their choice. 
                             Select the groups in the dropdown menus to compare custom resource values. 
 ", 
                                    style="text-align: justify; margin-top: 15px; margin-bottom: 5px;")

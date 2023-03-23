@@ -855,7 +855,7 @@ server <- function(input, output, session) {
     
     leaflet(options = leafletOptions(minZoom = 9)) %>% addTiles() %>%
       addGeoRaster(resources_comp()["norm_score"],
-                   opacity = 1,
+                   opacity = input$alpha_stake,
                    colorOptions =leafem:::colorOptions(
                      palette = "RdBu",
                      domain = c(-1*value(), 0,  value()),
@@ -869,7 +869,7 @@ server <- function(input, output, session) {
       addLegend(pal = color_pal(),
                        values = resources_comp()["norm_score"][[1]],
                        position = "bottomright",
-                       opacity=1
+                       opacity= input$alpha_stake
       )
     
     # leaflet(options = leafletOptions(minZoom = 9)) %>% addTiles() %>%
