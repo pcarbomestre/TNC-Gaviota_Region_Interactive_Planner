@@ -44,5 +44,5 @@ The app's core components have been completed, but it is currently undergoing re
 We welcome contributions to this repository and encourage the public to explore the app and provide feedback for future updates and improvements.
 
 ### **Support**
-If you have any questions about this Repo, please do not hesitate to send us an email with your inquiries. Additionally, if you come across any bugs or have any recommendations for improvements, please contact us at pcarbomestre@bre.ucsb.edu
+If you have any questions about this Repo, please do not hesitate to send us an email with your inquiries. Additionally, if you come across any bugs or have any recommendations for improvements, please contact us at pcarbomestre@bren.ucsb.edu
 
