@@ -41,7 +41,10 @@ packs = c("tidyverse",
           "htmltools",
           "gt",
           "gtExtras",
-          "RColorBrewer"
+          "RColorBrewer",
+          "rintrojs",
+          "cicerone",
+          "conductor"
           )
 
 # Run the following command to verify that the required packages are installed. 
@@ -162,3 +165,72 @@ my_theme <- bs_theme(
   primary = "#EC255A",
   base_font = font_google('Avenir')
 )
+
+
+
+conductor <- Conductor$
+  new(defaultStepOptions = list(
+    cancelIcon = list(enabled = TRUE, NULL)
+  ))$
+  step(
+    title = "Welcome to the tour!",
+    text = "You can navigate this tour with the left and right arrows of your keyboard, or leave it by pressing 'Esc'.",
+    buttons = list(
+      list(
+        action = "next",
+        text = "Next"
+      )
+    )
+  )$
+  step(
+    el = ".panel_sliders",
+    title = "Weights",
+    text= "viota Region Interactive Planner is designed to visualize and analyze spatial environmental data, with a focus on three primary axes: Natural Resources, Environmental Threats, and DEJ/EJ issues, with the purpose of helping users make informed decisions regarding land-us",
+  )$
+  step(
+    el = ".selectize-input",
+    title = "Stake holder weights",
+    text= "viota Region Interactive Planner is designed to visualize and analyze spatial environmental data, with a focus on three primary axes: Natural Resources, Environmental Threats, and DEJ/EJ issues, with the purpose of helping users make informed decisions regarding land-us",
+  )$
+  # step(
+  #   el = "[data-value='about']",
+  #   title = "Information",
+  #   text = "viota Region Interactive Planner is designed to visualize and analyze spatial environmental data, with a focus on three primary axes: Natural Resources, Environmental Threats, and DEJ/EJ issues, with the purpose of helping users make informed decisions regarding land-us",
+  #   tab = "About",
+  #   tabId = "about"
+  # )$
+  step(
+    el = ".col-sm-7",
+    title = "This is the technical info",
+    text = "viota Region Interactive Planner is designed to visualize and analyze spatial environmental data, with a focus on three primary axes: Natural Resources, Environmental Threats, and DEJ/EJ issues, with the purpose of helping users make informed decisions regarding land-us",
+    
+  )$
+  step(
+    el = ".leaflet-draw-section",
+    title = "Select your area of interest",
+    text= "You can draw on the map and delineate your are from which you want to extract the scores"
+    )$
+  step(
+    el = "#map",
+    title = "This is the technical info",
+    text = "viota Region Interactive Planner is designed to visualize and analyze spatial environmental data, with a focus on three primary axes: Natural Resources, Environmental Threats, and DEJ/EJ issues, with the purpose of helping users make informed decisions regarding land-us",
+    )$
+  step(
+    el = ".btn",
+    title = "End of tour",
+    text = "You always can review the tour pressing here",
+    buttons = list(
+      list(
+        action = "back",
+        secondary = TRUE,
+        text = "Previous"
+      ),
+      list(
+        action = "next",
+        text = "Finish"
+      )
+    )
+  )
+
+
+

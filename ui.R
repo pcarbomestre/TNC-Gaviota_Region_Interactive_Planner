@@ -10,35 +10,43 @@
 ##  Fluid page for the Interactive Planner app
 ## _____________________________
 
-#Global displaying options
+# Global displaying options
 options(spinner.color="#bdbfbe",
         spinner.color.background = "#929493",
         spinner.type=8)
+
 
 # Header ------------------------------------------------------------------
 header<- dashboardHeader(title = HTML("Gaviota Region Interactive planner"),
                          disable = FALSE,
                          titleWidth = 500,
-                         dropdownMenuCustom( type = 'message',
+                         tags$li(class = "dropdown",  
+                                 style = "padding-top=10px",
+                                 actionButton("invoke_tour","", 
+                                              icon = icon("info-circle"),
+                                              style="background-color: transparent; 
+                                              height:100%;
+                                              border-color: transparent; margin-top=10px")),
+                         dropdownMenuCustom(type = 'message',
                                                customSentence = customSentence_share,
                                                icon = icon("share-alt"),
                                                messageItem(
                                                  from = 'Twitter',
                                                  message = "",
-                                                 icon = icon("twitter")#,
-                                                 #href = "https://twitter.com/intent/tweet?url=http%3A%2F%2Ftradeintelligence.mbie.govt.nz&text=New%20Zealand%20Trade%20Intelligence%20Dashboard"
+                                                 icon = icon("twitter"),
+                                                 href = "https://twitter.com/intent/tweet?url=https%3A%2F%2Fgithub.com%2Fgp-endangermond%2Finteractive-planner-GP&text=Check%20out%20the%20repository%20for%20the%20Gaviota%20Region%20Interactive%20Planner&hashtags=TNC%20%23RShiny"
                                                ),
                                                messageItem(
                                                  from = 'Facebook',
                                                  message = "",
-                                                 icon = icon("facebook")#,
-                                                 #href = #"https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Ftradeintelligence.mbie.govt.nz"
+                                                 icon = icon("facebook"),
+                                                 href = "https://www.facebook.com/sharer/sharer.php?u=https%3A//github.com/gp-endangermond/interactive-planner-GP"
                                                ),
                                                messageItem(
                                                  from = 'LinkedIn',
                                                  message = "",
-                                                 icon = icon("linkedin")#,
-                                                 #href = "http://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Ftradeintelligence.mbie.govt.nz&title=New%20Zealand%20Trade%20Intelligence%20Dashboard"
+                                                 icon = icon("linkedin"),
+                                                 href = "https://www.linkedin.com/shareArticle?mini=true&url=https%3A//github.com/gp-endangermond/interactive-planner-GP"
                                                ))
                          
                          )
@@ -51,9 +59,12 @@ header$children[[2]]$children[[1]] <- tags$a(href='https://www.nature.org/en-us/
 
 # Siderbar ------------------------------------------------------------------
 siderbar<- dashboardSidebar(
-  # introBox(data.step = 1, data.intro = intro$text[1], data.position="right", #  intro tour
+  
+   # introBox(data.step = 1, 
+   #          data.intro = "The interactive planner allows you to select across three different data axis.", 
+   #          data.position="right", #  Intro tour
            div(class="inlay",style = "height:100%;width:100%;background-color: #ecf0f5;"),
-  sidebarMenu(
+  sidebarMenu(id="main_menu",
     menuItem("Resources Axis", tabName = "Initial", icon = icon("fa-brands fa-pagelines"),
              menuSubItem("Natural Resources",tabName = "natural_resources_map", icon = icon("map")),
              menuSubItem("Stakeholders priorities",tabName = "environmental_stake_map", icon = icon("fa-solid fa-layer-group")),
@@ -66,11 +77,14 @@ siderbar<- dashboardSidebar(
              menuSubItem("Data Information",tabName = "data_information_equity", icon = icon("info-circle"))),
     menuItem("Other Information",tabName = "other_information", icon = icon("info-circle"))
     )
-  #)
+  # )
   )
 
 # Body ------------------------------------------------------------------
 body <- dashboardBody(
+  
+  
+  
   # 
   # tags$head( # must include css
   #   tags$style(HTML("
@@ -95,6 +109,7 @@ body <- dashboardBody(
   tabItems(
     ## NATURAL RESOURCES ------------------------------------------------------------------
     tabItem(tabName = "natural_resources_map",
+            useConductor(),
             fluidRow(
               column(12,
                      shinycssloaders::withSpinner(leafletOutput("map", height='60vh')),
@@ -146,7 +161,7 @@ body <- dashboardBody(
 
                      ### Sliders panel ----
                      absolutePanel(id = "controls",
-                                   class = "panel panel-default",
+                                   class = "panel_sliders",
                                    fixed = FALSE,
                                    draggable = TRUE,
                                    top = 140, left = 40,
@@ -237,6 +252,9 @@ body <- dashboardBody(
                                    setSliderColor(rep("#629871", 5), c(2:5)),
 
                      #### Sliders and checkbox set up ----
+                     # introBox(data.step = 2, 
+                     #          data.intro = "The interactive planner allows you to select across three different data axis.", 
+                     #          data.position="right",
                      fluidRow(
                        column(10,
 
@@ -253,7 +271,8 @@ body <- dashboardBody(
                                       br(),
                                       textOutput("water_agg_pref")
                                       )
-                       ),
+                       # )
+                     ),
 
                      fluidRow(
                        column(10,
@@ -300,7 +319,8 @@ body <- dashboardBody(
                               textOutput("resilience_agg_pref")
                        )
                      )
-                     ),
+                     
+                     ), # End tour box
 
                      ### Remove shapes button ----
                      absolutePanel(id = "removeShapes",
@@ -317,7 +337,7 @@ body <- dashboardBody(
                      
                      column(5,offset = 0, style='padding-left:30px;padding-right:30px;',
                             br(),
-                            selectInput("stakeholder_w", label = "Select stakeholder's weights:",
+                            selectInput("stakeholder_w",label = "Select stakeholder's weights:",
                                         choices = c("None",ahp_weights$group),
                                         selected = NULL),
                             ### Text Information ----
@@ -1255,7 +1275,8 @@ body <- dashboardBody(
   )
      
 
-ui <- dashboardPage(header, siderbar, body , skin = "black",
+ui <- dashboardPage(header, siderbar, body ,
+                    skin = "black",
                     tags$head(tags$style(HTML('* {font-family: "Whitney A", "Whitney B", Whitney, "Trebuchet MS", sans-serif;')))
                     )
 

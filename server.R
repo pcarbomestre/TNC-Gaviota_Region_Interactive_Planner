@@ -10,10 +10,33 @@
 ##  Server for the Interactive Planner app
 ## _____________________________
 
-
 server <- function(input, output, session) {
 
   
+  
+  # Show intro modal
+  observeEvent("", {
+    showModal(modalDialog(
+      includeHTML("intro_text.html"),
+      easyClose = TRUE,
+      footer = tagList(
+        actionButton(inputId = "intro_tour", label = "INTRODUCTION TOUR", icon = icon("info-circle"))
+      )
+    ))
+  })
+# here("www","app_intro.html")
+  observeEvent(input$intro_tour,{
+    removeModal()
+  })
+
+  # show intro tour
+  observeEvent(input$intro_tour ,{
+    conductor$init()$start()
+  })
+  
+  observeEvent(input$invoke_tour ,{
+    conductor$init()$start()
+  })
   
   # NATURAL RESOURCES AXIS (MAIN TAB) ----
   # Defining Map Elements ----

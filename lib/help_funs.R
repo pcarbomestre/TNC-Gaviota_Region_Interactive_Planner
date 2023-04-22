@@ -13,7 +13,7 @@ customSentence <- function(numItems, type) {
 }
 
 customSentence_share <- function(numItems, type) {
-  paste("Like it? Share it!")
+  paste("Share it")
 }
 
 dropdownMenuCustom <-     function (..., type = c("messages", "notifications", "tasks"), 

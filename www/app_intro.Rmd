@@ -1,0 +1,56 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{=html}
+<style type="text/css">
+  body{
+  font-family: "Whitney A", "Whitney B", Whitney, "Trebuchet MS", sans-serif;
+  background-color: rgb(236,240,245); 
+}
+</style>
+```
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE, echo = FALSE)
+
+library(htmltools)
+```
+
+<br>
+
+<h2 style="text-align: center;">
+
+WELCOME TO
+
+</h2>
+
+<div style="display: flex; justify-content: center; align-items: center;">
+  <h2><mark style="color:#ffffff;
+                  background-color: #4f658f;
+                  border-radius: 0px;
+                  padding: 3px 10px;
+                  font-weight: bold;
+                  filter:url(#marker-shape);
+                  font-family: 'Chronicle Text G2 A', 'Chronicle Text G2 B', 
+                  'Chronicle Text G2', Georgia, sans-serif">Gaviota Coast Interactive Planner</mark></h2>
+</div>
+
+<br>
+
+<h5 style="text-align: center;"> helping users make informed decisions </h5>
+
+
+The Gaviota Region Interactive Planner is designed to visualize and analyze spatial environmental data, with a focus on three primary axes: Natural Resources, Environmental Threats, and DEJ/EJ issues, with the purpose of helping users make informed decisions regarding land-use planning and natural resource conservation.
+
+The app a part of a group project for the Master of Environmental Science and Management program at the Bren School, University of California Santa Barbara. The project aims to create a decision-making framework to assist Jack and Laura Dangermond Preserve, local agencies, stakeholders, and rightsholders in setting collaborative priorities and developing a region-wide conservation management plan.
+
+---
+
+```{r out.width='30%',fig.show="hold", out.extra='style="padding:10px;"'}
+
+hr()
+
+knitr::include_graphics(c("img/Bren_logo.png","img/james_s_bower_foundation_logo.png","img/TNC_logo.png"))
+```
