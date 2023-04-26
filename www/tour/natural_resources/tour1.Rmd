@@ -18,10 +18,10 @@ knitr::opts_chunk$set(echo = TRUE, echo = FALSE)
 library(htmltools)
 ```
 
-The Gaviota Region Interactive Planner allows you to [**visualize the degree of overlap of natural resources**]{.underline}. We have created a score running from 0 to 1 where higher values indicate higher resources availability---[**darker areas on the map indicate higher abundance of the aggregated resources.**]{.underline}
+The Gaviota Region Interactive Planner allows you to [**visualize the degree of overlap of natural resources**]{.underline}. We have created a score running from 0 to 1 where higher values indicate higher resources availability---[**darker areas on the map indicate higher abundance of the aggregated resources you select.**]{.underline}
 
-To customize the map to display where the resources you prioritize concentrate you can toggle between different options.
+To customize the map and display where the resources you prioritize concentrate, you can toggle between different options.
 
-[**Follow the next steps to see what you can do.**]{.underline}
+[**Follow the tour to see what you can do.**]{.underline}
 
-![](images/demo1.gif){width="100%"}
+![](images/tour1.gif)

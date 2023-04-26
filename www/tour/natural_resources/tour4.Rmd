@@ -22,9 +22,6 @@ library(htmltools)
 knitr::include_graphics("images/tour4.gif")
 ```
 
-This section of the app provides further details about the represented data. By selecting the **Summary tab**, you can view the average score of each available resource, along with the combined score calculated by applying the weights. The **Plot tab** displays the actual scores of each resource and offers insights into the data distribution. By default, when no area is selected, the values for the entire region of interest are displayed. In the next step of the tour, you will learn how to extract that information for specific areas.
+This section provides further details about the data displayed. By clicking [**in the "Summary" tab, you can view the average score of each available resource, along with the combined score**]{.underline} calculated by applying the weights. [**The "Plot" tab displays the actual scores of each resource and offers insights into its statistical distribution**]{.underline}. By default, [**when no area is selected, the values for the entire region of interest are displayed**]{.underline}.
 
-
-
-
-
+In the next step of the tour, you will learn how to extract that information for specific areas.

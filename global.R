@@ -159,14 +159,16 @@ leaflet(options = leafletOptions(minZoom = 11)) %>%
                  singleFeature = TRUE)
 
 
-conductor <- Conductor$
+# INTRO and TOUR (using Conductor)
+## Conductor for natural resources map
+conductor_nr <- Conductor$
   new(tourName = "natural_resources",
     defaultStepOptions = list(
     cancelIcon = list(enabled = TRUE, NULL)
   ))$
   step(
     title = "Natural resources axis",
-    text = htmltools::tags$iframe(src = "tour/natural_resources/tour1.html", width = "600px",  height = "500px",  style = "border:none;"),
+    text = htmltools::tags$iframe(src = "tour/natural_resources/tour1.html", width = "600px",  height = "530px",  style = "border:none;"),
     buttons = list(
       list(
         action = "next",
@@ -177,36 +179,36 @@ conductor <- Conductor$
   step(
     el = ".panel_sliders",
     title = "Select aggregated preferences",
-    text = htmltools::tags$iframe(src = "tour/natural_resources/tour2.html", width = "800px",  height = "320px",  style = "border:none;"),
+    text = htmltools::tags$iframe(src = "tour/natural_resources/tour2.html", width = "800px",  height = "400px",  style = "border:none;"),
   )$
   step(
     el = ".selectize-input",
     title = "Apply Stakeholder's weights",
-    text = htmltools::tags$iframe(src = "tour/natural_resources/tour3.html", width = "850px",  height = "300px",  style = "border:none;"),
+    text = htmltools::tags$iframe(src = "tour/natural_resources/tour3.html", width = "850px",  height = "330px",  style = "border:none;"),
     position = "left-end"
     )$
   step(
     el = ".col-sm-7",
     title = "Information details",
-    text = htmltools::tags$iframe(src = "tour/natural_resources/tour4.html", width = "650px",  height = "310px",  style = "border:none;"),
+    text = htmltools::tags$iframe(src = "tour/natural_resources/tour4.html", width = "650px",  height = "330px",  style = "border:none;"),
     position = "top-start"
   )$
   step(
     el = ".leaflet-draw-section",
     title = "Select your areas of interest",
-    text = htmltools::tags$iframe(src = "tour/natural_resources/tour5.html", width = "380px",  height = "420px",  style = "border:none;"),
+    text = htmltools::tags$iframe(src = "tour/natural_resources/tour5.html", width = "380px",  height = "440px",  style = "border:none;"),
     position = "right-start"
     )$
   step(
     el = "#map",
-    title = "Time to try it",
-    text = htmltools::tags$iframe(src = "tour/natural_resources/tour6.html", width = "400px",  height = "50px",  style = "border:none;"),
+    title = "Time to explore",
+    text = htmltools::tags$iframe(src = "tour/natural_resources/tour6.html", width = "470px",  height = "130px",  style = "border:none;"),
   position = "top-start"
     )$
   step(
     el = ".btn",
     title = "End of tour",
-    text = htmltools::tags$iframe(src = "tour/natural_resources/tour7.html", width = "380px",  height = "70px",  style = "border:none;"),
+    text = htmltools::tags$iframe(src = "tour/natural_resources/tour7.html", width = "380px",  height = "80px",  style = "border:none;"),
     position = "top-start",
      buttons = list(
       list(
@@ -221,20 +223,99 @@ conductor <- Conductor$
     )
   )
 
-
-conductor2 <- Conductor$
-  new(tourName = "natural_resources",
+## Conductor for stakeholders priorities map
+conductor_s <- Conductor$
+  new(tourName = "Stackeholders priorities",
       defaultStepOptions = list(
         cancelIcon = list(enabled = TRUE, NULL)
       ))$
   step(
-    title = "Threats axis",
-    text = htmltools::tags$iframe(src = "tour/natural_resources/tour1.html", width = "600px",  height = "500px",  style = "border:none;"),
+    title = "Stakeholder priorities",
+    text = htmltools::tags$iframe(src = "tour/stakeholders/tour1.html", width = "600px",  height = "500px",  style = "border:none;"),
     buttons = list(
       list(
         action = "next",
         text = "Next"
       )
     )
+  )$
+  step(
+    el = ".ahp_inputs",
+    title = "Select two groups",
+    text = htmltools::tags$iframe(src = "tour/stakeholders/tour2.html", width = "380px",  height = "150px",  style = "border:none;"),
+    position = "right-end"
+    )$
+  step(
+    el = "#map_stake",
+    title = "Interpretation",
+    text = htmltools::tags$iframe(src = "tour/stakeholders/tour3.html", width = "1150px",  height = "130px",  style = "border:none; padding: 0 0 0 0"),
+    position = "top-start"
+  )$
+  step(
+    el = ".btn",
+    title = "End of tour",
+    text = htmltools::tags$iframe(src = "tour/natural_resources/tour7.html", width = "380px",  height = "80px",  style = "border:none;"),
+    position = "top-start",
+    buttons = list(
+      list(
+        action = "back",
+        secondary = TRUE,
+        text = "Previous"
+      ),
+      list(
+        action = "next",
+        text = "Finish"
+      )
+    )
   )
 
+## Conductor for natural resources map
+conductor_t <- Conductor$
+  new(tourName = "threats",
+      defaultStepOptions = list(
+        cancelIcon = list(enabled = TRUE, NULL)
+      ))$
+  step(
+    title = "Environmental threats axis",
+    text = htmltools::tags$iframe(src = "tour/threats/tour1.html", width = "600px",  height = "530px",  style = "border:none;"),
+    buttons = list(
+      list(
+        action = "next",
+        text = "Next"
+      )
+    )
+  )$
+  step(
+    el = ".panel.panel-default.draggable.ui-draggable.ui-draggable-handle",
+    title = "Select aggregated preferences",
+    text = htmltools::tags$iframe(src = "tour/threats/tour2.html", width = "800px",  height = "420px",  style = "border:none;"),
+  )$
+  step(
+    el = ".col-sm-7.threats",
+    title = "Information details",
+    text = htmltools::tags$iframe(src = "tour/threats/tour3.html", width = "650px",  height = "300px",  style = "border:none;"),
+    position = "top-start"
+  )$
+  step(
+    el = "#map_threats",
+    title = "Time to explore",
+    text = htmltools::tags$iframe(src = "tour/threats/tour4.html", width = "800px",  height = "130px",  style = "border:none;"),
+    position = "top-start"
+  )$
+  step(
+    el = ".btn",
+    title = "End of tour",
+    text = htmltools::tags$iframe(src = "tour/natural_resources/tour7.html", width = "380px",  height = "80px",  style = "border:none;"),
+    position = "top-start",
+    buttons = list(
+      list(
+        action = "back",
+        secondary = TRUE,
+        text = "Previous"
+      ),
+      list(
+        action = "next",
+        text = "Finish"
+      )
+    )
+  )

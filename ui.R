@@ -52,7 +52,7 @@ header<- dashboardHeader(title = HTML("Gaviota Region Interactive planner"),
                          )
 
 header$children[[2]]$children[[2]] <- header$children[[2]]$children[[1]]
-header$children[[2]]$children[[1]] <- tags$a(href='https://www.nature.org/en-us/about-us/where-we-work/united-states/california/stories-in-california/dangermond-preserve/',
+header$children[[2]]$children[[1]] <- tags$a(href='https://www.nature.org/en-us/about-us/where-we-work/united-states/california/stories-in-california/dangermond-preserve',
                                              tags$img(src='/img/TNC_logo.png',style="width: 125px", align = 'left'),
                                              target = '_blank')
 
@@ -60,24 +60,21 @@ header$children[[2]]$children[[1]] <- tags$a(href='https://www.nature.org/en-us/
 # Siderbar ------------------------------------------------------------------
 siderbar<- dashboardSidebar(
   
-   # introBox(data.step = 1, 
-   #          data.intro = "The interactive planner allows you to select across three different data axis.", 
-   #          data.position="right", #  Intro tour
            div(class="inlay",style = "height:100%;width:100%;background-color: #ecf0f5;"),
   sidebarMenu(id="main_menu",
-    menuItem("Resources Axis", tabName = "Initial", icon = icon("fa-brands fa-pagelines"),
+    menuItem("Resources Axis", tabName = "nat_resources", icon = icon("fa-brands fa-pagelines"), startExpanded=TRUE,
              menuSubItem("Natural Resources",tabName = "natural_resources_map", icon = icon("map")),
              menuSubItem("Stakeholders priorities",tabName = "environmental_stake_map", icon = icon("fa-solid fa-layer-group")),
              menuSubItem("Data Information",tabName = "data_information_resources", icon = icon("info-circle"))),
-    menuItem("Threats Axis",tabName = "landings", icon = icon("fa-regular fa-fire"),
+    menuItem("Threats Axis",tabName = "threats", icon = icon("fa-regular fa-fire"),
              menuSubItem("Environmental Threats",tabName = "environmental_threats_map", icon = icon("map")),
              menuSubItem("Data Information",tabName = "data_information_threats", icon = icon("info-circle"))),
-    menuItem("DEI/EJ Axis",tabName = "Assessment", icon = icon("fa-duotone fa-people-arrows"),
+    menuItem("DEI/EJ Axis",tabName = "ej", icon = icon("fa-duotone fa-people-arrows"),
              menuSubItem("DEI/EJ Issues",tabName = "equity_issues_map", icon = icon("map")),
              menuSubItem("Data Information",tabName = "data_information_equity", icon = icon("info-circle"))),
     menuItem("Other Information",tabName = "other_information", icon = icon("info-circle"))
     )
-  # )
+
   )
 
 # Body ------------------------------------------------------------------
@@ -570,6 +567,7 @@ body <- dashboardBody(
                      ### Data tab ----
                      column(5,offset = 0, align="center",
                             style='padding-left:30px;padding-right:30px;padding-top:20px;margin-top:10px;',
+                            tags$div(class = "ahp_inputs",
                             fluidRow(
                               column(3,
                                      "Compare", style= "font-weight: bold; font-size:15pt; margin-left:50px;"
@@ -615,6 +613,7 @@ body <- dashboardBody(
                                                                      padding: 6px 5px 5px 5px;
                                                                      background-color: #a80d0d;
                                                                      color: white; !important}')))
+                            )
                             ),
                             tags$p("Interpretation:",style="text-align: justify; margin-top: 5px; margin-bottom: -5px; font-weight:bold;"),
                             tags$p("White represents areas that are equally important to the two selected groups. 
@@ -937,7 +936,8 @@ body <- dashboardBody(
                                    style="text-align: justify; margin-top: 15px; margin-bottom: 5px;")
                      ),
                      ### Data tab ----
-                     column(7,
+                    
+                     column(7,class = "threats",
                             tabsetPanel(id="tabs_threats",
                                         tags$style(HTML(".tabbable > .nav > li > a {margin-top:5px;float:right;display:inline-block;}")),
                                         tags$style(HTML(

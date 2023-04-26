@@ -1,0 +1,25 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{=html}
+<style type="text/css">
+  body{
+  font-family: "Whitney A", "Whitney B", Whitney, "Trebuchet MS", sans-serif;
+  background-color: rgb(255,255,255); 
+}
+</style>
+```
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE, echo = FALSE)
+
+library(htmltools)
+```
+
+The stakeholder priorities section allows you to [**spatially compare the areas that each type of organization prioritizes based on the resources they value the most**]{.underline}. This map compares the output maps from the natural resources section based on the Analytic Hierarchy Process results per organization type. [**It uses a diverging color scale to show the differences in area prioritization between the two groups**]{.underline}.
+
+Follow this tour to learn how to use it and interpret the results.
+
+![](images/tour1.gif)

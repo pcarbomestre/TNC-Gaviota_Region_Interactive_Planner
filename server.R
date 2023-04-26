@@ -14,10 +14,10 @@ server <- function(input, output, session) {
 
   
   
-  # Show intro modal
+  # INTRO AND TOUR ----
   observeEvent("", {
     showModal(modalDialog(
-      htmltools::tags$iframe(src = "app_intro.html", width = '100%',  height = 550,  style = "border:none;"),
+      htmltools::tags$iframe(src = "app_intro.html", width = '100%',  height = 570,  style = "border:none;"),
       easyClose = TRUE,
       footer = tagList(
         actionButton(inputId = "no_tour", label = "Skip tour", style = "align: center"),
@@ -25,7 +25,6 @@ server <- function(input, output, session) {
       )
     ))
   })
-# here("www","app_intro.html")
   observeEvent(input$intro_tour,{
       removeModal()
   })
@@ -34,13 +33,18 @@ server <- function(input, output, session) {
     removeModal()
   })
 
-  # show intro tour
-  observeEvent(input$intro_tour ,{
-    conductor$init()$start()
+    observeEvent(input$intro_tour ,{
+      conductor_nr$init()$start()
   })
   
   observeEvent(input$invoke_tour ,{
-    conductor$init()$start()
+    if (input$main_menu == "natural_resources_map"){
+      conductor_nr$init()$start()
+    } else if (input$main_menu == "environmental_stake_map"){
+      conductor_s$init()$start()
+    } else if (input$main_menu == "environmental_threats_map"){
+    conductor_t$init()$start()
+  }
   })
   
   # NATURAL RESOURCES AXIS (MAIN TAB) ----

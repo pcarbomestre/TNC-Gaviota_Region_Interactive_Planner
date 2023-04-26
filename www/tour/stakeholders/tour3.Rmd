@@ -1,0 +1,30 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{=html}
+<style type="text/css">
+  body{
+  font-family: "Whitney A", "Whitney B", Whitney, "Trebuchet MS", sans-serif;
+  background-color: rgb(255,255,255); 
+}
+
+.main-container {
+  max-width: 1800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+```
+
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE, echo = FALSE)
+
+library(htmltools)
+```
+
+[**The map shows the group's relative importance of different areas based on the color assigned**]{.underline}. The scale located in the bottom-right corner illustrates the intensity of the resources priorities differences between the groups. The maximum difference cannot exceed 1. [**The scale range varies depending on the specific comparison being made**]{.underline}.
+
+For example, the default selection is "Indigenous" in blue and "Farm/Ranch" in red. Therefore, the darker blue areas on the map represent the regions where the resources valued indigenous communities concentrate, while the red darker areas correspond to those that farming and ranching organizations prioritize. [**Lighter colored areas and areas in white are zones where both groups share priorities**]{.underline}, indicating areas where it is easier to find common ground for shared conservation goals.

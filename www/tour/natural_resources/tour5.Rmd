@@ -18,14 +18,10 @@ knitr::opts_chunk$set(echo = TRUE, echo = FALSE)
 library(htmltools)
 ```
 
-These two icons allow you to select any area on the displayed region from which to extract the individual and aggregated scores, as well as the data distribution. You can display this information by selecting the "Summary" and "Plot" tabs.
+These two buttons allow you to [**select any area in the region to extract the individual and aggregated scores, as well as its statistical distribution**]{.underline}. You can display this information by selecting the "Summary" and "Plot" tabs.
 
-You can edit or remove any area that you have drawn. If you draw a new area, it will replace the previous one.
+You can edit or remove the drawn areas using the respective buttons. Any new area drawn will replace the existing one.
 
 ```{r fig.align='center', out.width="100%", }
 knitr::include_graphics("images/tour5.gif")
 ```
-
-
-
-

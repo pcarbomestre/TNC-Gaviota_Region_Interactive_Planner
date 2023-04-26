@@ -1,0 +1,27 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{=html}
+<style type="text/css">
+  body{
+  font-family: "Whitney A", "Whitney B", Whitney, "Trebuchet MS", sans-serif;
+  background-color: rgb(255,255,255); 
+}
+</style>
+```
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE, echo = FALSE)
+
+library(htmltools)
+```
+
+```{r out.width='30%', out.extra='style="float:right; padding-left:20px"'}
+knitr::include_graphics("images/tour4.gif")
+```
+
+Now it is your turn, set your weight preferences and select an area to display the average scores.
+
+[**Remember**]{.underline}**:** darker areas correspond to a score closer to 1, representing a higher concentration of the displayed threats. On the contrary, those areas in white are lest susceptible to be affected by those threats.
