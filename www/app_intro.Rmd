@@ -20,37 +20,42 @@ library(htmltools)
 
 <br>
 
-<h2 style="text-align: center;">
+<h4 style="text-align: center;">
 
-WELCOME TO
+WELCOME TO THE
 
-</h2>
+</h4>
 
 <div style="display: flex; justify-content: center; align-items: center;">
-  <h2><mark style="color:#ffffff;
+  <h2 style="text-align: center;">
+  <mark style="color:#ffffff;
                   background-color: #4f658f;
                   border-radius: 0px;
-                  padding: 3px 10px;
+                  padding: 3px;
                   font-weight: bold;
                   filter:url(#marker-shape);
                   font-family: 'Chronicle Text G2 A', 'Chronicle Text G2 B', 
-                  'Chronicle Text G2', Georgia, sans-serif">Gaviota Coast Interactive Planner</mark></h2>
+                  'Chronicle Text G2', Georgia, sans-serif">Gaviota Region Interactive Planner
+                  </mark>
+                  </h2>
 </div>
 
-<br>
 
-<h5 style="text-align: center;"> helping users make informed decisions </h5>
+<h5 style="text-align: center;"> Helping users make informed decisions </h5>
 
-
-The Gaviota Region Interactive Planner is designed to visualize and analyze spatial environmental data, with a focus on three primary axes: Natural Resources, Environmental Threats, and DEJ/EJ issues, with the purpose of helping users make informed decisions regarding land-use planning and natural resource conservation.
-
-The app a part of a group project for the Master of Environmental Science and Management program at the Bren School, University of California Santa Barbara. The project aims to create a decision-making framework to assist Jack and Laura Dangermond Preserve, local agencies, stakeholders, and rightsholders in setting collaborative priorities and developing a region-wide conservation management plan.
-
+<hr>
 ---
 
-```{r out.width='30%',fig.show="hold", out.extra='style="padding:10px;"'}
+The Gaviota Region Interactive Planner is designed to visualize and explore spatial environmental data, with a focus on three primary axes: Natural Resources, Environmental Threats, and DEJ/EJ issues. Its goal is to help users make informed decisions regarding land-use and natural resource conservation.
 
-hr()
+The app is part of a group project for the Master of Environmental Science and Management of the Bren School, at the University of California Santa Barbara. The project sets de foundation to create a decision-making framework to assist Jack and Laura Dangermond Preserve, local agencies, stakeholders, and rightsholders in setting collaborative priorities and developing a region-wide conservation management plan.
 
-knitr::include_graphics(c("img/Bren_logo.png","img/james_s_bower_foundation_logo.png","img/TNC_logo.png"))
-```
+<hr>
+<br>
+---
+
+<p align="center">
+  <img style="margin-right:25px" width="30%" src="img/Bren_logo.png">
+    <img width="30%" src="img/james_s_bower_foundation_logo.png">
+  <img style="margin-left:15px" width="30%" src="img/TNC_logo.png">
+</p>

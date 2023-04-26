@@ -21,14 +21,14 @@ header<- dashboardHeader(title = HTML("Gaviota Region Interactive planner"),
                          disable = FALSE,
                          titleWidth = 500,
                          tags$li(class = "dropdown",  
-                                 style = "padding-top=10px",
+                                 style = "padding-top=50px",
                                  actionButton("invoke_tour","", 
-                                              icon = icon("info-circle"),
+                                              icon = icon("fa-regular fa-compass"),
                                               style="background-color: transparent; 
-                                              height:100%;
-                                              border-color: transparent; margin-top=10px")),
-                         dropdownMenuCustom(type = 'message',
-                                               customSentence = customSentence_share,
+                                              border-color: transparent;
+                                              margin-top: 8px")),
+                         dropdownMenu(type = 'messages',
+                                      headerText = "Share it",
                                                icon = icon("share-alt"),
                                                messageItem(
                                                  from = 'Twitter',
@@ -83,33 +83,77 @@ siderbar<- dashboardSidebar(
 # Body ------------------------------------------------------------------
 body <- dashboardBody(
   
-  
-  
-  # 
-  # tags$head( # must include css
-  #   tags$style(HTML("
-  #       .img-local {
-  #       }
-  #       
-  #       .small-box .img-local {
-  #       position: absolute;
-  #       top: auto;
-  #       bottom: -25px;
-  #       right: 5px;
-  #       z-index: 0;
-  #       font-size: 70px;
-  #       color: rgba(0, 0, 0, 0.15);
-  #       }"
-  #   ))
-  # ),
-  
   useShinyjs(),
-  introjsUI(),  
+
+  # Tour windows style
+  tags$head(
+    tags$style(
+      HTML(
+        "
+        
+        .modal-content{
+        width:650px;
+        margin-top:100px;
+        }
+        
+        .modal-body{
+        background-color: #ecf0f5 !important;
+        }
+        
+        .shepherd-content{
+        width: fit-content; 
+        block-size: fit-content;
+        }
+        
+        .shepherd-text {
+          color: white;
+          background-color: white !important;
+        }
+        
+        .shepherd-footer{
+          background-color: #ecf0f5 !important;
+          height: 50px;
+        }
+        
+       .shepherd-button{
+        height:70%;
+        margin-top: 10px;
+        margin-right: 10px
+       }
+        
+      .shepherd-button.shepherd-button-secondary{
+      background-color: #ecf0f5 ; 
+      transition-duration: 0.4s;
+      }
+   
+        .shepherd-header {
+          background-color: #ecf0f5 !important;
+        }
+        
+        shepherd-element {
+            background-color: white;
+            }
+     
+        .shepherd-title {
+          color: #2e2f30;
+          padding-left: 20px;
+          font-family: 'Chronicle Text G2 A', 'Chronicle Text G2 B', 
+          'Chronicle Text G2', Georgia, sans-serif;
+        }
+       
+        .shepherd-arrow:before {
+          background-color: white !important;
+        }
+        "
+      )
+    )
+  ),
   
   tabItems(
     ## NATURAL RESOURCES ------------------------------------------------------------------
     tabItem(tabName = "natural_resources_map",
             useConductor(),
+            
             fluidRow(
               column(12,
                      shinycssloaders::withSpinner(leafletOutput("map", height='60vh')),
@@ -337,9 +381,12 @@ body <- dashboardBody(
                      
                      column(5,offset = 0, style='padding-left:30px;padding-right:30px;',
                             br(),
+                            fluidRow(
                             selectInput("stakeholder_w",label = "Select stakeholder's weights:",
                                         choices = c("None",ahp_weights$group),
                                         selected = NULL),
+                            style = "width: 230px; padding-left:15px; margin-bottom:-10px "
+                            ),
                             ### Text Information ----
                             tags$div(
                               style = "display: flex; align-items: center; margin-top: 5px; margin-bottom: 5px;",

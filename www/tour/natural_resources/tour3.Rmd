@@ -1,0 +1,35 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{=html}
+<style type="text/css">
+  body{
+  font-family: "Whitney A", "Whitney B", Whitney, "Trebuchet MS", sans-serif;
+  background-color: rgb(255,255,255); 
+}
+</style>
+```
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE, echo = FALSE)
+
+library(htmltools)
+```
+
+```{r out.width='50%', out.extra='style="float:right; padding:10px"'}
+knitr::include_graphics("images/tour3.gif")
+```
+
+The variety of public and private stakeholders and rightsholders in the Gaviota Region, may result in a range of shared conservation goals, from biodiversity and habitat conservation to agricultural land use. 
+
+The app allows you can choose predefined weights to represent the priorities of the regional actors. These weights are the result of an Analytic Hierarchy Process that we conducted using the responses from 21 regional organizations. We calculated and scaled the aggregated weights by organization type based on their self-identification in the final survey.
+
+Essentially, this option allows you to display the areas that each type of organization prioritizes based on the resources they value the most.
+
+
+
+
+
+

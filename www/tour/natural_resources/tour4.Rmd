@@ -1,0 +1,30 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{=html}
+<style type="text/css">
+  body{
+  font-family: "Whitney A", "Whitney B", Whitney, "Trebuchet MS", sans-serif;
+  background-color: rgb(255,255,255); 
+}
+</style>
+```
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE, echo = FALSE)
+
+library(htmltools)
+```
+
+```{r fig.align='center', out.width="70%", }
+knitr::include_graphics("images/tour4.gif")
+```
+
+This section of the app provides further details about the represented data. By selecting the **Summary tab**, you can view the average score of each available resource, along with the combined score calculated by applying the weights. The **Plot tab** displays the actual scores of each resource and offers insights into the data distribution. By default, when no area is selected, the values for the entire region of interest are displayed. In the next step of the tour, you will learn how to extract that information for specific areas.
+
+
+
+
+

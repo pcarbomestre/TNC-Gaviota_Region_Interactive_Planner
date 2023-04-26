@@ -158,23 +158,15 @@ leaflet(options = leafletOptions(minZoom = 11)) %>%
                  position = "topright",
                  singleFeature = TRUE)
 
-# Custom theme
-my_theme <- bs_theme(
-  bg = "#FFFFFF",
-  fg = " #598048 ",
-  primary = "#EC255A",
-  base_font = font_google('Avenir')
-)
-
-
 
 conductor <- Conductor$
-  new(defaultStepOptions = list(
+  new(tourName = "natural_resources",
+    defaultStepOptions = list(
     cancelIcon = list(enabled = TRUE, NULL)
   ))$
   step(
-    title = "Welcome to the tour!",
-    text = "You can navigate this tour with the left and right arrows of your keyboard, or leave it by pressing 'Esc'.",
+    title = "Natural resources axis",
+    text = htmltools::tags$iframe(src = "tour/natural_resources/tour1.html", width = "600px",  height = "500px",  style = "border:none;"),
     buttons = list(
       list(
         action = "next",
@@ -184,42 +176,39 @@ conductor <- Conductor$
   )$
   step(
     el = ".panel_sliders",
-    title = "Weights",
-    text= "viota Region Interactive Planner is designed to visualize and analyze spatial environmental data, with a focus on three primary axes: Natural Resources, Environmental Threats, and DEJ/EJ issues, with the purpose of helping users make informed decisions regarding land-us",
+    title = "Select aggregated preferences",
+    text = htmltools::tags$iframe(src = "tour/natural_resources/tour2.html", width = "800px",  height = "320px",  style = "border:none;"),
   )$
   step(
     el = ".selectize-input",
-    title = "Stake holder weights",
-    text= "viota Region Interactive Planner is designed to visualize and analyze spatial environmental data, with a focus on three primary axes: Natural Resources, Environmental Threats, and DEJ/EJ issues, with the purpose of helping users make informed decisions regarding land-us",
-  )$
-  # step(
-  #   el = "[data-value='about']",
-  #   title = "Information",
-  #   text = "viota Region Interactive Planner is designed to visualize and analyze spatial environmental data, with a focus on three primary axes: Natural Resources, Environmental Threats, and DEJ/EJ issues, with the purpose of helping users make informed decisions regarding land-us",
-  #   tab = "About",
-  #   tabId = "about"
-  # )$
+    title = "Apply Stakeholder's weights",
+    text = htmltools::tags$iframe(src = "tour/natural_resources/tour3.html", width = "850px",  height = "300px",  style = "border:none;"),
+    position = "left-end"
+    )$
   step(
     el = ".col-sm-7",
-    title = "This is the technical info",
-    text = "viota Region Interactive Planner is designed to visualize and analyze spatial environmental data, with a focus on three primary axes: Natural Resources, Environmental Threats, and DEJ/EJ issues, with the purpose of helping users make informed decisions regarding land-us",
-    
+    title = "Information details",
+    text = htmltools::tags$iframe(src = "tour/natural_resources/tour4.html", width = "650px",  height = "310px",  style = "border:none;"),
+    position = "top-start"
   )$
   step(
     el = ".leaflet-draw-section",
-    title = "Select your area of interest",
-    text= "You can draw on the map and delineate your are from which you want to extract the scores"
+    title = "Select your areas of interest",
+    text = htmltools::tags$iframe(src = "tour/natural_resources/tour5.html", width = "380px",  height = "420px",  style = "border:none;"),
+    position = "right-start"
     )$
   step(
     el = "#map",
-    title = "This is the technical info",
-    text = "viota Region Interactive Planner is designed to visualize and analyze spatial environmental data, with a focus on three primary axes: Natural Resources, Environmental Threats, and DEJ/EJ issues, with the purpose of helping users make informed decisions regarding land-us",
+    title = "Time to try it",
+    text = htmltools::tags$iframe(src = "tour/natural_resources/tour6.html", width = "400px",  height = "50px",  style = "border:none;"),
+  position = "top-start"
     )$
   step(
     el = ".btn",
     title = "End of tour",
-    text = "You always can review the tour pressing here",
-    buttons = list(
+    text = htmltools::tags$iframe(src = "tour/natural_resources/tour7.html", width = "380px",  height = "70px",  style = "border:none;"),
+    position = "top-start",
+     buttons = list(
       list(
         action = "back",
         secondary = TRUE,
@@ -233,4 +222,19 @@ conductor <- Conductor$
   )
 
 
+conductor2 <- Conductor$
+  new(tourName = "natural_resources",
+      defaultStepOptions = list(
+        cancelIcon = list(enabled = TRUE, NULL)
+      ))$
+  step(
+    title = "Threats axis",
+    text = htmltools::tags$iframe(src = "tour/natural_resources/tour1.html", width = "600px",  height = "500px",  style = "border:none;"),
+    buttons = list(
+      list(
+        action = "next",
+        text = "Next"
+      )
+    )
+  )
 

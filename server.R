@@ -17,15 +17,20 @@ server <- function(input, output, session) {
   # Show intro modal
   observeEvent("", {
     showModal(modalDialog(
-      includeHTML("intro_text.html"),
+      htmltools::tags$iframe(src = "app_intro.html", width = '100%',  height = 550,  style = "border:none;"),
       easyClose = TRUE,
       footer = tagList(
-        actionButton(inputId = "intro_tour", label = "INTRODUCTION TOUR", icon = icon("info-circle"))
+        actionButton(inputId = "no_tour", label = "Skip tour", style = "align: center"),
+        actionButton(inputId = "intro_tour", label = "Introduction Tour", icon = icon("fa-regular fa-compass"))
       )
     ))
   })
 # here("www","app_intro.html")
   observeEvent(input$intro_tour,{
+      removeModal()
+  })
+  
+  observeEvent(input$no_tour,{
     removeModal()
   })
 
