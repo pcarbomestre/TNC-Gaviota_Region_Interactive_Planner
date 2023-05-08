@@ -59,17 +59,17 @@ header$children[[2]]$children[[1]] <- tags$a(href='https://www.nature.org/en-us/
 
 # Siderbar ------------------------------------------------------------------
 siderbar<- dashboardSidebar(
-  
+  # tags$style("@import url(https://use.fontawesome.com/releases/v5.7.2/css/all.css);"),
            div(class="inlay",style = "height:100%;width:100%;background-color: #ecf0f5;"),
   sidebarMenu(id="main_menu",
-    menuItem("Resources Axis", tabName = "nat_resources", icon = icon("fa-brands fa-pagelines"), startExpanded=TRUE,
+    menuItem("Resources Axis", tabName = "nat_resources", icon = shiny::icon("pagelines",verify_fa = FALSE), startExpanded=TRUE,
              menuSubItem("Natural Resources",tabName = "natural_resources_map", icon = icon("map")),
              menuSubItem("Stakeholders priorities",tabName = "environmental_stake_map", icon = HTML("<i class='fa-solid fa-layer-group'></i>")),
              menuSubItem("Data Information",tabName = "data_information_resources", icon = icon("info-circle"))),
-    menuItem("Threats Axis",tabName = "threats", icon = icon("fa-regular fa-fire"),
+    menuItem("Threats Axis",tabName = "threats", icon = shiny::icon("fire",verify_fa = FALSE),
              menuSubItem("Environmental Threats",tabName = "environmental_threats_map", icon = icon("map")),
              menuSubItem("Data Information",tabName = "data_information_threats", icon = icon("info-circle"))),
-    menuItem("DEI/EJ Axis",tabName = "ej", icon = icon("fa-duotone fa-people-arrows"),
+    menuItem("DEI/EJ Axis",tabName = "ej", icon = shiny::icon("people-arrows",verify_fa = FALSE),
              menuSubItem("DEI/EJ Issues",tabName = "equity_issues_map", icon = icon("map")),
              menuSubItem("Data Information",tabName = "data_information_equity", icon = icon("info-circle"))),
     menuItem("Other Information",tabName = "other_information", icon = icon("info-circle"))
