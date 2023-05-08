@@ -44,7 +44,7 @@ library(RColorBrewer)
 library(conductor)
      
     
-# DATAS READ IN ----
+# DATA READ IN ----
 
 ## Natural Resources Axis spatial data ----
 resources_axis_sf <- st_read(here('data','shiny_inputs','natural_resources','natural_resources.shp')) %>% 
