@@ -64,7 +64,7 @@ siderbar<- dashboardSidebar(
   sidebarMenu(id="main_menu",
     menuItem("Resources Axis", tabName = "nat_resources", icon = icon("fa-brands fa-pagelines"), startExpanded=TRUE,
              menuSubItem("Natural Resources",tabName = "natural_resources_map", icon = icon("map")),
-             menuSubItem("Stakeholders priorities",tabName = "environmental_stake_map", icon = icon("fa-solid fa-layer-group")),
+             menuSubItem("Stakeholders priorities",tabName = "environmental_stake_map", icon = HTML("<i class='fa-solid fa-layer-group'></i>")),
              menuSubItem("Data Information",tabName = "data_information_resources", icon = icon("info-circle"))),
     menuItem("Threats Axis",tabName = "threats", icon = icon("fa-regular fa-fire"),
              menuSubItem("Environmental Threats",tabName = "environmental_threats_map", icon = icon("map")),
