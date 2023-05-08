@@ -1,0 +1,25 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{=html}
+<style type="text/css">
+  body{
+  font-family: "Whitney A", "Whitney B", Whitney, "Trebuchet MS", sans-serif;
+  background-color: rgb(255,255,255); 
+}
+</style>
+```
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE, echo = FALSE)
+
+library(htmltools)
+```
+
+The Gaviota Region Interactive Planner allows you to [**visualize the degree of overlap of natural resources**]{.underline}. Values range from 0 to 1, where higher values indicate higher resource availability, which is represented by darker colors on the map.
+
+[**Follow the tour to see what you can do.**]{.underline}
+
+![](images/tour1.gif)

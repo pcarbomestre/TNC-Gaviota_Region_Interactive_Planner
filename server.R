@@ -10,10 +10,46 @@
 ##  Server for the Interactive Planner app
 ## _____________________________
 
-
 server <- function(input, output, session) {
 
   
+  
+  # INTRO AND TOUR ----
+  observeEvent("", {
+    showModal(modalDialog(
+      htmltools::tags$iframe(src = "app_intro.html", width = '100%',  height = 570,  style = "border:none;"),
+      easyClose = TRUE,
+      footer = tagList(
+        actionButton(inputId = "no_tour", label = "Skip tour", style = "align: center"),
+        actionButton(inputId = "intro_tour", label = "Introduction Tour", icon = icon("fa-regular fa-compass"))
+      )
+    ))
+  })
+  observeEvent(input$intro_tour,{
+      removeModal()
+  })
+  
+  observeEvent(input$no_tour,{
+    removeModal()
+  })
+
+    observeEvent(input$intro_tour ,{
+      conductor_nr$init()$start()
+  })
+  
+  observeEvent(input$invoke_tour ,{
+    if (input$main_menu == "natural_resources_map"){
+      conductor_nr$init()$start()
+    } else if (input$main_menu == "environmental_stake_map"){
+      conductor_s$init()$start()
+    } else if (input$main_menu == "environmental_threats_map"){
+    conductor_t$init()$start()
+    }else if (input$main_menu == "equity_issues_map"){
+    conductor_d$init()$start()
+    }
+  })
+  
+
   
   # NATURAL RESOURCES AXIS (MAIN TAB) ----
   # Defining Map Elements ----

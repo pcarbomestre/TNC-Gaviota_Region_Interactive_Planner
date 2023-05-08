@@ -1,0 +1,25 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{=html}
+<style type="text/css">
+  body{
+  font-family: "Whitney A", "Whitney B", Whitney, "Trebuchet MS", sans-serif;
+  background-color: rgb(255,255,255); 
+}
+</style>
+```
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE, echo = FALSE)
+
+library(htmltools)
+```
+
+```{r fig.align='center', out.width="70%", }
+knitr::include_graphics("images/tour3.gif")
+```
+
+This section provides further details about the data displayed. By clicking [**in the \"Summary\" tab, you can view the average score of each DEI/EJ issue, along with the combined score**]{.underline} calculated by applying the weights. [**The \"Plot\" tab displays the actual scores of each issue and offers insights into its statistical distribution**]{.underline}. By default, [**when no area is selected, the values for the entire region are displayed**.]{.underline}

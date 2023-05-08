@@ -1,0 +1,27 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{=html}
+<style type="text/css">
+  body{
+  font-family: "Whitney A", "Whitney B", Whitney, "Trebuchet MS", sans-serif;
+  background-color: rgb(255,255,255); 
+}
+</style>
+```
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE, echo = FALSE)
+
+library(htmltools)
+```
+
+The environmental threats section allows you to [**visualize the degree of overlap of environmental threats**]{.underline}. On a scale from 0 to 1, higher values indicate a higher concentration of threats---[**darker colors indicate more highly impacted areas for the aggregated threats selected**]{.underline}**.**
+
+To customize the map and display overlapping threats of interest, you can toggle between different options.
+
+[**Follow the tour to see what you can do.**]{.underline}
+
+![](images/tour1.gif)

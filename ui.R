@@ -10,91 +10,147 @@
 ##  Fluid page for the Interactive Planner app
 ## _____________________________
 
-#Global displaying options
+# Global displaying options
 options(spinner.color="#bdbfbe",
         spinner.color.background = "#929493",
         spinner.type=8)
+
 
 # Header ------------------------------------------------------------------
 header<- dashboardHeader(title = HTML("Gaviota Region Interactive planner"),
                          disable = FALSE,
                          titleWidth = 500,
-                         dropdownMenuCustom( type = 'message',
-                                               customSentence = customSentence_share,
+                         tags$li(class = "dropdown",  
+                                 style = "padding-top=50px",
+                                 actionButton("invoke_tour","", 
+                                              icon = icon("fa-regular fa-compass"),
+                                              style="background-color: transparent; 
+                                              border-color: transparent;
+                                              margin-top: 8px")),
+                         dropdownMenu(type = 'messages',
+                                      headerText = "Share it",
                                                icon = icon("share-alt"),
                                                messageItem(
                                                  from = 'Twitter',
                                                  message = "",
-                                                 icon = icon("twitter")#,
-                                                 #href = "https://twitter.com/intent/tweet?url=http%3A%2F%2Ftradeintelligence.mbie.govt.nz&text=New%20Zealand%20Trade%20Intelligence%20Dashboard"
+                                                 icon = icon("twitter"),
+                                                 href = "https://twitter.com/intent/tweet?url=https%3A%2F%2Fgithub.com%2Fgp-endangermond%2Finteractive-planner-GP&text=Check%20out%20the%20repository%20for%20the%20Gaviota%20Region%20Interactive%20Planner&hashtags=TNC%20%23RShiny"
                                                ),
                                                messageItem(
                                                  from = 'Facebook',
                                                  message = "",
-                                                 icon = icon("facebook")#,
-                                                 #href = #"https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Ftradeintelligence.mbie.govt.nz"
+                                                 icon = icon("facebook"),
+                                                 href = "https://www.facebook.com/sharer/sharer.php?u=https%3A//github.com/gp-endangermond/interactive-planner-GP"
                                                ),
                                                messageItem(
                                                  from = 'LinkedIn',
                                                  message = "",
-                                                 icon = icon("linkedin")#,
-                                                 #href = "http://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Ftradeintelligence.mbie.govt.nz&title=New%20Zealand%20Trade%20Intelligence%20Dashboard"
+                                                 icon = icon("linkedin"),
+                                                 href = "https://www.linkedin.com/shareArticle?mini=true&url=https%3A//github.com/gp-endangermond/interactive-planner-GP"
                                                ))
                          
                          )
 
 header$children[[2]]$children[[2]] <- header$children[[2]]$children[[1]]
-header$children[[2]]$children[[1]] <- tags$a(href='https://www.nature.org/en-us/about-us/where-we-work/united-states/california/stories-in-california/dangermond-preserve/',
+header$children[[2]]$children[[1]] <- tags$a(href='https://www.nature.org/en-us/about-us/where-we-work/united-states/california/stories-in-california/dangermond-preserve',
                                              tags$img(src='/img/TNC_logo.png',style="width: 125px", align = 'left'),
                                              target = '_blank')
 
 
 # Siderbar ------------------------------------------------------------------
 siderbar<- dashboardSidebar(
-  # introBox(data.step = 1, data.intro = intro$text[1], data.position="right", #  intro tour
+  
            div(class="inlay",style = "height:100%;width:100%;background-color: #ecf0f5;"),
-  sidebarMenu(
-    menuItem("Resources Axis", tabName = "Initial", icon = icon("fa-brands fa-pagelines"),
+  sidebarMenu(id="main_menu",
+    menuItem("Resources Axis", tabName = "nat_resources", icon = icon("fa-brands fa-pagelines"), startExpanded=TRUE,
              menuSubItem("Natural Resources",tabName = "natural_resources_map", icon = icon("map")),
              menuSubItem("Stakeholders priorities",tabName = "environmental_stake_map", icon = icon("fa-solid fa-layer-group")),
              menuSubItem("Data Information",tabName = "data_information_resources", icon = icon("info-circle"))),
-    menuItem("Threats Axis",tabName = "landings", icon = icon("fa-regular fa-fire"),
+    menuItem("Threats Axis",tabName = "threats", icon = icon("fa-regular fa-fire"),
              menuSubItem("Environmental Threats",tabName = "environmental_threats_map", icon = icon("map")),
              menuSubItem("Data Information",tabName = "data_information_threats", icon = icon("info-circle"))),
-    menuItem("DEI/EJ Axis",tabName = "Assessment", icon = icon("fa-duotone fa-people-arrows"),
+    menuItem("DEI/EJ Axis",tabName = "ej", icon = icon("fa-duotone fa-people-arrows"),
              menuSubItem("DEI/EJ Issues",tabName = "equity_issues_map", icon = icon("map")),
              menuSubItem("Data Information",tabName = "data_information_equity", icon = icon("info-circle"))),
     menuItem("Other Information",tabName = "other_information", icon = icon("info-circle"))
     )
-  #)
+
   )
 
 # Body ------------------------------------------------------------------
 body <- dashboardBody(
-  # 
-  # tags$head( # must include css
-  #   tags$style(HTML("
-  #       .img-local {
-  #       }
-  #       
-  #       .small-box .img-local {
-  #       position: absolute;
-  #       top: auto;
-  #       bottom: -25px;
-  #       right: 5px;
-  #       z-index: 0;
-  #       font-size: 70px;
-  #       color: rgba(0, 0, 0, 0.15);
-  #       }"
-  #   ))
-  # ),
   
   useShinyjs(),
-  introjsUI(),  
+
+  # Tour windows style
+  tags$head(
+    tags$style(
+      HTML(
+        "
+        
+        .modal-content{
+        width:650px;
+        margin-top:100px;
+        }
+        
+        .modal-body{
+        background-color: #ecf0f5 !important;
+        }
+        
+        .shepherd-content{
+        width: fit-content; 
+        block-size: fit-content;
+        }
+        
+        .shepherd-text {
+          color: white;
+          background-color: white !important;
+        }
+        
+        .shepherd-footer{
+          background-color: #ecf0f5 !important;
+          height: 50px;
+        }
+        
+       .shepherd-button{
+        height:70%;
+        margin-top: 10px;
+        margin-right: 10px
+       }
+        
+      .shepherd-button.shepherd-button-secondary{
+      background-color: #ecf0f5 ; 
+      transition-duration: 0.4s;
+      }
+   
+        .shepherd-header {
+          background-color: #ecf0f5 !important;
+        }
+        
+        shepherd-element {
+            background-color: white;
+            }
+     
+        .shepherd-title {
+          color: #2e2f30;
+          padding-left: 20px;
+          font-family: 'Chronicle Text G2 A', 'Chronicle Text G2 B', 
+          'Chronicle Text G2', Georgia, sans-serif;
+        }
+       
+        .shepherd-arrow:before {
+          background-color: white !important;
+        }
+        "
+      )
+    )
+  ),
   
   tabItems(
     ## NATURAL RESOURCES ------------------------------------------------------------------
     tabItem(tabName = "natural_resources_map",
+            useConductor(),
+            
             fluidRow(
               column(12,
                      shinycssloaders::withSpinner(leafletOutput("map", height='60vh')),
@@ -146,7 +202,7 @@ body <- dashboardBody(
 
                      ### Sliders panel ----
                      absolutePanel(id = "controls",
-                                   class = "panel panel-default",
+                                   class = "panel_sliders",
                                    fixed = FALSE,
                                    draggable = TRUE,
                                    top = 140, left = 40,
@@ -237,6 +293,9 @@ body <- dashboardBody(
                                    setSliderColor(rep("#629871", 5), c(2:5)),
 
                      #### Sliders and checkbox set up ----
+                     # introBox(data.step = 2, 
+                     #          data.intro = "The interactive planner allows you to select across three different data axis.", 
+                     #          data.position="right",
                      fluidRow(
                        column(10,
 
@@ -253,7 +312,8 @@ body <- dashboardBody(
                                       br(),
                                       textOutput("water_agg_pref")
                                       )
-                       ),
+                       # )
+                     ),
 
                      fluidRow(
                        column(10,
@@ -300,7 +360,8 @@ body <- dashboardBody(
                               textOutput("resilience_agg_pref")
                        )
                      )
-                     ),
+                     
+                     ), # End tour box
 
                      ### Remove shapes button ----
                      absolutePanel(id = "removeShapes",
@@ -317,9 +378,12 @@ body <- dashboardBody(
                      
                      column(5,offset = 0, style='padding-left:30px;padding-right:30px;',
                             br(),
-                            selectInput("stakeholder_w", label = "Select stakeholder's weights:",
+                            fluidRow(
+                            selectInput("stakeholder_w",label = "Select stakeholder's weights:",
                                         choices = c("None",ahp_weights$group),
                                         selected = NULL),
+                            style = "width: 230px; padding-left:15px; margin-bottom:-10px "
+                            ),
                             ### Text Information ----
                             tags$div(
                               style = "display: flex; align-items: center; margin-top: 5px; margin-bottom: 5px;",
@@ -503,6 +567,7 @@ body <- dashboardBody(
                      ### Data tab ----
                      column(5,offset = 0, align="center",
                             style='padding-left:30px;padding-right:30px;padding-top:20px;margin-top:10px;',
+                            tags$div(class = "ahp_inputs",
                             fluidRow(
                               column(3,
                                      "Compare", style= "font-weight: bold; font-size:15pt; margin-left:50px;"
@@ -548,6 +613,7 @@ body <- dashboardBody(
                                                                      padding: 6px 5px 5px 5px;
                                                                      background-color: #a80d0d;
                                                                      color: white; !important}')))
+                            )
                             ),
                             tags$p("Interpretation:",style="text-align: justify; margin-top: 5px; margin-bottom: -5px; font-weight:bold;"),
                             tags$p("White represents areas that are equally important to the two selected groups. 
@@ -666,7 +732,7 @@ body <- dashboardBody(
                                     .js-irs-9 .irs .irs-min:after {content:'Lowest' !important;}
                                     .js-irs-9 .irs .irs-max:after {content:'Highest' !important;}
                                     .js-irs-10 .irs .irs-min:after {content:'Lowest' !important;}
-                                    .js-irs-1o .irs .irs-max:after {content:'Highest' !important;}
+                                    .js-irs-10 .irs .irs-max:after {content:'Highest' !important;}
                                     .irs-min:after {
                                         visibility: visible !important;
                                         display: block;
@@ -870,7 +936,8 @@ body <- dashboardBody(
                                    style="text-align: justify; margin-top: 15px; margin-bottom: 5px;")
                      ),
                      ### Data tab ----
-                     column(7,
+                    
+                     column(7,class = "threats",
                             tabsetPanel(id="tabs_threats",
                                         tags$style(HTML(".tabbable > .nav > li > a {margin-top:5px;float:right;display:inline-block;}")),
                                         tags$style(HTML(
@@ -994,7 +1061,7 @@ body <- dashboardBody(
                      
                      ### Sliders panel ----
                      absolutePanel(id = "controls_equity",
-                                   class = "panel panel-default",
+                                   class = "ej",
                                    fixed = FALSE,
                                    draggable = TRUE,
                                    top = 210, left = 40,
@@ -1171,7 +1238,7 @@ body <- dashboardBody(
                                    style="text-align: justify; margin-top: 15px; margin-bottom: 5px;")
                      ),
                      ### Data tab ----
-                     column(7,
+                     column(7,class = "ej",
                             tabsetPanel(id="tabs_equity",
                                         tags$style(HTML(".tabbable > .nav > li > a {margin-top:5px;float:right;display:inline-block;}")),
                                         tags$style(HTML(
@@ -1255,7 +1322,8 @@ body <- dashboardBody(
   )
      
 
-ui <- dashboardPage(header, siderbar, body , skin = "black",
+ui <- dashboardPage(header, siderbar, body ,
+                    skin = "black",
                     tags$head(tags$style(HTML('* {font-family: "Whitney A", "Whitney B", Whitney, "Trebuchet MS", sans-serif;')))
                     )
 

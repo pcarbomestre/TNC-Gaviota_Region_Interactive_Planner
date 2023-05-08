@@ -1,0 +1,21 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{=html}
+<style type="text/css">
+  body{
+  font-family: "Whitney A", "Whitney B", Whitney, "Trebuchet MS", sans-serif;
+  background-color: rgb(255,255,255); 
+}
+</style>
+```
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE, echo = FALSE)
+
+library(htmltools)
+```
+
+[**You can choose from four different groups**]{.underline}. Additionally, you can [**compare the average priorities for all groups together by selecting \"All\"**]{.underline},  [**or compare your custom preferences to those of others by selecting \"My.\"**]{.underline} The color labels indicate which group corresponds to each side of the color scale, and will help to interpret the map results.

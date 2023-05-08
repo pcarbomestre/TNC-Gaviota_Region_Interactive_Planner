@@ -1,0 +1,31 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{=html}
+<style type="text/css">
+  body{
+  font-family: "Whitney A", "Whitney B", Whitney, "Trebuchet MS", sans-serif;
+  background-color: rgb(255,255,255); 
+}
+</style>
+```
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE, echo = FALSE)
+
+library(htmltools)
+```
+
+```{r out.width='70%', out.extra='style="float:right; padding:20px"'}
+knitr::include_graphics("images/tour2.gif")
+```
+
+To [**adjust the relative weight of each threat, use the sliders**]{.underline}. [**Assign higher values to the threats you are more concerned about**]{.underline}**.** The resulting map will display the threats distribution based on the aggregated preferences you select.
+
+For example, if you want to highlight areas susceptible to droughts and wildfires, you should move the respective sliders farther to the right relative to the other resources.
+
+[**On the right side of the sliders, you can see the resulting aggregated preference**,]{.underline} which represents how high you prioritize that threat out of 1.
+
+For droughts, floods and wildfires, this section allows you to [**select information from different climate models**]{.underline}. Additionally, you can [**display each layer individually by clicking on its label**]{.underline}. This will show you the areas where the selected threat will be more likely to occur.
