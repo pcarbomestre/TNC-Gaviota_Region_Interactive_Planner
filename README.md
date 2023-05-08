@@ -39,8 +39,6 @@ Spatial data was processed using the Environmental Evaluation Modeling System (E
 
 ### **Roadmap and Contributions**
 
-The app's core components have been completed, but it is currently undergoing review and testing. Additional features, such as a product tour to guide users through the app's functions and provide more in-depth information about the represented data, are planned. The final version is expected to be released in May.
-
 We welcome contributions to this repository and encourage the public to explore the app and provide feedback for future updates and improvements.
 
 ### **Support**
