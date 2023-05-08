@@ -22,4 +22,4 @@ library(htmltools)
 knitr::include_graphics("images/tour3.gif")
 ```
 
-This section provides further details about the data displayed. By clicking [**in the "Summary" tab, you can view the average score of each threat, along with the combined score**]{.underline} calculated by applying the weights. [**The "Plot" tab displays the actual scores of each threat and offers insights into its statistical distribution**]{.underline}. By default, [**when no area is selected, the values for the entire region of interest are displayed**]{.underline}.
+This section provides further details about the data displayed. By clicking [**in the \"Summary\" tab, you can view the average score of each threat, along with the combined score**]{.underline} calculated by applying the weights. [**The \"Plot\" tab displays the actual scores of each threat and offers insights into its statistical distribution**]{.underline}. By default, [**when no area is selected, the values for the entire region of interest are displayed**]{.underline}.

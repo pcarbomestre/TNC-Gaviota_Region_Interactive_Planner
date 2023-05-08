@@ -44,8 +44,12 @@ server <- function(input, output, session) {
       conductor_s$init()$start()
     } else if (input$main_menu == "environmental_threats_map"){
     conductor_t$init()$start()
-  }
+    }else if (input$main_menu == "equity_issues_map"){
+    conductor_d$init()$start()
+    }
   })
+  
+
   
   # NATURAL RESOURCES AXIS (MAIN TAB) ----
   # Defining Map Elements ----

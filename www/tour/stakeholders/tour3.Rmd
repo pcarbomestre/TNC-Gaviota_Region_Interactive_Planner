@@ -18,13 +18,12 @@ editor_options:
 }
 </style>
 ```
-
 ```{r setup, include=FALSE, echo=FALSE}
 knitr::opts_chunk$set(echo = TRUE, echo = FALSE)
 
 library(htmltools)
 ```
 
-[**The map shows the group's relative importance of different areas based on the color assigned**]{.underline}. The scale located in the bottom-right corner illustrates the intensity of the resources priorities differences between the groups. The maximum difference cannot exceed 1. [**The scale range varies depending on the specific comparison being made**]{.underline}.
+[**The map shows the group\'s relative importance of different areas based on the color assigned**.]{.underline} The scale located in the bottom-right corner illustrates the magnitude of the difference in priorities between the groups. The maximum difference cannot exceed 1. [**The scale range varies depending on the specific comparison being made**.]{.underline}
 
-For example, the default selection is "Indigenous" in blue and "Farm/Ranch" in red. Therefore, the darker blue areas on the map represent the regions where the resources valued indigenous communities concentrate, while the red darker areas correspond to those that farming and ranching organizations prioritize. [**Lighter colored areas and areas in white are zones where both groups share priorities**]{.underline}, indicating areas where it is easier to find common ground for shared conservation goals.
+For example, the default selection is \"Indigenous\" in blue and \"Farm/Ranch\" in red. Therefore, the darker blue areas on the map represent the regions where the resources valued by Indigenous communities are concentrated, while the red darker represent land that is high in the resources prioritized by farms and ranches. [**Lighter-colored areas and areas in white indicate a substantial level of agreement in conservation priorities between both groups.**]{.underline} These areas represent zones where it is potentially easier to find common ground for shared conservation goals.

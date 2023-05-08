@@ -18,6 +18,6 @@ knitr::opts_chunk$set(echo = TRUE, echo = FALSE)
 library(htmltools)
 ```
 
-Now it is your turn, set your weight preferences and select an area to display the average scores.
+Now it is your turn to set your weight preferences and select an area to display the average scores.
 
-[**Remember**]{.underline}**:** darker areas correspond to a score closer to 1, representing a higher concentration of the displayed resources. On the contrary, those areas in white show a deficit or an absolute lack of them.
+[**Remember**]{.underline}**:** Darker areas correspond to a higher concentration of the displayed resources, and lighter areas represent lower concentrations of those resources.

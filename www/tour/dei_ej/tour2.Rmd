@@ -1,0 +1,31 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{=html}
+<style type="text/css">
+  body{
+  font-family: "Whitney A", "Whitney B", Whitney, "Trebuchet MS", sans-serif;
+  background-color: rgb(255,255,255); 
+}
+</style>
+```
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE, echo = FALSE)
+
+library(htmltools)
+```
+
+```{r out.width='70%', out.extra='style="float:right; padding:20px"'}
+knitr::include_graphics("images/tour2.gif")
+```
+
+[To **adjust the relative weight of each issue, use the sliders**. **Assign higher values to the issues you are more concerned about.**]{.underline} The resulting map will display the DEI/EJ issues distribution based on the aggregated preferences you select.
+
+For example, if you want to highlight areas isolated from nature, you should move the respective slider farther to the right relative to the other issues
+
+[**On the right side of the sliders, you can see the resulting aggregated preference**]{.underline}, which represents how much you consider that issue out of 1.
+
+Additionally, you can [**display each layer individually by clicking on its label**]{.underline}. By doing so, you can see the areas where the selected issue is predominant.

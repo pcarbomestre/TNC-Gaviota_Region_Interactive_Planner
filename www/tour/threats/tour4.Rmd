@@ -22,6 +22,6 @@ library(htmltools)
 knitr::include_graphics("images/tour4.gif")
 ```
 
-Now it is your turn, set your weight preferences and select an area to display the average scores.
+Now it is your turn. Set your weight preferences and select an area to display the average scores.
 
-[**Remember**]{.underline}**:** darker areas correspond to a score closer to 1, representing a higher concentration of the displayed threats. On the contrary, those areas in white are lest susceptible to be affected by those threats.
+[**Remember**]{.underline}**:** darker areas correspond to a score closer to 1, representing a higher concentration of the displayed threats. On the contrary, those areas in white are less susceptible to be affected by those threats.

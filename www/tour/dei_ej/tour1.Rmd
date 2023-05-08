@@ -1,0 +1,27 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{=html}
+<style type="text/css">
+  body{
+  font-family: "Whitney A", "Whitney B", Whitney, "Trebuchet MS", sans-serif;
+  background-color: rgb(255,255,255); 
+}
+</style>
+```
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE, echo = FALSE)
+
+library(htmltools)
+```
+
+The DEI/EJ section [**illustrates the degree of overlap among different environmental justice, diversity, equity, and inclusion issues**]{.underline}. We have created a score running from 0 to 1, where higher values represent a higher concentration of the selected factors. This scoring system serves to identify communities in specific areas that may require mitigating actions due to the uneven impact of environmental threats or the lack of access to natural resources.
+
+To customize the map and display the issues you are more concerned about, you can toggle between different options.
+
+[**Follow the tour to see what you can do.**]{.underline}
+
+![](images/tour1.gif)

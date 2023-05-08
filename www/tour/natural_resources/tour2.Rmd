@@ -22,10 +22,10 @@ library(htmltools)
 knitr::include_graphics("images/tour2.gif")
 ```
 
-To [**adjust the relative weight of each resource, use the sliders**]{.underline}. [**Assign higher values to the resources you prioritize more.**]{.underline} The resulting map will display the resource distribution based on the aggregated preferences you select.
+To [**adjust the relative weight of each resource, use the sliders**]{.underline}. [**Assign higher values to the resources you prioritize more**]{.underline}**.** The map will then display the resource distribution based on your customized priorities
 
-For example, if you want to highlight areas with high abundance of water resources and soil health, you should move the sliders farther to the right relative to the other resources.
+For example, if you want to highlight areas with a high abundance of water resources and soil health, you should move the sliders farther to the right relative to the other resources.
 
 [**On the right side of the sliders, you can see the resulting aggregated preference**]{.underline}, which represents how much you value that resource out of 1.
 
-Additionally, you can also [**display each layer individually by clicking on their name**]{.underline}. By doing so, you can see the areas where the selected resource is not present and those where it concentrate.
+Additionally, you can also [**display each resource individually by clicking on its label**]{.underline}. This will display solely that layer, allowing you to see its distribution and concentration.

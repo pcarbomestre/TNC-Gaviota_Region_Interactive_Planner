@@ -732,7 +732,7 @@ body <- dashboardBody(
                                     .js-irs-9 .irs .irs-min:after {content:'Lowest' !important;}
                                     .js-irs-9 .irs .irs-max:after {content:'Highest' !important;}
                                     .js-irs-10 .irs .irs-min:after {content:'Lowest' !important;}
-                                    .js-irs-1o .irs .irs-max:after {content:'Highest' !important;}
+                                    .js-irs-10 .irs .irs-max:after {content:'Highest' !important;}
                                     .irs-min:after {
                                         visibility: visible !important;
                                         display: block;
@@ -1061,7 +1061,7 @@ body <- dashboardBody(
                      
                      ### Sliders panel ----
                      absolutePanel(id = "controls_equity",
-                                   class = "panel panel-default",
+                                   class = "ej",
                                    fixed = FALSE,
                                    draggable = TRUE,
                                    top = 210, left = 40,
@@ -1238,7 +1238,7 @@ body <- dashboardBody(
                                    style="text-align: justify; margin-top: 15px; margin-bottom: 5px;")
                      ),
                      ### Data tab ----
-                     column(7,
+                     column(7,class = "ej",
                             tabsetPanel(id="tabs_equity",
                                         tags$style(HTML(".tabbable > .nav > li > a {margin-top:5px;float:right;display:inline-block;}")),
                                         tags$style(HTML(

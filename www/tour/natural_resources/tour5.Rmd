@@ -18,7 +18,7 @@ knitr::opts_chunk$set(echo = TRUE, echo = FALSE)
 library(htmltools)
 ```
 
-These two buttons allow you to [**select any area in the region to extract the individual and aggregated scores, as well as its statistical distribution**]{.underline}. You can display this information by selecting the "Summary" and "Plot" tabs.
+These two buttons allow you to [**select any area in the region to extract the individual and aggregated scores, as well as its statistical distribution**]{.underline}. You can display this information by selecting the \"Summary\" and \"Plot\" tabs.
 
 You can edit or remove the drawn areas using the respective buttons. Any new area drawn will replace the existing one.
 
