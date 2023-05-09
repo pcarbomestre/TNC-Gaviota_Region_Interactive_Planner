@@ -53,7 +53,7 @@ header<- dashboardHeader(title = HTML("Gaviota Region Interactive planner"),
 
 header$children[[2]]$children[[2]] <- header$children[[2]]$children[[1]]
 header$children[[2]]$children[[1]] <- tags$a(href='https://www.nature.org/en-us/about-us/where-we-work/united-states/california/stories-in-california/dangermond-preserve',
-                                             tags$img(src='/img/TNC_logo.png',style="width: 125px", align = 'left'),
+                                             tags$img(src='img/TNC_logo.png',style="width: 125px", align = 'left'),
                                              target = '_blank')
 
 
