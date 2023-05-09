@@ -22,8 +22,8 @@ server <- function(input, output, session) {
       footer = tagList(
         actionButton(inputId = "no_tour", label = "Skip tour", style = "align: center"),
         actionButton(inputId = "intro_tour", label = "Introduction Tour", icon = icon("fa-regular fa-compass"))
-      )
-    ))
+      ), style = "margin-top:-45px;")
+    )
   })
   observeEvent(input$intro_tour,{
       removeModal()
