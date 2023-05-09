@@ -17,7 +17,7 @@ options(spinner.color="#bdbfbe",
 
 
 # Header ------------------------------------------------------------------
-header<- dashboardHeader(title = HTML("Gaviota Region Interactive planner"),
+header<- dashboardHeader(title = HTML("Gaviota Region Interactive Planner"),
                          disable = FALSE,
                          titleWidth = 500,
                          tags$li(class = "dropdown",  
@@ -53,8 +53,7 @@ header<- dashboardHeader(title = HTML("Gaviota Region Interactive planner"),
 
 header$children[[2]]$children[[2]] <- header$children[[2]]$children[[1]]
 header$children[[2]]$children[[1]] <- tags$a(href='https://www.nature.org/en-us/about-us/where-we-work/united-states/california/stories-in-california/dangermond-preserve',
-                                             tags$img(src='img/TNC_logo.png',style="width: 125px", align = 'left'),
-                                             target = '_blank')
+                                             tags$img(src='img/TNC_logo.png',style="width: 125px", align = 'left'))
 
 
 # Siderbar ------------------------------------------------------------------
