@@ -17,7 +17,7 @@ options(spinner.color="#bdbfbe",
 
 
 # Header ------------------------------------------------------------------
-header<- dashboardHeader(title = HTML("Gaviota Region Interactive planner"),
+header<- dashboardHeader(title = HTML("Gaviota Region Interactive Planner"),
                          disable = FALSE,
                          titleWidth = 500,
                          tags$li(class = "dropdown",  
@@ -53,8 +53,7 @@ header<- dashboardHeader(title = HTML("Gaviota Region Interactive planner"),
 
 header$children[[2]]$children[[2]] <- header$children[[2]]$children[[1]]
 header$children[[2]]$children[[1]] <- tags$a(href='https://www.nature.org/en-us/about-us/where-we-work/united-states/california/stories-in-california/dangermond-preserve',
-                                             tags$img(src='/img/TNC_logo.png',style="width: 125px", align = 'left'),
-                                             target = '_blank')
+                                             tags$img(src='img/TNC_logo.png',style="width: 125px", align = 'left'))
 
 
 # Siderbar ------------------------------------------------------------------
@@ -205,7 +204,7 @@ body <- dashboardBody(
                                    class = "panel_sliders",
                                    fixed = FALSE,
                                    draggable = TRUE,
-                                   top = 140, left = 40,
+                                   top = 90, left = 27,
                                    right = "auto", bottom = "auto",
                                    width = 250, height = "auto",
                                    style="background-color: white;
@@ -370,7 +369,7 @@ body <- dashboardBody(
                                    draggable = FALSE,
                                    top = 125, left = "auto",
                                    right = 25, bottom = "auto",
-                                   actionButton("removeShapes","", icon = icon("fa-regular fa-trash"))
+                                   actionButton("removeShapes","", icon = shiny::icon("trash",verify_fa = FALSE))
                      ),
 
 
@@ -386,7 +385,7 @@ body <- dashboardBody(
                             ),
                             ### Text Information ----
                             tags$div(
-                              style = "display: flex; align-items: center; margin-top: 5px; margin-bottom: 5px;",
+                              style = "display: flex; align-items: center; margin-top: 0px; margin-bottom: 5px;",
                               tags$h4(
                                 style = "text-align: left; margin-right: 10px; margin-bottom: 0;",
                                 tags$mark("Natural resources map",style = "color:#ffffff;
@@ -689,7 +688,7 @@ body <- dashboardBody(
                                    class = "panel panel-default",
                                    fixed = FALSE,
                                    draggable = TRUE,
-                                   top = 140, left = 40,
+                                   top = 90, left = 27,
                                    right = "auto", bottom = "auto",
                                    width = 250, height = "auto",
                                    style="background-color: white;
@@ -901,12 +900,12 @@ body <- dashboardBody(
                                    draggable = FALSE,
                                    top = 125, left = "auto",
                                    right = 25, bottom = "auto",
-                                   actionButton("removeShapes_threats","", icon = icon("fa-regular fa-trash"))
+                                   actionButton("removeShapes_threats","", icon = shiny::icon("trash",verify_fa = FALSE))
                      ),
 
 
                      ### Text Information ----
-                     column(5,offset = 0, style='padding-left:30px;padding-right:30px;padding-top:40px',
+                     column(5,offset = 0, style='padding-left:30px;padding-right:30px;padding-top:10px',
                             br(),
                             tags$div(
                               style = "display: flex; align-items: center; margin-top: 5px; margin-bottom: 5px;",
@@ -1064,7 +1063,7 @@ body <- dashboardBody(
                                    class = "ej",
                                    fixed = FALSE,
                                    draggable = TRUE,
-                                   top = 210, left = 40,
+                                   top = 90, left = 27,
                                    right = "auto", bottom = "auto",
                                    width = 250, height = "auto",
                                    style="background-color: white;
@@ -1205,11 +1204,11 @@ body <- dashboardBody(
                                    draggable = FALSE,
                                    top = 125, left = "auto",
                                    right = 25, bottom = "auto",
-                                   actionButton("removeShapes_equity","", icon = icon("fa-regular fa-trash"))
+                                   actionButton("removeShapes_equity","", icon = shiny::icon("trash",verify_fa = FALSE))
                      ),
                      
                      ### Text Information ----
-                     column(5,offset = 0, style='padding-left:30px;padding-right:30px;padding-top:40px',
+                     column(5,offset = 0, style='padding-left:30px;padding-right:30px;padding-top:10px',
                             br(),
                             tags$div(
                               style = "display: flex; align-items: center; margin-top: 5px; margin-bottom: 5px;",

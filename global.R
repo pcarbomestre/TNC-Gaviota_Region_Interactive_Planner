@@ -42,8 +42,7 @@ library(gt)
 library(gtExtras)
 library(RColorBrewer)
 library(conductor)
-library(fontawesome)
-     
+
     
 # DATA READ IN ----
 
