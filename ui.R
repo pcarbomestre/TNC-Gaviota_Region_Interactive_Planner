@@ -19,7 +19,7 @@ options(spinner.color="#bdbfbe",
 # Header ------------------------------------------------------------------
 header<- dashboardHeader(title = HTML("Gaviota Region Interactive Planner"),
                          disable = FALSE,
-                         titleWidth = 500,
+                         titleWidth = 550,
                          tags$li(class = "dropdown",  
                                  style = "padding-top=50px",
                                  actionButton("invoke_tour","", 
@@ -34,26 +34,30 @@ header<- dashboardHeader(title = HTML("Gaviota Region Interactive Planner"),
                                                  from = 'Twitter',
                                                  message = "",
                                                  icon = icon("twitter"),
-                                                 href = "https://twitter.com/intent/tweet?url=https%3A%2F%2Fgithub.com%2Fgp-endangermond%2Finteractive-planner-GP&text=Check%20out%20the%20repository%20for%20the%20Gaviota%20Region%20Interactive%20Planner&hashtags=TNC%20%23RShiny"
+                                                 href = "https://twitter.com/intent/tweet?url=https%3A%2F%2Fgithub.com%2Fgp-endangermond%2Finteractive-planner-GP&text=Check%20out%20the%20repository%20for%20the%20Gaviota%20Region%20Interactive%20Planner&hashtags=TNC%20%23RShiny",
+                                                 
                                                ),
                                                messageItem(
                                                  from = 'Facebook',
                                                  message = "",
                                                  icon = icon("facebook"),
-                                                 href = "https://www.facebook.com/sharer/sharer.php?u=https%3A//github.com/gp-endangermond/interactive-planner-GP"
+                                                 href = "https://www.facebook.com/sharer/sharer.php?u=https%3A//github.com/gp-endangermond/interactive-planner-GP",
+                                                
                                                ),
                                                messageItem(
                                                  from = 'LinkedIn',
                                                  message = "",
                                                  icon = icon("linkedin"),
-                                                 href = "https://www.linkedin.com/shareArticle?mini=true&url=https%3A//github.com/gp-endangermond/interactive-planner-GP"
+                                                 href = "https://www.linkedin.com/shareArticle?mini=true&url=https%3A//github.com/gp-endangermond/interactive-planner-GP",
+                                                 
                                                ))
                          
                          )
 
 header$children[[2]]$children[[2]] <- header$children[[2]]$children[[1]]
-header$children[[2]]$children[[1]] <- tags$a(href='https://www.nature.org/en-us/about-us/where-we-work/united-states/california/stories-in-california/dangermond-preserve',
-                                             tags$img(src='img/TNC_logo.png',style="width: 125px", align = 'left'))
+header$children[[2]]$children[[1]] <- tags$a(href='https://bren.ucsb.edu/',
+                                             target="_blank",
+                                             tags$img(src='img/Bren_logo_small.png',style="width: 170px; margin-top:9px; margin-left:10px; margin-right:15px", align = 'left'))
 
 
 # Siderbar ------------------------------------------------------------------
@@ -80,7 +84,7 @@ siderbar<- dashboardSidebar(
 body <- dashboardBody(
   
   useShinyjs(),
-
+  
   # Tour windows style
   tags$head(
     tags$style(
