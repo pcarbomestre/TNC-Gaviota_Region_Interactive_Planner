@@ -262,7 +262,7 @@ server <- function(input, output, session) {
                      na.color = "transparent"
                    ),
                    resolution=10000) %>%
-      addProviderTiles(providers$Stamen.Terrain) %>%
+      addProviderTiles(providers$Esri.WorldTopoMap) %>%
       addLegend(pal = pallete_reactive(),
                 values = weights_reactive()["norm_score"][[1]],
                 position = "bottomright",
@@ -294,7 +294,7 @@ server <- function(input, output, session) {
     #     addPolygons(stroke = FALSE, fillOpacity = input$alpha, smoothFactor = 0.5,
     #                 color = "grey",
     #                 fillColor = ~pallete_reactive()(norm_score)) %>%
-    #     addProviderTiles(providers$Stamen.Terrain) %>%
+    #     addProviderTiles(providers$Esri.WorldTopoMap) %>%
     #     addLegend("bottomright", pal = pallete_reactive(), values = ~map_reactive()$norm_score,
     #               title = "Score",
     #               opacity = 1)
@@ -900,7 +900,7 @@ server <- function(input, output, session) {
                      na.color = "transparent"
                    ),
                    resolution=10000) %>%
-      addProviderTiles(providers$Stamen.Terrain) %>%
+      addProviderTiles(providers$Esri.WorldTopoMap) %>%
       addLegend(pal = color_pal(),
                        values = resources_comp()["norm_score"][[1]],
                        position = "bottomright",
@@ -1052,7 +1052,7 @@ server <- function(input, output, session) {
                      na.color = "transparent"
                    ),
                    resolution=10000) %>%
-      addProviderTiles(providers$Stamen.Terrain) %>%
+      addProviderTiles(providers$Esri.WorldTopoMap) %>%
       addLegend(pal = pallete_reactive_threats(),
                 values = weights_reactive_threats()["norm_score"][[1]],
                 position = "bottomright",
@@ -1560,7 +1560,7 @@ server <- function(input, output, session) {
                      na.color = "transparent"
                    ),
                    resolution=10000) %>%
-      addProviderTiles(providers$Stamen.Terrain) %>%
+      addProviderTiles(providers$Esri.WorldTopoMap) %>%
       addLegend(pal = pallete_reactive_equity(),
                 values = weights_reactive_equity()["norm_score"][[1]],
                 position = "bottomright",
